@@ -1,3 +1,4 @@
-import prisma from '../index';
+import prisma from "../index";
 
-export const findUser = async (email: string) => await prisma.user.findUnique({ where: { email } });
+export const findUser = async (email: string) =>
+ await prisma.admin.findUnique({ where: { email } });

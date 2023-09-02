@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "prisma/jsMigrations/create-admin-account.ts"  ],
   "exclude": [
     "node_modules"
   ]

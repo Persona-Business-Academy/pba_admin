@@ -1,143 +1,165 @@
 "use client";
-import React from "react";
+import React, { useCallback } from "react";
 import {
  Box,
  Button,
  Flex,
  FormControl,
  FormLabel,
- Heading,
- Input,
- Link,
  Switch,
- Text,
- useColorModeValue,
+ useToast,
 } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { FormInput } from "@/components/atom";
+import { ERROR_MESSAGES } from "@/constants/common";
+import { SignInFormData } from "@/models/auth";
 
-function SignIn() {
- const titleColor = useColorModeValue("teal.300", "teal.200");
- const textColor = useColorModeValue("gray.400", "white");
+function Signin() {
+ const toast = useToast();
+ const { push } = useRouter();
+
+ const {
+  control,
+  handleSubmit,
+  formState: { errors, isSubmitting },
+ } = useForm<SignInFormData>({
+  defaultValues: { email: "", password: "", rememberMe: false },
+ });
+
+ const onSubmit: SubmitHandler<SignInFormData> = useCallback(
+  async ({ email, password }) => {
+   try {
+    const res = await signIn("credentials", {
+     email,
+     password,
+     redirect: false,
+    });
+    console.log(res);
+    if (res?.ok) {
+     push("/dashboard");
+    } else {
+     toast({
+      title: "Invalid credentials",
+      description: ERROR_MESSAGES.invalidCredentials,
+      status: "error",
+     });
+    }
+   } catch {
+    toast({
+     title: ERROR_MESSAGES.somethingWentWrong,
+     status: "error",
+    });
+   }
+  },
+  [push, toast]
+ );
+
  return (
-  <Flex position="relative" mb="40px">
-   <Flex
-    h={{ sm: "initial", md: "75vh", lg: "85vh" }}
-    w="100%"
-    maxW="1044px"
-    mx="auto"
-    justifyContent="space-between"
-    mb="30px"
-    pt={{ sm: "100px", md: "0px" }}
-   >
+  <Flex
+   direction="column"
+   alignSelf="center"
+   justifySelf="center"
+   overflow="hidden"
+  >
+   <Box
+    position="absolute"
+    minH={{ base: "70vh", md: "100vh" }}
+    w={{ md: "calc(100vw - 50px)" }}
+    borderRadius={{ md: "15px" }}
+    left="0"
+    right="0"
+    bgRepeat="no-repeat"
+    overflow="hidden"
+    zIndex="-1"
+    top="0"
+    bgImage="/images/basic-auth.png"
+    bgSize="cover"
+    mx={{ md: "auto" }}
+    mt={{ md: "14px" }}
+   ></Box>
+   <Flex alignItems="center" justifyContent="center" mb="60px" mt="20px">
     <Flex
-     alignItems="center"
-     justifyContent="start"
-     style={{ userSelect: "none" }}
-     w={{ base: "100%", md: "50%", lg: "42%" }}
+     direction="column"
+     w="445px"
+     background="transparent"
+     borderRadius="15px"
+     p="40px"
+     mx={{ base: "100px" }}
+     bg="#fff"
+     boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
     >
-     <Flex
-      direction="column"
-      w="100%"
-      background="transparent"
-      p="48px"
-      mt={{ md: "150px", lg: "80px" }}
-     >
-      <Heading color={titleColor} fontSize="32px" mb="10px">
-       Welcome Back
-      </Heading>
-      <Text
-       mb="36px"
-       ms="4px"
-       color={textColor}
-       fontWeight="bold"
-       fontSize="14px"
-      >
-       Enter your email and password to sign in
-      </Text>
-      <FormControl>
-       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-        Email
-       </FormLabel>
-       <Input
-        borderRadius="15px"
-        mb="24px"
-        fontSize="sm"
-        type="text"
-        placeholder="Your email adress"
-        size="lg"
+     <Controller
+      name="email"
+      control={control}
+      rules={{
+       required: "This field is required",
+      }}
+      render={({ field: { onChange, value } }) => (
+       <FormInput
+        isRequired
+        isInvalid={!!errors.email?.message}
+        name="email"
+        type="email"
+        formLabelName="Email"
+        value={value}
+        handleInputChange={onChange}
+        formErrorMessage={errors.email?.message}
        />
-       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-        Password
-       </FormLabel>
-       <Input
-        borderRadius="15px"
-        mb="36px"
-        fontSize="sm"
+      )}
+     />
+
+     <Controller
+      name="password"
+      control={control}
+      rules={{
+       required: "This field is required",
+      }}
+      render={({ field: { onChange, value } }) => (
+       <FormInput
+        isRequired
+        isInvalid={!!errors.password?.message}
+        name="password"
+        formLabelName="Password"
+        value={value}
+        handleInputChange={onChange}
         type="password"
-        placeholder="Your password"
-        size="lg"
+        formHelperText="Your password must be less than 6 characters."
+        formErrorMessage={errors.password?.message}
        />
-       <FormControl display="flex" alignItems="center">
-        <Switch id="remember-login" colorScheme="teal" me="10px" />
-        <FormLabel htmlFor="remember-login" mb="0" ms="1" fontWeight="normal">
-         Remember me
-        </FormLabel>
-       </FormControl>
-       <Button
-        fontSize="sm"
-        type="submit"
-        bg="teal.300"
-        w="100%"
-        h="45"
-        mb="20px"
-        color="white"
-        mt="20px"
-        _hover={{
-         bg: "teal.200",
-        }}
-        _active={{
-         bg: "teal.400",
-        }}
-       >
-        SIGN IN
-       </Button>
-      </FormControl>
-      <Flex
-       flexDirection="column"
-       justifyContent="center"
-       alignItems="center"
-       maxW="100%"
-       mt="0px"
-      >
-       <Text color={textColor} fontWeight="medium">
-        Don&apos;t have an account?
-        <Link color={titleColor} as="span" ms="5px" fontWeight="bold">
-         Sign Up
-        </Link>
-       </Text>
-      </Flex>
-     </Flex>
-    </Flex>
-    <Box
-     display={{ base: "none", md: "block" }}
-     overflowX="hidden"
-     h="100%"
-     w="40vw"
-     position="absolute"
-     right="0px"
-    >
-     <Box
-      backgroundImage="/images/cover-auth.png"
+      )}
+     />
+     <FormControl display="flex" alignItems="center" mb="24px">
+      <Switch id="remember-login" colorScheme="teal" me="10px" />
+      <FormLabel htmlFor="remember-login" mb="0" fontWeight="normal">
+       Remember me
+      </FormLabel>
+     </FormControl>
+     <Button
+      type="submit"
+      bg="teal.300"
+      fontSize="sm"
+      color="white"
+      fontWeight="bold"
       w="100%"
-      h="100%"
-      bgSize="cover"
-      bgPosition="50%"
-      position="absolute"
-      borderBottomLeftRadius="20px"
-     ></Box>
-    </Box>
+      h="45"
+      mb="24px"
+      _hover={{
+       bg: "teal.200",
+      }}
+      _active={{
+       bg: "teal.400",
+      }}
+      isDisabled={isSubmitting}
+      onClick={handleSubmit(onSubmit)}
+     >
+      SIGN IN
+     </Button>
+    </Flex>
    </Flex>
   </Flex>
  );
 }
 
-export default SignIn;
+export default Signin;
