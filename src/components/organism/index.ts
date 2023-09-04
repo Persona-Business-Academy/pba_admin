@@ -1,7 +1,6 @@
-'use client';
-import AuthWrapper from './AuthWrapper';
-import Footer from './Footer';
-import Header from './Header';
-import SimpleSidebar from './ProfileSidebar';
+"use client";
+import AuthWrapper from "./AuthWrapper";
+import Footer from "./Footer";
+import Sidebar from "./Sidebar";
 
-export { AuthWrapper, Header, Footer, SimpleSidebar };
+export { AuthWrapper, Footer, Sidebar };
