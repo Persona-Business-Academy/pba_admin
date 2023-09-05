@@ -47,6 +47,20 @@ const linkItems: LinkItemProps[] = [
    },
   ],
  },
+ {
+  name: "Submit Form",
+  icon: FiTrendingUp,
+  children: [
+   {
+    title: "Contact Us",
+    href: "/development",
+   },
+   {
+    title: "Job",
+    href: "/job-applicants",
+   },
+  ],
+ },
 ];
 
 interface SidebarProps {
@@ -55,7 +69,7 @@ interface SidebarProps {
 const Sidebar: FC<SidebarProps> = ({ children }) => {
  const { isOpen, onOpen, onClose } = useDisclosure();
  return (
-  <Box minH={"calc(100vh - 64px)"} bg="#ffffff">
+  <Box minH="100vh" bg="#ffffff">
    <SidebarContent
     onClose={() => onClose}
     linkItems={linkItems}

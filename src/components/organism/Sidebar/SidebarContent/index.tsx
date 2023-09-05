@@ -30,8 +30,7 @@ const SidebarContent = ({
    borderRightColor={"gray.200"}
    w={{ base: "full", md: 60 }}
    pos="fixed"
-   top="64px"
-   h="calc(100% - 64px)"
+   h="100%"
    {...rest}
   >
    <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
