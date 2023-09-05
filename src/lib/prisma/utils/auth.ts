@@ -1,23 +1,24 @@
-import bcrypt from 'bcrypt';
-import { BadRequestException } from 'next-api-decorators';
-import { ERROR_MESSAGES } from '@/constants/common';
-import { findUser } from '../resolvers';
+import bcrypt from "bcrypt";
+import { BadRequestException } from "next-api-decorators";
+import { ERROR_MESSAGES } from "@/constants/common";
+import { User } from "../resolvers";
 
 export const validateUserPassword = async (email: string, password: string) => {
-  try {
-    const user = await findUser(email);
+ try {
+  return User.findUserByEmail(email).then((user) => {
+   if (!user) {
+    throw new BadRequestException(ERROR_MESSAGES.invalidCredentials);
+   }
 
-    if (!user) {
-      throw new BadRequestException(ERROR_MESSAGES.invalidCredentials);
-    }
-
-    const isValid = await bcrypt.compare(password, user.password || '');
+   bcrypt.compare(password, user.password || "").then((isValid) => {
     if (!isValid) {
-      throw new BadRequestException(ERROR_MESSAGES.invalidCredentials);
+     throw new BadRequestException(ERROR_MESSAGES.invalidCredentials);
     }
+   });
 
-    return { id: user.id, email: user.email };
-  } catch (e) {
-    throw new Error(e as string);
-  }
+   return { id: user.id, email: user.email };
+  });
+ } catch (e) {
+  throw new Error(e as string);
+ }
 };

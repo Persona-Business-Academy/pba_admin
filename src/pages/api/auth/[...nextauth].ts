@@ -2,7 +2,7 @@ import NextAuth, { Session, SessionStrategy, User } from "next-auth";
 import { AdapterUser } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { findUser } from "@/lib/prisma/resolvers";
+import { User as UserResolver } from "@/lib/prisma/resolvers";
 import { validateUserPassword } from "@/lib/prisma/utils/auth";
 
 export default NextAuth({
@@ -27,7 +27,7 @@ export default NextAuth({
  secret: process.env.JWT_SECRET,
  callbacks: {
   async session({ session }: { session: Session }) {
-   const user = await findUser(session.user?.email || "");
+   const user = await UserResolver.findUserByEmail(session.user?.email || "");
 
    return user
     ? {

@@ -1,13 +1,20 @@
+"use client";
+import { Box } from "@chakra-ui/react";
 import { Sidebar } from "@/components/organism";
-
-export const metadata = {
- title: "PBA Website",
-};
+import Header from "@/components/organism/Header";
 
 export default function SidebarLayout({
  children,
 }: {
  children: React.ReactNode;
 }) {
- return <Sidebar>{children}</Sidebar>;
+ return (
+  <>
+   <Header>
+    <Sidebar>
+     <Box mt="64px">{children}</Box>
+    </Sidebar>
+   </Header>
+  </>
+ );
 }

@@ -55,7 +55,7 @@ interface SidebarProps {
 const Sidebar: FC<SidebarProps> = ({ children }) => {
  const { isOpen, onOpen, onClose } = useDisclosure();
  return (
-  <Box minH="100vh" bg="#ffffff">
+  <Box minH={"calc(100vh - 64px)"} bg="#ffffff">
    <SidebarContent
     onClose={() => onClose}
     linkItems={linkItems}
