@@ -1,19 +1,12 @@
 "use client";
 import React, { useCallback } from "react";
-import {
- Box,
- Button,
- Flex,
- FormControl,
- FormLabel,
- Switch,
- useToast,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FormInput } from "@/components/atom";
 import { ERROR_MESSAGES } from "@/constants/common";
+import { DASHBOARD_ROUTE } from "@/constants/routes";
 import { SignInFormData } from "@/models/auth";
 
 function Signin() {
@@ -25,7 +18,7 @@ function Signin() {
   handleSubmit,
   formState: { errors, isSubmitting },
  } = useForm<SignInFormData>({
-  defaultValues: { email: "", password: "", rememberMe: false },
+  defaultValues: { email: "", password: "" },
  });
 
  const onSubmit: SubmitHandler<SignInFormData> = useCallback(
@@ -37,7 +30,7 @@ function Signin() {
    })
     .then((res) => {
      if (res?.ok) {
-      push("/dashboard");
+      push(DASHBOARD_ROUTE);
      } else {
       toast({
        title: "Invalid credentials",
@@ -119,12 +112,6 @@ function Signin() {
         />
        )}
       />
-      <FormControl display="flex" alignItems="center" mb="24px">
-       <Switch id="remember-login" colorScheme="teal" me="10px" />
-       <FormLabel htmlFor="remember-login" mb="0" fontWeight="normal">
-        Remember me
-       </FormLabel>
-      </FormControl>
       <Button
        type="submit"
        bg="#3CB4E7"
@@ -133,7 +120,7 @@ function Signin() {
        fontWeight="bold"
        w="100%"
        h="45"
-       mb="24px"
+       my="24px"
        isDisabled={isSubmitting}
        onClick={handleSubmit(onSubmit)}
       >

@@ -35,7 +35,7 @@ export type DataTableProps<Data extends object> = {
  search: string;
 };
 
-export function DataTable<Data extends object>({
+function SearchTable<Data extends object>({
  data,
  columns,
  sorting,
@@ -176,3 +176,5 @@ export function DataTable<Data extends object>({
   </Box>
  );
 }
+
+export default SearchTable;

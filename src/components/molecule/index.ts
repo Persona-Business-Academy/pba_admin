@@ -1,4 +1,4 @@
-'use client';
-import AuthBox from './AuthBox';
+"use client";
+import SearchTable from "./SearchTable";
 
-export { AuthBox };
+export { SearchTable };

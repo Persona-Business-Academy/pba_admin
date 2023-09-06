@@ -5,7 +5,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { createColumnHelper, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import { UserService } from "@/api/services/UserService";
-import { DataTable } from "@/components/molecule/SearchTable";
+import { SearchTable } from "@/components/molecule";
 import { UserModel } from "@/models/user";
 
 type Props = {};
@@ -49,8 +49,6 @@ const UsersList: FC<Props> = () => {
   }
  );
 
- console.log(search, "search");
-
  const columnHelper = createColumnHelper<UserModel>();
 
  const columns = [
@@ -87,7 +85,7 @@ const UsersList: FC<Props> = () => {
  console.log(sorting, "sorting");
 
  return data ? (
-  <DataTable
+  <SearchTable
    data={data.pages[0]}
    columns={columns}
    sorting={sorting}
