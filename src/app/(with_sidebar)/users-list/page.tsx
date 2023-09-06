@@ -1,8 +1,12 @@
 "use client";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useToast } from "@chakra-ui/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { createColumnHelper, SortingState } from "@tanstack/react-table";
+import {
+ ColumnDef,
+ createColumnHelper,
+ SortingState,
+} from "@tanstack/react-table";
 import dayjs from "dayjs";
 import { UserService } from "@/api/services/UserService";
 import { SearchTable } from "@/components/molecule";
@@ -18,12 +22,13 @@ const UsersList: FC<Props> = () => {
  const toast = useToast();
 
  const {
-  //   isLoading,
+  isLoading,
   data,
-  //   hasNextPage,
-  //   isFetchingNextPage,
-  //   fetchNextPage,
-  //   isError,
+  hasNextPage,
+  hasPreviousPage,
+  fetchNextPage,
+  fetchPreviousPage,
+  refetch,
  } = useInfiniteQuery<any, any, Array<UserModel>>(
   ["all-users"],
   () =>
@@ -51,7 +56,7 @@ const UsersList: FC<Props> = () => {
 
  const columnHelper = createColumnHelper<UserModel>();
 
- const columns = [
+ const columns: ColumnDef<UserModel, any>[] = [
   columnHelper.accessor("firstName", {
    cell: (info) => info.getValue(),
    header: "First Name",
@@ -82,18 +87,28 @@ const UsersList: FC<Props> = () => {
   }),
  ];
 
- console.log(sorting, "sorting");
+ useEffect(() => {
+  const timeOut = setTimeout(() => refetch(), 500);
+  return () => {
+   clearTimeout(timeOut);
+  };
+ }, [refetch, search]);
 
- return data ? (
+ return (
   <SearchTable
-   data={data.pages[0]}
+   isLoading={isLoading}
+   data={data?.pages[0] || []}
    columns={columns}
    sorting={sorting}
    setSorting={setSorting}
    setSearch={setSearch}
    search={search}
+   hasNextPage={!!hasNextPage}
+   hasPreviousPage={!!hasPreviousPage}
+   fetchNextPage={fetchNextPage}
+   fetchPreviousPage={fetchPreviousPage}
   />
- ) : null;
+ );
 };
 
 export default UsersList;

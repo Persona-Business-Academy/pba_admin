@@ -58,7 +58,6 @@ const SidebarContent = ({
          as={NextLink}
          href={subLink.href}
          p="4"
-         mx="4"
          borderRadius="lg"
          textDecoration="none"
          role="group"

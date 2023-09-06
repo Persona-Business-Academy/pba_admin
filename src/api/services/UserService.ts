@@ -4,7 +4,6 @@ import { UsersParamsInput } from "../types";
 
 export class UserService {
  static async getAllUsers(params: UsersParamsInput): Promise<UserModel[]> {
-  console.log(params);
   return $apiClient.get("/users/list", {
    params: {
     limit: params.limit,
