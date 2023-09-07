@@ -18,7 +18,7 @@ const UsersList: FC<Props> = () => {
  const [sorting, setSorting] = React.useState<SortingState>([]);
  const [search, setSearch] = useState("");
 
- const ITEMS_PER_PAGE = 20;
+ const ITEMS_PER_PAGE = 4;
  const toast = useToast();
 
  const {
