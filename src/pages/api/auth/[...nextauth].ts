@@ -1,54 +1,43 @@
-import NextAuth, { Session, SessionStrategy, User } from "next-auth";
-import { AdapterUser } from "next-auth/adapters";
-import { JWT } from "next-auth/jwt";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { User as UserResolver } from "@/lib/prisma/resolvers";
+import prisma from "@/lib/prisma";
+import { User } from "@/lib/prisma/resolvers";
 import { validateUserPassword } from "@/lib/prisma/utils/auth";
 
-export default NextAuth({
- providers: [
-  CredentialsProvider({
-   id: "credentials",
-   name: "Credentials",
-   credentials: {
-    email: { type: "text" },
-    password: { type: "password" },
-   },
-   async authorize(credentials): Promise<{ id: string; email: string } | null> {
-    const user = await validateUserPassword(
-     credentials?.email || "",
-     credentials?.password || ""
-    );
-
-    return user || null;
-   },
-  }),
- ],
- secret: process.env.JWT_SECRET,
- callbacks: {
-  async session({ session }: { session: Session }) {
-   const user = await UserResolver.findUserByEmail(session.user?.email || "");
-
-   return user
-    ? {
-       ...session,
-       user: {
-        name: `${user.firstName} ${user.lastName}`,
-        email: user.email,
-       },
-      }
-    : session;
+export const authOptions: AuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  secret: process.env.JWT_SECRET,
+  providers: [
+    CredentialsProvider({
+      id: "credentials",
+      name: "Credentials",
+      credentials: { email: { type: "text" }, password: { type: "password" } },
+      authorize: async (credentials) =>
+        (await validateUserPassword(
+          credentials?.email || "",
+          credentials?.password || ""
+        )) || null,
+    }),
+  ],
+  callbacks: {
+    session: async ({ session }) => {
+      const user = await User.findUserByEmail(session.user?.email || "");
+      return user
+        ? {
+            ...session,
+            user: {
+              name: `${user.firstName} ${user.lastName}`,
+              email: user.email,
+            },
+          }
+        : session;
+    },
+    jwt: async ({ user, token }) =>
+      !!user ? { ...token, id: user.id } : token,
   },
+  pages: { signIn: "/signin" },
+  session: { strategy: "jwt" },
+};
 
-  async jwt({ token, user }: { token: JWT; user: User | AdapterUser }) {
-   if (user) {
-    return { ...token, id: user.id };
-   }
-   return token;
-  },
- },
- pages: {
-  signIn: "/signin",
- },
- session: { strategy: "jwt" as SessionStrategy, maxAge: 30 * 24 * 60 * 60 },
-});
+export default NextAuth(authOptions);
