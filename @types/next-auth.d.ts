@@ -1,15 +1,14 @@
+import { Prisma } from "@prisma/client";
 // eslint-disable-next-line unused-imports/no-unused-imports
-import NextAuth, { ISODateString } from 'next-auth';
+import NextAuth, { ISODateString } from "next-auth";
+import { User } from "@/lib/prisma/resolvers";
 
-declare module 'next-auth' {
+declare module "next-auth" {
+  export type User = Prisma.PromiseReturnType<typeof User.findUserByEmail>;
   interface Session {
     expires: ISODateString;
     token: { email: string; iat: number; jti: string; exp: number };
-    user: any;
-  }
-  export interface User {
-    id: number;
-    email: string;
+    user: User;
   }
 }
 // todo
