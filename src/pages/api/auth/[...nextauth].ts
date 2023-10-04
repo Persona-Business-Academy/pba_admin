@@ -22,13 +22,13 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     session: async ({ session }) => {
-      const user = await User.findUserByEmail(session.user?.email || "");
-      return user
+      const admin = await User.findAdminByEmail(session.user?.email || "");
+      return admin
         ? {
             ...session,
             user: {
-              name: `${user.firstName} ${user.lastName}`,
-              email: user.email,
+              name: `${admin.firstName} ${admin.lastName}`,
+              email: admin.email,
             },
           }
         : session;

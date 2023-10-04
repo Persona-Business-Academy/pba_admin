@@ -28,12 +28,12 @@ import {
 } from "@tanstack/react-table";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
-export type DataTableProps<Data extends object> = {
+export type DataTableProps<Data> = {
   data: Data[];
   columns: ColumnDef<Data, any>[];
   sorting: SortingState;
   setSorting: Dispatch<SetStateAction<SortingState>>;
-  setSearch: Dispatch<SetStateAction<string>>;
+  setSearch: (value: string) => void;
   search: string;
   isLoading: boolean;
   hasNextPage: boolean;
@@ -42,7 +42,7 @@ export type DataTableProps<Data extends object> = {
   fetchPreviousPage: () => void;
 };
 
-function SearchTable<Data extends object>({
+function SearchTable<Data>({
   data,
   columns,
   sorting,
@@ -55,7 +55,7 @@ function SearchTable<Data extends object>({
   fetchNextPage,
   fetchPreviousPage,
 }: DataTableProps<Data>) {
-  const table = useReactTable({
+  const { getHeaderGroups, getRowModel } = useReactTable({
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
@@ -69,6 +69,7 @@ function SearchTable<Data extends object>({
       },
     },
   });
+
   const userSearchHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearch(e.target.value);
@@ -107,7 +108,7 @@ function SearchTable<Data extends object>({
       ) : (
         <Table borderTop="1px solid rgb(226, 232, 240)" height="100%">
           <Thead>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const meta: any = header.column.columnDef.meta;
@@ -138,7 +139,7 @@ function SearchTable<Data extends object>({
             ))}
           </Thead>
           <Tbody>
-            {table.getRowModel().rows.map((row) => (
+            {getRowModel().rows.map((row) => (
               <Tr key={row.id}>
                 {row.getVisibleCells().map((cell) => {
                   const meta: any = cell.column.columnDef.meta;
@@ -166,7 +167,7 @@ function SearchTable<Data extends object>({
                   onClick={fetchPreviousPage}
                   bg="transparent"
                   icon={<BsChevronLeft />}
-                  isDisabled={hasPreviousPage}
+                  isDisabled={!hasPreviousPage}
                 >
                   {"<"}
                 </IconButton>

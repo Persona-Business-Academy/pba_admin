@@ -1,140 +1,131 @@
 "use client";
-import React, { FC, useEffect, useMemo, useState } from "react";
-import { useToast } from "@chakra-ui/react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import {
-  ColumnDef,
-  createColumnHelper,
-  SortingState,
-} from "@tanstack/react-table";
+import React, { useCallback, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { createColumnHelper, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
+import { v4 as uuidv4 } from "uuid";
 import { UserService } from "@/api/services/UserService";
+import { UsersParamsInput } from "@/api/types";
 import { SearchTable } from "@/components/molecule";
-import { UserModel, UsersListModel } from "@/models/user";
+import { ITEMS_PER_PAGE } from "@/constants/common";
+import { useDebounce } from "@/hooks/useDebounce";
+import { UserModel } from "@/models/user";
 
-type Props = {};
-
-const UsersList: FC<Props> = () => {
+export default function UsersList() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
-  const ITEMS_PER_PAGE = 5;
-  const toast = useToast();
+  const debouncedSearch = useDebounce(search);
 
-  const {
-    isLoading,
-    data,
-    hasNextPage,
-    fetchNextPage,
-    fetchPreviousPage,
-    refetch,
-  } = useInfiniteQuery<any, any, UsersListModel>(
-    ["all-users"],
-    ({ pageParam = 0 }) =>
-      UserService.getAllUsers({
-        offset: pageParam,
-        limit: ITEMS_PER_PAGE,
-        sorting,
-        search,
-      }),
-    {
-      keepPreviousData: true,
-      getNextPageParam: (lastPage: Array<UserModel>, pages) => {
-        if (lastPage?.length < ITEMS_PER_PAGE) {
-          return false; // No more pages to fetch
-        }
-        return pages.length * ITEMS_PER_PAGE;
-      },
-      // TODO Previous page is not working
-
-      getPreviousPageParam: (data: UsersListModel, pages) => {
-        console.log(pages[pages.length - 1], "pages[pages.length - 1]");
-
-        if (!data.skip) {
-          return false; // No previous page to fetch
-        }
-        return (pages.length - 1) * ITEMS_PER_PAGE;
-      },
-      onError: () => {
-        toast({
-          title: "Something went wrong",
-          status: "error",
-        });
-      },
-      select: (data) => {
-        return {
-          pages: [data.pages[data.pages.length - 1]],
-          pageParams: [data.pageParams[data.pageParams.length - 1]],
-        };
-      },
-    }
+  const queryKey = useMemo(
+    () => [
+      debouncedSearch ? `all-users/${debouncedSearch}` : "all-users",
+      page,
+    ],
+    [debouncedSearch, page]
   );
 
-  const columnHelper = createColumnHelper<UserModel>();
-
-  const columns: ColumnDef<UserModel, any>[] = [
-    columnHelper.accessor("firstName", {
-      cell: (info) => info.getValue(),
-      header: "First Name",
-    }),
-    columnHelper.accessor("lastName", {
-      cell: (info) => info.getValue(),
-      header: "Last Name",
-    }),
-    columnHelper.accessor("email", {
-      cell: (info) => info.getValue(),
-      header: "Email",
-    }),
-    columnHelper.accessor("createdAt", {
-      cell: (info) => {
-        const currentDate = dayjs(info.getValue());
-        return currentDate.format("YYYY-MM-DD HH:mm:ss");
-      },
-      header: "Created At",
-    }),
-    columnHelper.accessor("createdAt", {
-      cell: () => (
-        <div style={{ display: "flex", gap: 20 }}>
-          <span>Delete</span>
-          <span>Block</span>
-        </div>
-      ),
-      header: "Action Buttons",
-    }),
-  ];
-
-  useEffect(() => {
-    const timeOut = setTimeout(() => refetch(), 500);
-    return () => {
-      clearTimeout(timeOut);
+  const queryFn = useCallback(() => {
+    const params: UsersParamsInput = {
+      offset: page === 1 ? 0 : (page - 1) * ITEMS_PER_PAGE,
+      limit: ITEMS_PER_PAGE,
+      sorting: sorting,
+      search: debouncedSearch,
     };
-  }, [refetch, search]);
+    return UserService.getAllUsers(params);
+  }, [debouncedSearch, page, sorting]);
 
-  const currentPageData = useMemo(
-    () => data?.pages[data.pages.length - 1].users || [],
-    [data]
+  const { data, isLoading, isPreviousData } = useQuery({
+    queryKey,
+    queryFn,
+    keepPreviousData: true,
+  });
+
+  const pageCount = useMemo(() => {
+    if (data?.count) {
+      return Math.ceil(data.count / ITEMS_PER_PAGE);
+    }
+  }, [data?.count]);
+
+  const hasNextPage = useMemo(
+    () => !(page === pageCount || isPreviousData),
+    [isPreviousData, page, pageCount]
   );
 
   const hasPreviousPage = useMemo(
-    () => data?.pages[data.pages.length - 1].skip || 0,
-    [data?.pages]
+    () => !(page === 1 || isPreviousData),
+    [isPreviousData, page]
+  );
+
+  const setSearchValue = useCallback(
+    (value: string) => {
+      if (!!value && page !== 1) {
+        setPage(1);
+      }
+      setSearch(value);
+    },
+    [page]
+  );
+
+  const nextPage = useCallback(() => setPage((prevState) => ++prevState), []);
+  const prevPage = useCallback(() => setPage((prevState) => --prevState), []);
+
+  const items = useMemo(() => data?.users || [], [data?.users]);
+
+  const columnHelper = useMemo(() => createColumnHelper<UserModel>(), []);
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("firstName", {
+        id: uuidv4(),
+        cell: (info) => info.getValue(),
+        header: "First Name",
+      }),
+      columnHelper.accessor("lastName", {
+        id: uuidv4(),
+        cell: (info) => info.getValue(),
+        header: "Last Name",
+      }),
+      columnHelper.accessor("email", {
+        id: uuidv4(),
+        cell: (info) => info.getValue(),
+        header: "Email",
+      }),
+      columnHelper.accessor("createdAt", {
+        id: uuidv4(),
+        cell: (info) => {
+          const currentDate = dayjs(info.getValue());
+          return currentDate.format("YYYY-MM-DD HH:mm:ss");
+        },
+        header: "Created At",
+      }),
+      columnHelper.accessor("createdAt", {
+        id: uuidv4(),
+        cell: () => (
+          <div style={{ display: "flex", gap: 20 }}>
+            <span>Delete</span>
+            <span>Block</span>
+          </div>
+        ),
+        header: "Action Buttons",
+      }),
+    ],
+    [columnHelper]
   );
 
   return (
     <SearchTable
       isLoading={isLoading}
-      data={currentPageData}
+      data={items}
       columns={columns}
       sorting={sorting}
-      setSorting={setSorting}
-      setSearch={setSearch}
       search={search}
-      hasNextPage={!!hasNextPage}
-      hasPreviousPage={!hasPreviousPage}
-      fetchNextPage={fetchNextPage}
-      fetchPreviousPage={fetchPreviousPage}
+      setSorting={setSorting}
+      setSearch={setSearchValue}
+      hasNextPage={hasNextPage}
+      hasPreviousPage={hasPreviousPage}
+      fetchNextPage={nextPage}
+      fetchPreviousPage={prevPage}
     />
   );
-};
-
-export default UsersList;
+}
