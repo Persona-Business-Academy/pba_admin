@@ -90,14 +90,7 @@ export default function OnlineCourses() {
     <SearchTable
       title="Online Courses"
       isLoading={isLoading}
-      data={[
-        {
-          id: 1,
-          name: "asdasdasdasd",
-          cratedAt: Date.now(),
-          updatedAt: Date.now(),
-        },
-      ]}
+      data={data?.onlineCourses || []}
       count={data?.count || 0}
       // @ts-ignore
       columns={columns}
