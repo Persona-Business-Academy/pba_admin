@@ -8,9 +8,9 @@ namespace NodeJS {
     DATABASE_URL: string;
     NEXTAUTH_URL: string;
     NEXT_PUBLIC_AWS_STORAGE_URL: string;
-    AWS_ACCESS_KEY: string;
-    AWS_SECRET_KEY: string;
-    AWS_BUCKET_NAME: string;
-    AWS_REGION: string;
+    NEXT_PUBLIC_AWS_ACCESS_KEY: string;
+    NEXT_PUBLIC_AWS_SECRET_KEY: string;
+    NEXT_PUBLIC_AWS_BUCKET_NAME: string;
+    NEXT_PUBLIC_AWS_REGION: string;
   }
 }

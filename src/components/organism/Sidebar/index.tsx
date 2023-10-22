@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Box, Drawer, DrawerContent, useDisclosure } from "@chakra-ui/react";
 import { FiHome, FiTrendingUp } from "react-icons/fi";
 import {
-  FILES_ROUTE,
+  ONLINE_COURSES_ROUTE,
   USERS_ACTIVITY_ROUTE,
   USERS_ANALYTICS_ROUTE,
   USERS_LIST_ROUTE,
@@ -46,6 +46,7 @@ const linkItems: LinkItemProps[] = [
         title: "Project Management",
         href: "/project-management",
       },
+      { title: "Online", href: ONLINE_COURSES_ROUTE },
     ],
   },
   {
@@ -59,16 +60,6 @@ const linkItems: LinkItemProps[] = [
       {
         title: "Job",
         href: "/job-applicants",
-      },
-    ],
-  },
-  {
-    name: "Common",
-    icon: FiTrendingUp,
-    children: [
-      {
-        title: "Files",
-        href: FILES_ROUTE,
       },
     ],
   },
