@@ -13,8 +13,8 @@ model User {
     firstName String?  @db.VarChar(45)
     lastName  String?  @db.VarChar(45)
     password  String   @db.VarChar(60)
-    createdAt DateTime @default(now()) @map(name: "created_at")
-    updatedAt DateTime @updatedAt @map(name: "updated_at")
+    createdAt DateTime @default(now()) @db.Timestamp(0)
+    updatedAt DateTime @updatedAt @db.Timestamp(0)
 
     @@map(name: "users")
 }
@@ -26,10 +26,65 @@ model Admin {
     lastName  String?   @db.VarChar(45)
     password  String    @db.VarChar(60)
     role      AdminRole
-    createdAt DateTime  @default(now()) @map(name: "created_at")
-    updatedAt DateTime  @updatedAt @map(name: "updated_at")
+    createdAt DateTime  @default(now()) @db.Timestamp(0)
+    updatedAt DateTime  @updatedAt @db.Timestamp(0)
 
     @@map(name: "admin")
+}
+
+model OnlineCourse {
+    id        Int      @id @default(autoincrement())
+    name      String   @db.VarChar(45)
+    createdAt DateTime @default(now()) @db.Timestamp(0)
+    updatedAt DateTime @updatedAt @db.Timestamp(0)
+
+    levels OnlineCourseLevel[]
+    days   OnlineCourseDay[]
+    videos OnlineCourseVideo[]
+}
+
+model OnlineCourseLevel {
+    id        Int      @id @default(autoincrement())
+    level     String   @db.VarChar(45)
+    createdAt DateTime @default(now()) @db.Timestamp(0)
+    updatedAt DateTime @updatedAt @db.Timestamp(0)
+
+    onlineCourseId Int
+
+    OnlineCourse OnlineCourse @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
+
+    days   OnlineCourseDay[]
+    videos OnlineCourseVideo[]
+}
+
+model OnlineCourseDay {
+    id        Int      @id @default(autoincrement())
+    label     String   @db.VarChar(45)
+    createdAt DateTime @default(now()) @db.Timestamp(0)
+    updatedAt DateTime @updatedAt @db.Timestamp(0)
+
+    onlineCourseId      Int
+    onlineCourseLevelId Int
+
+    onlineCourse      OnlineCourse      @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
+    OnlineCourseLevel OnlineCourseLevel @relation(fields: [onlineCourseLevelId], references: [id], onDelete: Cascade)
+
+    videos OnlineCourseVideo[]
+}
+
+model OnlineCourseVideo {
+    id        Int      @id @default(autoincrement())
+    key       String   @db.VarChar(45)
+    createdAt DateTime @default(now()) @db.Timestamp(0)
+    updatedAt DateTime @updatedAt @db.Timestamp(0)
+
+    onlineCourseId      Int
+    onlineCourseLevelId Int
+    onlineCourseDayId   Int
+
+    onlineCourse      OnlineCourse      @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
+    OnlineCourseLevel OnlineCourseLevel @relation(fields: [onlineCourseLevelId], references: [id], onDelete: Cascade)
+    OnlineCourseDay   OnlineCourseDay   @relation(fields: [onlineCourseDayId], references: [id], onDelete: Cascade)
 }
 
 enum AdminRole {

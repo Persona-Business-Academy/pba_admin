@@ -1,11 +1,11 @@
-import React, { Dispatch, SetStateAction, useCallback } from "react";
+import React, { Dispatch, memo, SetStateAction, useCallback } from "react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   Box,
   chakra,
   Flex,
   FormControl,
-  FormLabel,
+  HStack,
   IconButton,
   Input,
   Spinner,
@@ -27,8 +27,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { ITEMS_PER_PAGE } from "@/constants/common";
 
 export type DataTableProps<Data> = {
+  title?: string;
+  count: number;
   data: Data[];
   columns: ColumnDef<Data, any>[];
   sorting: SortingState;
@@ -43,6 +46,8 @@ export type DataTableProps<Data> = {
 };
 
 function SearchTable<Data>({
+  title,
+  count,
   data,
   columns,
   sorting,
@@ -65,7 +70,7 @@ function SearchTable<Data>({
       sorting,
       pagination: {
         pageIndex: 0,
-        pageSize: 10,
+        pageSize: ITEMS_PER_PAGE,
       },
     },
   });
@@ -78,18 +83,13 @@ function SearchTable<Data>({
   );
 
   return (
-    <Box
-      border="1px solid rgb(226, 232, 240)"
-      overflow="auto"
-      minHeight="700px"
-    >
+    <Box overflow="auto" minHeight="700px">
       <Text as="h2" fontSize={24} textAlign="center">
-        USERS LIST
+        {title}
       </Text>
       <FormControl py={4} px={4}>
-        <FormLabel mb="3px">Search Users</FormLabel>
         <Input
-          placeholder="Type here to search users"
+          placeholder="Type here to search"
           width="200px"
           onChange={userSearchHandler}
           value={search}
@@ -158,29 +158,31 @@ function SearchTable<Data>({
           <Tfoot>
             <Tr>
               <Td align="left" colSpan={5}>
-                <Text>Users count 12</Text>
+                <Text>Count - {count}</Text>
               </Td>
               <Td>
-                <IconButton
-                  className="border rounded p-1"
-                  aria-label="chevron-left"
-                  onClick={fetchPreviousPage}
-                  bg="transparent"
-                  icon={<BsChevronLeft />}
-                  isDisabled={!hasPreviousPage}
-                >
-                  {"<"}
-                </IconButton>
-                <IconButton
-                  aria-label="chevron-right"
-                  className="border rounded p-1"
-                  bg="transparent"
-                  onClick={fetchNextPage}
-                  icon={<BsChevronRight />}
-                  isDisabled={!hasNextPage}
-                >
-                  {">"}
-                </IconButton>
+                <HStack>
+                  <IconButton
+                    className="border rounded p-1"
+                    aria-label="chevron-left"
+                    onClick={fetchPreviousPage}
+                    bg="transparent"
+                    icon={<BsChevronLeft />}
+                    isDisabled={!hasPreviousPage}
+                  >
+                    {"<"}
+                  </IconButton>
+                  <IconButton
+                    aria-label="chevron-right"
+                    className="border rounded p-1"
+                    bg="transparent"
+                    onClick={fetchNextPage}
+                    icon={<BsChevronRight />}
+                    isDisabled={!hasNextPage}
+                  >
+                    {">"}
+                  </IconButton>
+                </HStack>
               </Td>
             </Tr>
           </Tfoot>
@@ -190,4 +192,4 @@ function SearchTable<Data>({
   );
 }
 
-export default SearchTable;
+export default memo(SearchTable);

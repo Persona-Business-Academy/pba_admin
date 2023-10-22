@@ -49,7 +49,7 @@ export default function UsersList() {
   }, [data?.count]);
 
   const hasNextPage = useMemo(
-    () => !(page === pageCount || isPreviousData),
+    () => !(!pageCount || page === pageCount || isPreviousData),
     [isPreviousData, page, pageCount]
   );
 
@@ -70,8 +70,6 @@ export default function UsersList() {
 
   const nextPage = useCallback(() => setPage((prevState) => ++prevState), []);
   const prevPage = useCallback(() => setPage((prevState) => --prevState), []);
-
-  const items = useMemo(() => data?.users || [], [data?.users]);
 
   const columnHelper = useMemo(() => createColumnHelper<UserModel>(), []);
   const columns = useMemo(
@@ -115,8 +113,11 @@ export default function UsersList() {
 
   return (
     <SearchTable
+      title="Users List"
       isLoading={isLoading}
-      data={items}
+      data={data?.users || []}
+      count={data?.count || 0}
+      // @ts-ignore
       columns={columns}
       sorting={sorting}
       search={search}
