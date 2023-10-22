@@ -35,7 +35,7 @@ const CreateEditOnlineCourseModal: FC<Props> = ({
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<CreateEditOnlineCourseValidation>({
     defaultValues: { name: !!onlineCourse ? onlineCourse.name : "" },
     resolver,
@@ -66,7 +66,9 @@ const CreateEditOnlineCourseModal: FC<Props> = ({
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create Online Course</ModalHeader>
+        <ModalHeader>
+          {`${!!onlineCourse ? "Edit" : "Create"} Online Course`}
+        </ModalHeader>
         <ModalBody>
           <Controller
             name="name"
@@ -95,9 +97,10 @@ const CreateEditOnlineCourseModal: FC<Props> = ({
             onClick={handleSubmit(
               useCallback((data) => mutate(data), [mutate])
             )}
+            isDisabled={!isDirty}
             isLoading={isLoading}
           >
-            Save
+            {!!onlineCourse ? "Save" : "Create"}
           </Button>
         </ModalFooter>
       </ModalContent>
