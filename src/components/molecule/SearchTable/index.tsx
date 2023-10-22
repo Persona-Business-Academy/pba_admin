@@ -2,6 +2,7 @@ import React, { Dispatch, memo, SetStateAction, useCallback } from "react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   chakra,
   Flex,
   FormControl,
@@ -43,6 +44,7 @@ export type DataTableProps<Data> = {
   hasPreviousPage: boolean;
   fetchNextPage: () => void;
   fetchPreviousPage: () => void;
+  addNew?: () => void;
 };
 
 function SearchTable<Data>({
@@ -59,6 +61,7 @@ function SearchTable<Data>({
   hasPreviousPage,
   fetchNextPage,
   fetchPreviousPage,
+  addNew,
 }: DataTableProps<Data>) {
   const { getHeaderGroups, getRowModel } = useReactTable({
     columns,
@@ -84,9 +87,12 @@ function SearchTable<Data>({
 
   return (
     <Box overflow="auto" minHeight="700px">
-      <Text as="h2" fontSize={24} textAlign="center">
-        {title}
-      </Text>
+      <Flex justifyContent="space-between" padding={5}>
+        <Text as="h2" fontSize={24} textAlign="center">
+          {title}
+        </Text>
+        <Button onClick={addNew}>Add New</Button>
+      </Flex>
       <FormControl py={4} px={4}>
         <Input
           placeholder="Type here to search"

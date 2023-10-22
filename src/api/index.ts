@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { getSession } from "next-auth/react";
-import { customToast, toastDefaultOptions } from "@/constants/chakra";
+import { customToast } from "@/constants/chakra";
 
 const $apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -8,12 +8,8 @@ const $apiClient = axios.create({
 });
 
 const handleError = (error: Error | AxiosError) => {
-  if (axios.isAxiosError(error) && !!error.response) {
-    customToast({
-      title: error.response.data.message,
-      status: "error",
-      ...toastDefaultOptions,
-    });
+  if (axios.isAxiosError(error) && !!error.response?.data?.message) {
+    customToast({ title: error.response.data.message, status: "error" });
     return Promise.reject(error.response.data);
   } else {
     customToast({ title: error.message, status: "error" });
