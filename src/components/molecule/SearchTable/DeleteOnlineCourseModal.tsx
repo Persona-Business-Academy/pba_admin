@@ -42,6 +42,8 @@ const DeleteOnlineCourseModal: FC<Props> = ({
       isOpen={isOpen}
       leastDestructiveRef={cancelRef}
       onClose={onClose}
+      closeOnOverlayClick={false}
+      closeOnEsc={false}
     >
       <AlertDialogOverlay>
         <AlertDialogContent>

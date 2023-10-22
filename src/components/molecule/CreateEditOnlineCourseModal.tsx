@@ -3,7 +3,6 @@ import {
   Button,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -59,11 +58,15 @@ const CreateEditOnlineCourseModal: FC<Props> = ({
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnOverlayClick={false}
+      closeOnEsc={false}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Create Online Course</ModalHeader>
-        <ModalCloseButton />
         <ModalBody>
           <Controller
             name="name"
