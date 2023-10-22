@@ -1,5 +1,5 @@
 import { SortingType } from "@/api/types";
-import prisma from "../index";
+import prisma from "..";
 
 export class User {
   static async list(
@@ -76,13 +76,7 @@ export class User {
 
     return {
       count,
-      users: users.map(({ id, firstName, lastName, email, createdAt }) => ({
-        id,
-        firstName,
-        lastName,
-        email,
-        createdAt,
-      })),
+      users,
     };
   }
 

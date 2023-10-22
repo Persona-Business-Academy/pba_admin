@@ -5,7 +5,6 @@ import { createColumnHelper, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { UserService } from "@/api/services/UserService";
-import { UsersParamsInput } from "@/api/types";
 import { SearchTable } from "@/components/molecule";
 import { ITEMS_PER_PAGE } from "@/constants/common";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -15,30 +14,20 @@ export default function UsersList() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-
   const debouncedSearch = useDebounce(search);
 
-  const queryKey = useMemo(
-    () => [
+  const { data, isLoading, isPreviousData } = useQuery({
+    queryKey: [
       debouncedSearch ? `all-users/${debouncedSearch}` : "all-users",
       page,
     ],
-    [debouncedSearch, page]
-  );
-
-  const queryFn = useCallback(() => {
-    const params: UsersParamsInput = {
-      offset: page === 1 ? 0 : (page - 1) * ITEMS_PER_PAGE,
-      limit: ITEMS_PER_PAGE,
-      sorting: sorting,
-      search: debouncedSearch,
-    };
-    return UserService.getAllUsers(params);
-  }, [debouncedSearch, page, sorting]);
-
-  const { data, isLoading, isPreviousData } = useQuery({
-    queryKey,
-    queryFn,
+    queryFn: () =>
+      UserService.getAllUsers({
+        offset: page === 1 ? 0 : (page - 1) * ITEMS_PER_PAGE,
+        limit: ITEMS_PER_PAGE,
+        sorting: sorting,
+        search: debouncedSearch,
+      }),
     keepPreviousData: true,
   });
 
@@ -47,16 +36,6 @@ export default function UsersList() {
       return Math.ceil(data.count / ITEMS_PER_PAGE);
     }
   }, [data?.count]);
-
-  const hasNextPage = useMemo(
-    () => !(!pageCount || page === pageCount || isPreviousData),
-    [isPreviousData, page, pageCount]
-  );
-
-  const hasPreviousPage = useMemo(
-    () => !(page === 1 || isPreviousData),
-    [isPreviousData, page]
-  );
 
   const setSearchValue = useCallback(
     (value: string) => {
@@ -67,9 +46,6 @@ export default function UsersList() {
     },
     [page]
   );
-
-  const nextPage = useCallback(() => setPage((prevState) => ++prevState), []);
-  const prevPage = useCallback(() => setPage((prevState) => --prevState), []);
 
   const columnHelper = useMemo(() => createColumnHelper<UserModel>(), []);
   const columns = useMemo(
@@ -123,10 +99,16 @@ export default function UsersList() {
       search={search}
       setSorting={setSorting}
       setSearch={setSearchValue}
-      hasNextPage={hasNextPage}
-      hasPreviousPage={hasPreviousPage}
-      fetchNextPage={nextPage}
-      fetchPreviousPage={prevPage}
+      hasNextPage={useMemo(
+        () => !(!pageCount || page === pageCount || isPreviousData),
+        [isPreviousData, page, pageCount]
+      )}
+      hasPreviousPage={useMemo(
+        () => !(page === 1 || isPreviousData),
+        [isPreviousData, page]
+      )}
+      fetchNextPage={useCallback(() => setPage((prev) => ++prev), [])}
+      fetchPreviousPage={useCallback(() => setPage((prev) => --prev), [])}
     />
   );
 }

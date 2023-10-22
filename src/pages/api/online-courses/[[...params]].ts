@@ -2,20 +2,20 @@ import { Catch, createHandler, Get, Query } from "next-api-decorators";
 import { SortingType } from "@/api/types";
 import { exceptionHandler } from "@/lib/prisma/error";
 import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
-import { User } from "@/lib/prisma/resolvers";
+import { OnlineCourses } from "@/lib/prisma/resolvers/online-courses";
 
 @Catch(exceptionHandler)
 @AuthMiddleware()
-class UserHandler {
+class OnlineCourseHandler {
   @Get("/list")
-  _getAllUsers(
+  _getAllOnlineCourses(
     @Query("offset") skip: string,
     @Query("limit") take: string,
     @Query("search") search: string,
     @Query("sorting") sorting: SortingType[]
   ) {
-    return User.list(+skip, +take, search, sorting);
+    return OnlineCourses.list(+skip, +take, search, sorting);
   }
 }
 
-export default createHandler(UserHandler);
+export default createHandler(OnlineCourseHandler);
