@@ -1,13 +1,4 @@
 import { FC, memo, useCallback } from "react";
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-} from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
@@ -15,7 +6,8 @@ import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { Maybe } from "@/models/common";
 import { OnlineCourse } from "@/models/onlineCourses";
 import { CreateEditOnlineCourseValidation } from "@/validation/online-courses";
-import { FormInput } from "../../atom";
+import { FormInput } from "../../../atom";
+import SharedModal from "../../SharedModal";
 
 type Props = {
   isOpen: boolean;
@@ -53,43 +45,32 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} closeOnEsc={false}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{`${!!onlineCourse ? "Edit" : "Create"} Online Course`}</ModalHeader>
-        <ModalBody>
-          <Controller
+    <SharedModal
+      isOpen={isOpen}
+      title={`${!!onlineCourse ? "Edit" : "Create"} Online Course`}
+      action={handleSubmit(useCallback(data => mutate(data), [mutate]))}
+      actionButtonText={!!onlineCourse ? "Save" : "Create"}
+      onClose={onClose}
+      isLoading={isLoading}
+      actionButtonDisabled={!isDirty}>
+      <Controller
+        name="name"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <FormInput
+            isRequired
+            isInvalid={!!errors.name?.message}
             name="name"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <FormInput
-                isRequired
-                isInvalid={!!errors.name?.message}
-                name="name"
-                type="text"
-                formLabelName="Name"
-                value={value}
-                placeholder="React.js course"
-                handleInputChange={onChange}
-                formErrorMessage={errors.name?.message}
-              />
-            )}
+            type="text"
+            formLabelName="Name"
+            value={value}
+            placeholder="React.js course"
+            handleInputChange={onChange}
+            formErrorMessage={errors.name?.message}
           />
-        </ModalBody>
-        <ModalFooter>
-          <Button isDisabled={isLoading} mr={3} onClick={onClose}>
-            Close
-          </Button>
-          <Button
-            colorScheme="blue"
-            onClick={handleSubmit(useCallback(data => mutate(data), [mutate]))}
-            isDisabled={!isDirty}
-            isLoading={isLoading}>
-            {!!onlineCourse ? "Save" : "Create"}
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        )}
+      />
+    </SharedModal>
   );
 };
 

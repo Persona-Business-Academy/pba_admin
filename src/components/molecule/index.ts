@@ -1,10 +1,10 @@
 "use client";
-import AddEditOnilneCourseDayModal from "./modals/AddEditOnilneCourseDayModal";
-import AddEditOnilneCourseLevelModal from "./modals/AddEditOnilneCourseLevelModal";
-import AddEditOnilneCourseVideoModal from "./modals/AddEditOnilneCourseVideoModal";
-import CreateEditOnlineCourseModal from "./modals/CreateEditOnlineCourseModal";
+import AddEditOnilneCourseDayModal from "./modals/OnlineCourse/AddEditOnilneCourseDayModal";
+import AddEditOnilneCourseLevelModal from "./modals/OnlineCourse/AddEditOnilneCourseLevelModal";
+import AddEditOnilneCourseVideoModal from "./modals/OnlineCourse/AddEditOnilneCourseVideoModal";
+import CreateEditOnlineCourseModal from "./modals/OnlineCourse/CreateEditOnlineCourseModal";
+import DeleteOnlineCourseModal from "./modals/OnlineCourse/DeleteOnlineCourseModal";
 import SearchTable from "./SearchTable";
-import DeleteOnlineCourseModal from "./SearchTable/DeleteOnlineCourseModal";
 import SharedModal from "./SharedModal";
 
 export {

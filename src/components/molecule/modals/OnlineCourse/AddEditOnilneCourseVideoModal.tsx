@@ -1,17 +1,17 @@
 import { FC, memo, useCallback } from "react";
-import SharedModal from "../SharedModal";
+import SharedModal from "../../SharedModal";
 
 type Props = {
   onClose: () => void;
 };
 
-const AddEditOnlineCourseLevelModal: FC<Props> = ({ onClose }) => {
+const AddEditOnlineCourseVideoModal: FC<Props> = ({ onClose }) => {
   const handleSubmit = useCallback(() => {}, []);
 
   return (
     <SharedModal
       isOpen
-      title="Add Level"
+      title="Add Video"
       action={handleSubmit}
       actionButtonText="Create"
       onClose={onClose}
@@ -21,4 +21,4 @@ const AddEditOnlineCourseLevelModal: FC<Props> = ({ onClose }) => {
   );
 };
 
-export default memo(AddEditOnlineCourseLevelModal);
+export default memo(AddEditOnlineCourseVideoModal);

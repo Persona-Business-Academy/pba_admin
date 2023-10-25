@@ -1,6 +1,7 @@
 "use client";
 import { FC, memo } from "react";
 import {
+  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -9,7 +10,6 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { Button } from "../atom";
 
 type Props = {
   isOpen: boolean;
@@ -17,7 +17,7 @@ type Props = {
   title: string;
   children: React.ReactNode;
   actionButtonText: string;
-  actionButtonColorScheme?: string;
+  actionButtonDisabled?: boolean;
   action: () => void;
   isLoading: boolean;
 };
@@ -28,33 +28,35 @@ const SharedModal: FC<Props> = ({
   title,
   children,
   actionButtonText,
-  actionButtonColorScheme = "primary",
+  actionButtonDisabled,
   action,
   isLoading,
-}) => {
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={!isLoading} isCentered>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>{children}</ModalBody>
-        <ModalFooter>
-          <Button
-            variant="ghost"
-            colorScheme="blue"
-            mr={3}
-            onClick={onClose}
-            isDisabled={isLoading}>
-            Close
-          </Button>
-          <Button colorScheme={actionButtonColorScheme} onClick={action} isLoading={isLoading}>
-            {actionButtonText}
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  );
-};
+}) => (
+  <Modal
+    isCentered
+    isOpen={isOpen}
+    onClose={onClose}
+    closeOnOverlayClick={!isLoading}
+    closeOnEsc={false}>
+    <ModalOverlay />
+    <ModalContent>
+      <ModalHeader>{title}</ModalHeader>
+      <ModalCloseButton />
+      <ModalBody>{children}</ModalBody>
+      <ModalFooter>
+        <Button mr={3} onClick={onClose} isDisabled={isLoading}>
+          Close
+        </Button>
+        <Button
+          colorScheme="blue"
+          onClick={action}
+          isLoading={isLoading}
+          isDisabled={actionButtonDisabled}>
+          {actionButtonText}
+        </Button>
+      </ModalFooter>
+    </ModalContent>
+  </Modal>
+);
 
 export default memo(SharedModal);

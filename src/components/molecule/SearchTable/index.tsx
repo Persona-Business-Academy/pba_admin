@@ -82,7 +82,7 @@ function SearchTable<Data>({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearch(e.target.value);
     },
-    [setSearch]
+    [setSearch],
   );
 
   return (
@@ -103,31 +103,21 @@ function SearchTable<Data>({
       </FormControl>
       {isLoading ? (
         <Flex alignItems="center" justifyContent="center" minHeight="500px">
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-          />
+          <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
         </Flex>
       ) : (
         <Table borderTop="1px solid rgb(226, 232, 240)" height="100%">
           <Thead>
-            {getHeaderGroups().map((headerGroup) => (
+            {getHeaderGroups().map(headerGroup => (
               <Tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map(header => {
                   const meta: any = header.column.columnDef.meta;
                   return (
                     <Th
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
-                      isNumeric={meta?.isNumeric}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      isNumeric={meta?.isNumeric}>
+                      {flexRender(header.column.columnDef.header, header.getContext())}
 
                       <chakra.span pl="4">
                         {header.column.getIsSorted() ? (
@@ -145,16 +135,13 @@ function SearchTable<Data>({
             ))}
           </Thead>
           <Tbody>
-            {getRowModel().rows.map((row) => (
+            {getRowModel().rows.map(row => (
               <Tr key={row.id}>
-                {row.getVisibleCells().map((cell) => {
+                {row.getVisibleCells().map(cell => {
                   const meta: any = cell.column.columnDef.meta;
                   return (
                     <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </Td>
                   );
                 })}
@@ -174,8 +161,7 @@ function SearchTable<Data>({
                     onClick={fetchPreviousPage}
                     bg="transparent"
                     icon={<BsChevronLeft />}
-                    isDisabled={!hasPreviousPage}
-                  >
+                    isDisabled={!hasPreviousPage}>
                     {"<"}
                   </IconButton>
                   <IconButton
@@ -184,8 +170,7 @@ function SearchTable<Data>({
                     bg="transparent"
                     onClick={fetchNextPage}
                     icon={<BsChevronRight />}
-                    isDisabled={!hasNextPage}
-                  >
+                    isDisabled={!hasNextPage}>
                     {">"}
                   </IconButton>
                 </HStack>
