@@ -1,13 +1,13 @@
 import React, { FC, memo, useCallback, useState } from "react";
 import { Box, Flex, Heading, IconButton } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
-import { Maybe } from "@/models/common";
-import { OnlineCourseType } from "@/models/onlineCourses";
 import {
   AddEditOnilneCourseDayModal,
   AddEditOnilneCourseLevelModal,
   AddEditOnilneCourseVideoModal,
-} from "../molecule";
+} from "@/components/molecule";
+import { Maybe } from "@/models/common";
+import { OnlineCourseType } from "@/models/onlineCourses";
 
 type ModalByTypeProps = {
   type: Maybe<OnlineCourseType>;

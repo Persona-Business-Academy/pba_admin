@@ -3,11 +3,11 @@ import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
+import { FormInput } from "@/components/atom";
+import SharedModal from "@/components/molecule/SharedModal";
 import { Maybe } from "@/models/common";
 import { OnlineCourse } from "@/models/onlineCourses";
 import { CreateEditOnlineCourseValidation } from "@/validation/online-courses";
-import { FormInput } from "../../../atom";
-import SharedModal from "../../SharedModal";
 
 type Props = {
   isOpen: boolean;

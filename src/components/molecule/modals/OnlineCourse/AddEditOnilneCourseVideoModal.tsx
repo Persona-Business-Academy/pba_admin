@@ -1,5 +1,5 @@
 import { FC, memo, useCallback } from "react";
-import SharedModal from "../../SharedModal";
+import SharedModal from "@/components/molecule/SharedModal";
 
 type Props = {
   onClose: () => void;
