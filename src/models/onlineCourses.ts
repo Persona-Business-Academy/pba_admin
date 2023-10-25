@@ -8,6 +8,5 @@ export type OnlineCourse = {
   updatedAt: Date;
 };
 
-export type OnlineCoursesListModel = Prisma.PromiseReturnType<
-  typeof OnlineCourses.list
->;
+export type OnlineCoursesListModel = Prisma.PromiseReturnType<typeof OnlineCourses.list>;
+export type OnlineCourseType = "levels" | "days" | "videos";

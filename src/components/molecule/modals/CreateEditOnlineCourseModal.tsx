@@ -15,7 +15,7 @@ import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { Maybe } from "@/models/common";
 import { OnlineCourse } from "@/models/onlineCourses";
 import { CreateEditOnlineCourseValidation } from "@/validation/online-courses";
-import { FormInput } from "../atom";
+import { FormInput } from "../../atom";
 
 type Props = {
   isOpen: boolean;
@@ -26,12 +26,7 @@ type Props = {
 
 const resolver = classValidatorResolver(CreateEditOnlineCourseValidation);
 
-const CreateEditOnlineCourseModal: FC<Props> = ({
-  onlineCourse,
-  isOpen,
-  onClose,
-  onSave,
-}) => {
+const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose, onSave }) => {
   const {
     control,
     handleSubmit,
@@ -47,28 +42,21 @@ const CreateEditOnlineCourseModal: FC<Props> = ({
     CreateEditOnlineCourseValidation
   >(
     !!onlineCourse
-      ? (data) => OnlineCourseService.editOnlineCourse(onlineCourse.id, data)
+      ? data => OnlineCourseService.editOnlineCourse(onlineCourse.id, data)
       : OnlineCourseService.createOnlineCourse,
     {
       onSuccess: async () => {
         onSave();
         onClose();
       },
-    }
+    },
   );
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      closeOnOverlayClick={false}
-      closeOnEsc={false}
-    >
+    <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} closeOnEsc={false}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>
-          {`${!!onlineCourse ? "Edit" : "Create"} Online Course`}
-        </ModalHeader>
+        <ModalHeader>{`${!!onlineCourse ? "Edit" : "Create"} Online Course`}</ModalHeader>
         <ModalBody>
           <Controller
             name="name"
@@ -94,12 +82,9 @@ const CreateEditOnlineCourseModal: FC<Props> = ({
           </Button>
           <Button
             colorScheme="blue"
-            onClick={handleSubmit(
-              useCallback((data) => mutate(data), [mutate])
-            )}
+            onClick={handleSubmit(useCallback(data => mutate(data), [mutate]))}
             isDisabled={!isDirty}
-            isLoading={isLoading}
-          >
+            isLoading={isLoading}>
             {!!onlineCourse ? "Save" : "Create"}
           </Button>
         </ModalFooter>

@@ -27,15 +27,30 @@ class OnlineCourseHandler {
     @Query("offset") skip: string,
     @Query("limit") take: string,
     @Query("search") search: string,
-    @Query("sorting") sorting: SortingType[]
+    @Query("sorting") sorting: SortingType[],
   ) {
     return OnlineCourses.list(+skip, +take, search, sorting);
   }
 
+  @Get("/:id")
+  async getOnlineCourse(@Param("id") id: string) {
+    const courseId = +id;
+
+    if (isNaN(courseId)) {
+      throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
+    }
+
+    const onlineCourse = await prisma.onlineCourse.findUnique({
+      where: {
+        id: courseId,
+      },
+    });
+
+    return onlineCourse;
+  }
+
   @Post("/create")
-  async createOnlineCourse(
-    @Body(ValidationPipe) body: CreateEditOnlineCourseValidation
-  ) {
+  async createOnlineCourse(@Body(ValidationPipe) body: CreateEditOnlineCourseValidation) {
     const { name } = body;
     const newCourse = await prisma.onlineCourse.create({ data: { name } });
     return newCourse.id;
@@ -44,7 +59,7 @@ class OnlineCourseHandler {
   @Put("/edit/:id")
   async editOnlineCourse(
     @Body(ValidationPipe) body: CreateEditOnlineCourseValidation,
-    @Param("id") id: string
+    @Param("id") id: string,
   ) {
     const { name } = body;
 

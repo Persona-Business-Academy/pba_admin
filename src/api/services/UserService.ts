@@ -1,9 +1,9 @@
 import { UsersListModel } from "@/models/user";
 import $apiClient from "..";
-import { UsersParamsInput } from "../types";
+import { QueryParams } from "../types";
 
 export class UserService {
-  static getAllUsers(params: UsersParamsInput): Promise<UsersListModel> {
+  static getAllUsers(params: QueryParams): Promise<UsersListModel> {
     return $apiClient.get("/users/list", {
       params: {
         limit: params.limit,
@@ -13,6 +13,4 @@ export class UserService {
       },
     });
   }
-
-  getUserById() {}
 }

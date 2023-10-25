@@ -22,10 +22,8 @@ export default function OnlineCourses() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(search);
-  const [editableOnlineCourse, setEditableOnlineCourse] =
-    useState<Maybe<OnlineCourse>>(null);
-  const [deletableOnlineCourse, setDeletableOnlineCourse] =
-    useState<Maybe<OnlineCourse>>(null);
+  const [editableOnlineCourse, setEditableOnlineCourse] = useState<Maybe<OnlineCourse>>(null);
+  const [deletableOnlineCourse, setDeletableOnlineCourse] = useState<Maybe<OnlineCourse>>(null);
   const { isOpen, onOpen, onClose } = useDisclosure({
     onClose() {
       if (!!editableOnlineCourse) setEditableOnlineCourse(null);
@@ -44,9 +42,7 @@ export default function OnlineCourses() {
 
   const { data, isLoading, isPreviousData, refetch } = useQuery({
     queryKey: [
-      debouncedSearch
-        ? `all-online-courses/${debouncedSearch}`
-        : "all-online-courses",
+      debouncedSearch ? `all-online-courses/${debouncedSearch}` : "all-online-courses",
       page,
     ],
     queryFn: () =>
@@ -72,7 +68,7 @@ export default function OnlineCourses() {
       }
       setSearch(value);
     },
-    [page]
+    [page],
   );
 
   const columnHelper = useMemo(() => createColumnHelper<OnlineCourse>(), []);
@@ -81,7 +77,7 @@ export default function OnlineCourses() {
     () => [
       columnHelper.accessor("id", {
         id: uuidv4(),
-        cell: (info) => {
+        cell: info => {
           const id = info.getValue();
           return (
             <Button as={Link} href={`/online-courses/${id}`}>
@@ -93,17 +89,17 @@ export default function OnlineCourses() {
       }),
       columnHelper.accessor("name", {
         id: uuidv4(),
-        cell: (info) => info.getValue(),
+        cell: info => info.getValue(),
         header: "Name",
       }),
       columnHelper.accessor("createdAt", {
         id: uuidv4(),
-        cell: (info) => dayjs(info.getValue()).format("YYYY-MM-DD HH:mm:ss"),
+        cell: info => dayjs(info.getValue()).format("YYYY-MM-DD HH:mm:ss"),
         header: "Created At",
       }),
       columnHelper.accessor("updatedAt", {
         id: uuidv4(),
-        cell: (info) => dayjs(info.getValue()).format("YYYY-MM-DD HH:mm:ss"),
+        cell: info => dayjs(info.getValue()).format("YYYY-MM-DD HH:mm:ss"),
         header: "Updated At",
       }),
       columnHelper.accessor("id", {
@@ -115,8 +111,7 @@ export default function OnlineCourses() {
               onClick={() => {
                 setEditableOnlineCourse(row.original);
                 onOpen();
-              }}
-            >
+              }}>
               Edit
             </Button>
             <Button
@@ -124,8 +119,7 @@ export default function OnlineCourses() {
               onClick={() => {
                 setDeletableOnlineCourse(row.original);
                 onOpenDeleteOnlineCourse();
-              }}
-            >
+              }}>
               Delete
             </Button>
           </HStack>
@@ -133,7 +127,7 @@ export default function OnlineCourses() {
         header: "Actions",
       }),
     ],
-    [columnHelper, onOpen, onOpenDeleteOnlineCourse]
+    [columnHelper, onOpen, onOpenDeleteOnlineCourse],
   );
 
   return (
@@ -151,14 +145,11 @@ export default function OnlineCourses() {
         setSearch={setSearchValue}
         hasNextPage={useMemo(
           () => !(!pageCount || page === pageCount || isPreviousData),
-          [isPreviousData, page, pageCount]
+          [isPreviousData, page, pageCount],
         )}
-        hasPreviousPage={useMemo(
-          () => !(page === 1 || isPreviousData),
-          [isPreviousData, page]
-        )}
-        fetchNextPage={useCallback(() => setPage((prev) => ++prev), [])}
-        fetchPreviousPage={useCallback(() => setPage((prev) => --prev), [])}
+        hasPreviousPage={useMemo(() => !(page === 1 || isPreviousData), [isPreviousData, page])}
+        fetchNextPage={useCallback(() => setPage(prev => ++prev), [])}
+        fetchPreviousPage={useCallback(() => setPage(prev => --prev), [])}
         addNew={onOpen}
       />
       {isOpen && (

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 import { Box, Drawer, DrawerContent, useDisclosure } from "@chakra-ui/react";
 import { FiHome, FiTrendingUp } from "react-icons/fi";
 import {
@@ -83,8 +83,7 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        size="full"
-      >
+        size="full">
         <DrawerContent>
           <SidebarContent onClose={onClose} linkItems={linkItems} />
         </DrawerContent>
@@ -94,4 +93,4 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
     </Box>
   );
 };
-export default Sidebar;
+export default memo(Sidebar);
