@@ -31,10 +31,14 @@ export class OnlineCourses {
       },
       include: {
         levels: {
+          orderBy: { createdAt: "desc" },
           include: {
             days: {
+              orderBy: { createdAt: "desc" },
               include: {
-                videos: true,
+                videos: {
+                  orderBy: { createdAt: "desc" },
+                },
               },
             },
           },

@@ -18,8 +18,9 @@ import { exceptionHandler } from "@/lib/prisma/error";
 import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
 import { OnlineCourses } from "@/lib/prisma/resolvers/online-courses";
 import {
-  CreateEditOnlineCourseLevelValidation,
   CreateEditOnlineCourseValidation,
+  CreateOnlineCourseLevelValidation,
+  EditOnlineCourseLevelValidation,
 } from "@/validation/online-courses";
 
 @Catch(exceptionHandler)
@@ -86,7 +87,7 @@ export class OnlineCourseHandler {
   }
 
   @Post("/create-level")
-  async createOnlineCourseLevel(@Body(ValidationPipe) body: CreateEditOnlineCourseLevelValidation) {
+  async createOnlineCourseLevel(@Body(ValidationPipe) body: CreateOnlineCourseLevelValidation) {
     const { onlineCourseId, level } = body;
 
     if (isNaN(Number(onlineCourseId)) || onlineCourseId === 0) {
@@ -98,6 +99,25 @@ export class OnlineCourseHandler {
     });
 
     return newCourseLevel.id;
+  }
+  @Put("/edit-level/:id")
+  async editOnlineCourseLevel(
+    @Body(ValidationPipe) body: EditOnlineCourseLevelValidation,
+    @Param("id") id: string,
+  ) {
+    const { level } = body;
+    const levelId = Number(id);
+
+    if (isNaN(levelId) || levelId === 0) {
+      throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
+    }
+
+    const updatedCourseLevel = await prisma.onlineCourseLevel.update({
+      where: { id: levelId },
+      data: { level },
+    });
+
+    return updatedCourseLevel.id;
   }
 }
 

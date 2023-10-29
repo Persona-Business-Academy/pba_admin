@@ -1,25 +1,13 @@
 "use client";
-import React, { FC, memo } from "react";
-import { Box, Center, Flex, Grid, GridItem, Heading, Spinner, Text } from "@chakra-ui/react";
+import React from "react";
+import { Center, Flex, Grid, GridItem, Heading, Spinner } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
-import { OnlineCourseItem } from "@/components/organism";
+import { Day, Level, Video } from "@/components/atom";
+import { OnlineCourseItemHeading } from "@/components/organism";
 import { ERROR_MESSAGES } from "@/constants/common";
 
 type Props = { params: { id: string } };
-
-type ItemWrapperProps = {
-  title: string;
-  children: React.ReactNode;
-};
-
-const ItemWrapper: FC<ItemWrapperProps> = memo(({ title, children }) => (
-  <Box paddingLeft={10}>
-    <Heading size="lg">{title}</Heading>
-    {children}
-  </Box>
-));
-ItemWrapper.displayName = "ItemWrapper";
 
 export default function OnlineCourses({ params }: Props) {
   const { data, isLoading, isSuccess } = useQuery({
@@ -49,27 +37,35 @@ export default function OnlineCourses({ params }: Props) {
       <GridItem w="100%" padding={5}>
         <Heading textAlign="center">{data?.name}</Heading>
         <Flex flexDirection="column" paddingTop={10}>
-          <OnlineCourseItem title="Levels">
+          <OnlineCourseItemHeading title="Levels" type="levels" onlineCourseId={data.id}>
             {data.levels.map(({ id: levelId, level, days }) => {
               return (
-                <ItemWrapper key={levelId} title={level}>
-                  <OnlineCourseItem title="Days">
+                <Level
+                  key={`${level}-${levelId}`}
+                  id={levelId}
+                  level={level}
+                  onlineCourseId={data.id}>
+                  <OnlineCourseItemHeading
+                    title="Days"
+                    type="days"
+                    onlineCourseId={data.id}
+                    levelId={levelId}>
                     {days.map(({ id: dayId, label, videos }) => {
                       return (
-                        <ItemWrapper key={`${label}-${dayId}`} title={label}>
-                          <OnlineCourseItem title="Videos">
-                            {videos.map(({ key, id: videoId }) => (
-                              <Text key={`${key}-${videoId}`}>{key}</Text>
-                            ))}
-                          </OnlineCourseItem>
-                        </ItemWrapper>
+                        <Day key={`${label}-${dayId}`} day={label}>
+                          <OnlineCourseItemHeading title="Videos" type="videos">
+                            {videos.map(({ id: videoId, key }) => {
+                              return <Video key={`${key}-${videoId}`} video={key} />;
+                            })}
+                          </OnlineCourseItemHeading>
+                        </Day>
                       );
                     })}
-                  </OnlineCourseItem>
-                </ItemWrapper>
+                  </OnlineCourseItemHeading>
+                </Level>
               );
             })}
-          </OnlineCourseItem>
+          </OnlineCourseItemHeading>
         </Flex>
       </GridItem>
     </Grid>

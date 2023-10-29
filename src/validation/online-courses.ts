@@ -6,7 +6,7 @@ export class CreateEditOnlineCourseValidation {
   name: string;
 }
 
-export class CreateEditOnlineCourseLevelValidation {
+export class CreateOnlineCourseLevelValidation {
   @IsString()
   @IsNotEmpty({ message: "Name is required" })
   level: string;
@@ -14,4 +14,14 @@ export class CreateEditOnlineCourseLevelValidation {
   @IsNotEmpty({ message: "Online Course is required" })
   @IsNumber()
   onlineCourseId: number;
+}
+
+export class EditOnlineCourseLevelValidation {
+  @IsString()
+  @IsNotEmpty({ message: "Level is required" })
+  level: string;
+
+  @IsNotEmpty({ message: "Level is required" })
+  @IsNumber()
+  id: number;
 }

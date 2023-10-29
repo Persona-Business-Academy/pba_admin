@@ -6,21 +6,21 @@ import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { queryClient } from "@/app/providers";
 import { FormInput } from "@/components/atom";
 import SharedModal from "@/components/molecule/SharedModal";
-import { CreateEditOnlineCourseLevelValidation } from "@/validation/online-courses";
+import { CreateOnlineCourseLevelValidation } from "@/validation/online-courses";
 
 type Props = {
   onlineCourseId: number;
   onClose: () => void;
 };
 
-const resolver = classValidatorResolver(CreateEditOnlineCourseLevelValidation);
+const resolver = classValidatorResolver(CreateOnlineCourseLevelValidation);
 
 const AddEditOnlineCourseLevelModal: FC<Props> = ({ onlineCourseId, onClose }) => {
   const {
     control,
     handleSubmit,
     formState: { errors, isDirty },
-  } = useForm<CreateEditOnlineCourseLevelValidation>({
+  } = useForm<CreateOnlineCourseLevelValidation>({
     defaultValues: { level: "", onlineCourseId },
     resolver,
   });
@@ -37,7 +37,7 @@ const AddEditOnlineCourseLevelModal: FC<Props> = ({ onlineCourseId, onClose }) =
   const { mutate, isLoading } = useMutation<
     number,
     { message: string },
-    CreateEditOnlineCourseLevelValidation
+    CreateOnlineCourseLevelValidation
   >(OnlineCourseService.createOnlineCourseLevel, { onSuccess });
 
   return (

@@ -3,6 +3,8 @@ import SharedModal from "@/components/molecule/SharedModal";
 
 type Props = {
   onClose: () => void;
+  onlineCourseId: number;
+  levelId: number;
 };
 
 const AddEditOnlineCourseDayModal: FC<Props> = ({ onClose }) => {

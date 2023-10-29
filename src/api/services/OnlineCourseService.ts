@@ -1,7 +1,8 @@
 import { OnlineCourse, OnlineCoursesListModel } from "@/models/onlineCourses";
 import {
-  CreateEditOnlineCourseLevelValidation,
   CreateEditOnlineCourseValidation,
+  CreateOnlineCourseLevelValidation,
+  EditOnlineCourseLevelValidation,
 } from "@/validation/online-courses";
 import $apiClient from "..";
 import { QueryParams } from "../types";
@@ -20,23 +21,28 @@ export class OnlineCourseService {
   static getOnlineCourse(id: number): Promise<OnlineCourse> {
     return $apiClient.get(`/online-courses/${id}`);
   }
-  static createOnlineCourse(data: CreateEditOnlineCourseValidation) {
+  static createOnlineCourse(data: CreateEditOnlineCourseValidation): Promise<number> {
     return $apiClient.post("/online-courses/create", data);
   }
-  static editOnlineCourse(id: number, data: CreateEditOnlineCourseValidation) {
+  static editOnlineCourse(id: number, data: CreateEditOnlineCourseValidation): Promise<number> {
     return $apiClient.put(`/online-courses/edit/${id}`, data);
   }
-  static deleteOnlineCourse(id: number) {
+  static deleteOnlineCourse(id: number): Promise<number> {
     return $apiClient.delete(`/online-courses/delete/${id}`);
   }
   // levels
-  static createOnlineCourseLevel(data: CreateEditOnlineCourseLevelValidation) {
+  static createOnlineCourseLevel(data: CreateOnlineCourseLevelValidation): Promise<number> {
     return $apiClient.post("/online-courses/create-level", data);
   }
-  static createOnlineCourseDay(data: CreateEditOnlineCourseLevelValidation) {
+  static editOnlineCourseLevel(data: EditOnlineCourseLevelValidation): Promise<number> {
+    return $apiClient.put(`/online-courses/edit-level/${data.id}`, data);
+  }
+  // days
+  static createOnlineCourseDay(data: CreateOnlineCourseLevelValidation): Promise<number> {
     return $apiClient.post("/online-courses/create-day", data);
   }
-  static createOnlineCourseVideo(data: CreateEditOnlineCourseLevelValidation) {
+  // videos
+  static createOnlineCourseVideo(data: CreateOnlineCourseLevelValidation): Promise<number> {
     return $apiClient.post("/online-courses/create-video", data);
   }
 }
