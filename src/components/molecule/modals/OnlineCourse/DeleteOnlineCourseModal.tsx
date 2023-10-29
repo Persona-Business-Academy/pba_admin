@@ -8,9 +8,9 @@ import {
   AlertDialogOverlay,
   Button,
 } from "@chakra-ui/react";
+import { OnlineCourse } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
-import { OnlineCourse } from "@/models/onlineCourses";
 
 type Props = {
   isOpen: boolean;
@@ -19,12 +19,7 @@ type Props = {
   onlineCourse: OnlineCourse;
 };
 
-const DeleteOnlineCourseModal: FC<Props> = ({
-  isOpen,
-  onClose,
-  onSave,
-  onlineCourse,
-}) => {
+const DeleteOnlineCourseModal: FC<Props> = ({ isOpen, onClose, onSave, onlineCourse }) => {
   const cancelRef = useRef(null);
 
   const { mutate, isLoading } = useMutation<number, { message: string }>(
@@ -34,7 +29,7 @@ const DeleteOnlineCourseModal: FC<Props> = ({
         onSave();
         onClose();
       },
-    }
+    },
   );
 
   return (
@@ -43,16 +38,13 @@ const DeleteOnlineCourseModal: FC<Props> = ({
       leastDestructiveRef={cancelRef}
       onClose={onClose}
       closeOnOverlayClick={false}
-      closeOnEsc={false}
-    >
+      closeOnEsc={false}>
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
             Delete <b>{onlineCourse.name}</b> Online Course
           </AlertDialogHeader>
-          <AlertDialogBody>
-            Are you sure you want to delete this course ?
-          </AlertDialogBody>
+          <AlertDialogBody>Are you sure you want to delete this course ?</AlertDialogBody>
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose} isDisabled={isLoading}>
               Cancel
@@ -61,8 +53,7 @@ const DeleteOnlineCourseModal: FC<Props> = ({
               colorScheme="red"
               onClick={useCallback(() => mutate(), [mutate])}
               ml={3}
-              isLoading={isLoading}
-            >
+              isLoading={isLoading}>
               Delete
             </Button>
           </AlertDialogFooter>
