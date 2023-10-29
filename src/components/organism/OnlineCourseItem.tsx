@@ -34,6 +34,12 @@ type Props = {
   children: React.ReactNode;
 };
 
+const headingSizeByType: Record<OnlineCourseType, string> = {
+  levels: "lg",
+  days: "md",
+  videos: "sm",
+};
+
 const OnlineCourseItem: FC<Props> = ({ title, type, children }) => {
   const [openedModal, setOpenedModal] = useState<Maybe<OnlineCourseType>>(null);
 
@@ -44,7 +50,7 @@ const OnlineCourseItem: FC<Props> = ({ title, type, children }) => {
     <>
       <Box>
         <Flex w="200px" justifyContent="space-between" alignItems="center" paddingY={5}>
-          <Heading as="h4" size="lg">
+          <Heading as="h4" size={headingSizeByType[type]}>
             {title}
           </Heading>
           <IconButton
