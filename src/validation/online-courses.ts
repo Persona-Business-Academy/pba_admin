@@ -25,3 +25,17 @@ export class EditOnlineCourseLevelValidation {
   @IsNumber()
   id: number;
 }
+
+export class CreateOnlineCourseDayValidation {
+  @IsString()
+  @IsNotEmpty({ message: "Label is required" })
+  label: string;
+
+  @IsNotEmpty({ message: "Online Course is required" })
+  @IsNumber()
+  onlineCourseId: number;
+
+  @IsNotEmpty({ message: "Online Course Level is required" })
+  @IsNumber()
+  onlineCourseLevelId: number;
+}

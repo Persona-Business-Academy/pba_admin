@@ -19,6 +19,7 @@ import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
 import { OnlineCourses } from "@/lib/prisma/resolvers/online-courses";
 import {
   CreateEditOnlineCourseValidation,
+  CreateOnlineCourseDayValidation,
   CreateOnlineCourseLevelValidation,
   EditOnlineCourseLevelValidation,
 } from "@/validation/online-courses";
@@ -118,6 +119,25 @@ export class OnlineCourseHandler {
     });
 
     return updatedCourseLevel.id;
+  }
+  @Post("/create-day")
+  async createOnlineCourseDay(@Body(ValidationPipe) body: CreateOnlineCourseDayValidation) {
+    const { onlineCourseId, onlineCourseLevelId, label } = body;
+
+    if (
+      isNaN(Number(onlineCourseId)) ||
+      onlineCourseId === 0 ||
+      isNaN(Number(onlineCourseLevelId)) ||
+      onlineCourseLevelId === 0
+    ) {
+      throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
+    }
+
+    const newCourseDay = await prisma.onlineCourseDay.create({
+      data: { label, onlineCourseId, onlineCourseLevelId },
+    });
+
+    return newCourseDay.id;
   }
 }
 
