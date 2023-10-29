@@ -1,14 +1,25 @@
 "use client";
-import { ReactNode, useCallback, useMemo } from "react";
-import { Center, Flex, Grid, GridItem, Heading, Spinner } from "@chakra-ui/react";
+import React, { FC, memo } from "react";
+import { Box, Center, Flex, Grid, GridItem, Heading, Spinner, Text } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { OnlineCourseItem } from "@/components/organism";
 import { ERROR_MESSAGES } from "@/constants/common";
-import { OnlineCourseType } from "@/models/onlineCourses";
 
-type Items = Array<{ title: string; type: OnlineCourseType; children: ReactNode }>;
 type Props = { params: { id: string } };
+
+type ItemWrapperProps = {
+  title: string;
+  children: React.ReactNode;
+};
+
+const ItemWrapper: FC<ItemWrapperProps> = memo(({ title, children }) => (
+  <Box paddingLeft={10}>
+    <Heading size="lg">{title}</Heading>
+    {children}
+  </Box>
+));
+ItemWrapper.displayName = "ItemWrapper";
 
 export default function OnlineCourses({ params }: Props) {
   const { data, isLoading, isSuccess } = useQuery({
@@ -16,20 +27,6 @@ export default function OnlineCourses({ params }: Props) {
     queryFn: () => OnlineCourseService.getOnlineCourse(+params.id),
     enabled: !isNaN(+params.id),
   });
-
-  const items: Items = useMemo(
-    () => [
-      { title: "Levels", type: "levels", children: "Levels" },
-      { title: "Days", type: "days", children: "Days" },
-      { title: "Videos", type: "videos", children: "Videos" },
-    ],
-    [],
-  );
-
-  const renderItems = useCallback(
-    (item: (typeof items)[0]) => <OnlineCourseItem key={item.type} {...item} />,
-    [],
-  );
 
   if (isLoading) {
     return (
@@ -39,7 +36,7 @@ export default function OnlineCourses({ params }: Props) {
     );
   }
 
-  if (!data && isSuccess) {
+  if ((!data && isSuccess) || !data) {
     return (
       <Center h="100vh">
         <Heading>{ERROR_MESSAGES.somethingWentWrong}</Heading>
@@ -51,8 +48,28 @@ export default function OnlineCourses({ params }: Props) {
     <Grid>
       <GridItem w="100%" padding={5}>
         <Heading textAlign="center">{data?.name}</Heading>
-        <Flex flexDirection="column" alignItems="center" paddingTop={10}>
-          {items.map(renderItems)}
+        <Flex flexDirection="column" paddingTop={10}>
+          <OnlineCourseItem title="Levels">
+            {data.levels.map(({ id: levelId, level, days }) => {
+              return (
+                <ItemWrapper key={levelId} title={level}>
+                  <OnlineCourseItem title="Days">
+                    {days.map(({ id: dayId, label, videos }) => {
+                      return (
+                        <ItemWrapper key={`${label}-${dayId}`} title={label}>
+                          <OnlineCourseItem title="Videos">
+                            {videos.map(({ key, id: videoId }) => (
+                              <Text key={`${key}-${videoId}`}>{key}</Text>
+                            ))}
+                          </OnlineCourseItem>
+                        </ItemWrapper>
+                      );
+                    })}
+                  </OnlineCourseItem>
+                </ItemWrapper>
+              );
+            })}
+          </OnlineCourseItem>
         </Flex>
       </GridItem>
     </Grid>

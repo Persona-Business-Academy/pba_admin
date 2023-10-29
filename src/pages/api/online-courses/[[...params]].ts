@@ -17,11 +17,14 @@ import prisma from "@/lib/prisma";
 import { exceptionHandler } from "@/lib/prisma/error";
 import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
 import { OnlineCourses } from "@/lib/prisma/resolvers/online-courses";
-import { CreateEditOnlineCourseValidation } from "@/validation/online-courses";
+import {
+  CreateEditOnlineCourseLevelValidation,
+  CreateEditOnlineCourseValidation,
+} from "@/validation/online-courses";
 
 @Catch(exceptionHandler)
 @AuthMiddleware()
-class OnlineCourseHandler {
+export class OnlineCourseHandler {
   @Get("/list")
   _getAllOnlineCourses(
     @Query("offset") skip: string,
@@ -36,17 +39,11 @@ class OnlineCourseHandler {
   async getOnlineCourse(@Param("id") id: string) {
     const courseId = +id;
 
-    if (isNaN(courseId)) {
+    if (isNaN(courseId) || courseId === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
-    const onlineCourse = await prisma.onlineCourse.findUnique({
-      where: {
-        id: courseId,
-      },
-    });
-
-    return onlineCourse;
+    return OnlineCourses.getOnlineCourse(courseId);
   }
 
   @Post("/create")
@@ -63,7 +60,7 @@ class OnlineCourseHandler {
   ) {
     const { name } = body;
 
-    if (isNaN(Number(id))) {
+    if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
@@ -77,7 +74,7 @@ class OnlineCourseHandler {
 
   @Delete("/delete/:id")
   async deleteOnlineCourse(@Param("id") id: string) {
-    if (isNaN(Number(id))) {
+    if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
@@ -86,6 +83,21 @@ class OnlineCourseHandler {
     });
 
     return deletedCourse.id;
+  }
+
+  @Post("/create-level")
+  async createOnlineCourseLevel(@Body(ValidationPipe) body: CreateEditOnlineCourseLevelValidation) {
+    const { onlineCourseId, level } = body;
+
+    if (isNaN(Number(onlineCourseId)) || onlineCourseId === 0) {
+      throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
+    }
+
+    const newCourseLevel = await prisma.onlineCourseLevel.create({
+      data: { level, onlineCourseId },
+    });
+
+    return newCourseLevel.id;
   }
 }
 

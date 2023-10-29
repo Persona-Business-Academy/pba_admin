@@ -2,12 +2,7 @@ import { SortingType } from "@/api/types";
 import prisma from "..";
 
 export class OnlineCourses {
-  static async list(
-    skip: number,
-    take: number,
-    search: string,
-    sorting: SortingType[]
-  ) {
+  static async list(skip: number, take: number, search: string, sorting: SortingType[]) {
     let orderBy: Record<string, "asc" | "desc"> = {}; // Initialize an empty object for orderBy
     if (sorting && sorting.length > 0) {
       const sortingField = sorting[0].id; // Get the sorting field from the first item in the array
@@ -27,5 +22,26 @@ export class OnlineCourses {
     });
 
     return { count, onlineCourses };
+  }
+
+  static async getOnlineCourse(courseId: number) {
+    const onlineCourse = await prisma.onlineCourse.findUnique({
+      where: {
+        id: courseId,
+      },
+      include: {
+        levels: {
+          include: {
+            days: {
+              include: {
+                videos: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return onlineCourse;
   }
 }
