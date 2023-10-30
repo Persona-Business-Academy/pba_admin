@@ -51,6 +51,6 @@ export class OnlineCourseService {
     return $apiClient.post("/online-courses/create-video", data);
   }
   static editOnlineCourseVideo(data: any): Promise<number> {
-    return $apiClient.post("/online-courses/edit-video", data);
+    return $apiClient.put("/online-courses/edit-video", data);
   }
 }
