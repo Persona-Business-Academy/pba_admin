@@ -1,8 +1,10 @@
 import React, { FC, memo, useCallback } from "react";
+import { Box } from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
+import { colors } from "@/constants/chakra";
 import { refetchOnlineCourseById } from "@/helpers/queryClient";
 import { EditOnlineCourseLevelValidation } from "@/validation/online-courses";
 import ItemWrapper from "./ItemWrapper";
@@ -43,19 +45,21 @@ const Level: FC<Props> = ({ id, level, onlineCourseId, children }) => {
 
   return (
     <ItemWrapper>
-      <Controller
-        name="level"
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <EditableCustom
-            value={value}
-            onChange={onChange}
-            onCancel={onCancel}
-            onSubmit={handleSubmit(onSubmit)}
-          />
-        )}
-      />
-      {children}
+      <Box borderBottom={`2px solid ${colors.blue[500]}`}>
+        <Controller
+          name="level"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <EditableCustom
+              value={value}
+              onChange={onChange}
+              onCancel={onCancel}
+              onSubmit={handleSubmit(onSubmit)}
+            />
+          )}
+        />
+        {children}
+      </Box>
     </ItemWrapper>
   );
 };

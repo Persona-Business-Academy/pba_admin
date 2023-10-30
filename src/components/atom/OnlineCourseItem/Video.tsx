@@ -35,7 +35,7 @@ const Video: FC<Props> = ({ name, videoKey, uploading, uploadProgress }) => {
           {name}
         </Button>
       )}
-      {previewVideo && <VideoPreview title={name} videoKey={videoKey} onClose={close} />}
+      <VideoPreview title={name} videoKey={videoKey} isOpen={previewVideo} onClose={close} />
     </ItemWrapper>
   );
 };

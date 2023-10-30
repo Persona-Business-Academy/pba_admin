@@ -8,13 +8,13 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player";
 import { generateAWSUrl } from "@/helpers/common";
 
-type Props = { title: string; videoKey: string; onClose: () => void };
+type Props = { isOpen: boolean; title: string; videoKey: string; onClose: () => void };
 
-const VideoPreview: FC<Props> = ({ title, videoKey, onClose }) => (
-  <Modal isOpen onClose={onClose} size="3xl">
+const VideoPreview: FC<Props> = ({ isOpen, title, videoKey, onClose }) => (
+  <Modal isOpen={isOpen} onClose={onClose} size="3xl">
     <ModalOverlay />
     <ModalContent>
       <ModalHeader>{title}</ModalHeader>
