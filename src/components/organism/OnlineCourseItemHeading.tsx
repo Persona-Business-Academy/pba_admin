@@ -1,6 +1,7 @@
 import React, { FC, memo, useCallback, useState } from "react";
 import { Box, Heading, HStack, IconButton } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
+import { useOnlineCourse } from "@/context/OnlineCourseContext";
 import { generateOnlineCourseFileName, uploadDocumentToAWS } from "@/helpers/uploadFile";
 import { Maybe, UploadProgressType } from "@/models/common";
 import { OnlineCourseType } from "@/models/onlineCourses";
@@ -25,18 +26,17 @@ const OnlineCourseItemHeading: FC<Props> = ({
   children,
 }) => {
   const [openedModalType, setOpenedModalType] = useState<Maybe<OnlineCourseType>>(null);
-  const [_, setUploadProgress] = useState<Record<string, UploadProgressType>>({});
+  const { setUploadProgress } = useOnlineCourse();
 
   const handleUploadProgress = useCallback(
     ({ fileName, progress }: UploadProgressType) =>
       setUploadProgress({ [fileName]: { fileName, progress } }),
-    [],
+    [setUploadProgress],
   );
 
   const submitHandler = useCallback(
     async (files?: Maybe<FileList>) => {
-      if (!files?.length) return;
-      if (!levelId || !dayId) return;
+      if (!files?.length || !levelId || !dayId) return;
 
       const fileData = await uploadDocumentToAWS({
         file: files[0],
