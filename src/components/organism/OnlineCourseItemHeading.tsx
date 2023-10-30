@@ -3,7 +3,7 @@ import { Box, Heading, HStack, IconButton } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { Maybe } from "@/models/common";
 import { OnlineCourseType } from "@/models/onlineCourses";
-import { CreateEditOnlineCourseDayModal, CreateEditOnlineCourseLevelModal } from "../molecule";
+import { CreateEditOnlineCourseLevelModal, CreateOnlineCourseDayModal } from "../molecule";
 
 type Props = {
   title: string;
@@ -39,7 +39,7 @@ const OnlineCourseItemHeading: FC<Props> = ({ title, type, onlineCourseId, level
         <CreateEditOnlineCourseLevelModal onlineCourseId={onlineCourseId} onClose={onClose} />
       )}
       {openedModalType === "days" && onlineCourseId && levelId && (
-        <CreateEditOnlineCourseDayModal
+        <CreateOnlineCourseDayModal
           onlineCourseId={onlineCourseId}
           levelId={levelId}
           onClose={onClose}

@@ -16,7 +16,7 @@ type Props = {
 
 const resolver = classValidatorResolver(CreateOnlineCourseDayValidation);
 
-const AddEditOnlineCourseDayModal: FC<Props> = ({ levelId, onlineCourseId, onClose }) => {
+const CreateOnlineCourseDayModal: FC<Props> = ({ levelId, onlineCourseId, onClose }) => {
   const {
     control,
     handleSubmit,
@@ -71,4 +71,4 @@ const AddEditOnlineCourseDayModal: FC<Props> = ({ levelId, onlineCourseId, onClo
   );
 };
 
-export default memo(AddEditOnlineCourseDayModal);
+export default memo(CreateOnlineCourseDayModal);
