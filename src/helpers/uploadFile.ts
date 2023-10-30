@@ -70,9 +70,5 @@ export const uploadDocumentToAWS = async (
   }
 };
 
-export const generateOnlineCourseFileName = (
-  id: number,
-  levelId: number,
-  dayId: number,
-  videoCount: number,
-) => `OnlineCourses/OnlineCourse-${id}/Level-${levelId}/Day-${dayId}/Video-${videoCount + 1}}`;
+export const generateOnlineCourseFileName = (id: number, levelId: number, dayId: number) =>
+  `OnlineCourses/OnlineCourse-${id}/Level-${levelId}/Day-${dayId}/Video-${Date.now()}}`;

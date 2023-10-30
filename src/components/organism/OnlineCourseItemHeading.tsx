@@ -14,7 +14,6 @@ type Props = {
   levelId?: number;
   dayId?: number;
   children: React.ReactNode;
-  videosLength?: number;
 };
 
 const OnlineCourseItemHeading: FC<Props> = ({
@@ -24,7 +23,6 @@ const OnlineCourseItemHeading: FC<Props> = ({
   levelId,
   dayId,
   children,
-  videosLength,
 }) => {
   const [openedModalType, setOpenedModalType] = useState<Maybe<OnlineCourseType>>(null);
   const [_, setUploadProgress] = useState<Record<string, UploadProgressType>>({});
@@ -38,16 +36,16 @@ const OnlineCourseItemHeading: FC<Props> = ({
   const submitHandler = useCallback(
     async (files?: Maybe<FileList>) => {
       if (!files?.length) return;
-      if (typeof videosLength !== "number" || !levelId || !dayId) return;
+      if (!levelId || !dayId) return;
 
       const fileData = await uploadDocumentToAWS({
         file: files[0],
-        fileName: generateOnlineCourseFileName(onlineCourseId, levelId, dayId, videosLength),
+        fileName: generateOnlineCourseFileName(onlineCourseId, levelId, dayId),
         handleUploadProgress,
       });
       return fileData;
     },
-    [dayId, handleUploadProgress, levelId, onlineCourseId, videosLength],
+    [dayId, handleUploadProgress, levelId, onlineCourseId],
   );
 
   const onBtnClick = useCallback(() => {
