@@ -3,13 +3,13 @@ import { Heading } from "@chakra-ui/react";
 import ItemWrapper from "./ItemWrapper";
 
 type Props = {
-  video: string;
+  videoKey: string;
 };
 
-const Video: FC<Props> = ({ video }) => {
+const Video: FC<Props> = ({ videoKey }) => {
   return (
     <ItemWrapper>
-      <Heading size="lg">{video}</Heading>
+      <Heading size="lg">{videoKey}</Heading>
     </ItemWrapper>
   );
 };
