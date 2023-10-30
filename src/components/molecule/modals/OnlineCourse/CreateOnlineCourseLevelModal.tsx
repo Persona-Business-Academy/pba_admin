@@ -1,11 +1,11 @@
 import { FC, memo, useCallback } from "react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
-import { queryClient } from "@/app/providers";
 import { FormInput } from "@/components/atom";
 import SharedModal from "@/components/molecule/SharedModal";
+import { refetchOnlineCourseById } from "@/helpers/queryClient";
 import { CreateOnlineCourseLevelValidation } from "@/validation/online-courses";
 
 type Props = {
@@ -16,6 +16,7 @@ type Props = {
 const resolver = classValidatorResolver(CreateOnlineCourseLevelValidation);
 
 const AddEditOnlineCourseLevelModal: FC<Props> = ({ onlineCourseId, onClose }) => {
+  const queryClient = useQueryClient();
   const {
     control,
     handleSubmit,
@@ -26,13 +27,9 @@ const AddEditOnlineCourseLevelModal: FC<Props> = ({ onlineCourseId, onClose }) =
   });
 
   const onSuccess = useCallback(async () => {
-    await queryClient.refetchQueries({
-      queryKey: ["online-course", onlineCourseId.toString()],
-      type: "active",
-      exact: true,
-    });
+    await refetchOnlineCourseById(queryClient, onlineCourseId);
     onClose();
-  }, [onClose, onlineCourseId]);
+  }, [onClose, onlineCourseId, queryClient]);
 
   const { mutate, isLoading } = useMutation<
     number,

@@ -1,7 +1,6 @@
 import { ChangeEventHandler, FC, memo, useCallback, useRef } from "react";
-import { Center, IconButton, Input, Text, VStack } from "@chakra-ui/react";
-import { FiUpload } from "react-icons/fi";
-import { colors } from "@/constants/chakra";
+import { IconButton, Input } from "@chakra-ui/react";
+import { BsPlusCircleFill } from "react-icons/bs";
 import { Maybe } from "@/models/common";
 
 interface Props {
@@ -13,27 +12,20 @@ const UploadFile: FC<Props> = ({ changeHandler }) => {
   const uploadFileClick = useCallback(() => fileInputRef.current?.click(), []);
 
   const onChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => changeHandler(e.target.files),
-    [changeHandler]
+    e => changeHandler(e.target.files),
+    [changeHandler],
   );
 
   return (
-    <Center
-      w={400}
-      h={150}
-      maxW={400}
-      border={`2px dashed ${colors.blue[500]}`}
-      borderRadius={12}
-    >
-      <VStack>
-        <IconButton
-          colorScheme="blue"
-          aria-label="Upload file"
-          icon={<FiUpload />}
-          onClick={uploadFileClick}
-        />
-        <Text color="blue.500">Upload File</Text>
-      </VStack>
+    <>
+      <IconButton
+        isRound
+        aria-label="Upload file"
+        icon={<BsPlusCircleFill />}
+        colorScheme="blue"
+        fontSize="20px"
+        onClick={uploadFileClick}
+      />
       <Input
         ref={fileInputRef}
         multiple={false}
@@ -48,7 +40,7 @@ const UploadFile: FC<Props> = ({ changeHandler }) => {
         left={0}
         onChange={onChange}
       />
-    </Center>
+    </>
   );
 };
 

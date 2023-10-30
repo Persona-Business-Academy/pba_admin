@@ -1,9 +1,9 @@
 import React, { FC, memo, useCallback } from "react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
-import { queryClient } from "@/app/providers";
+import { refetchOnlineCourseById } from "@/helpers/queryClient";
 import { EditOnlineCourseDayValidation } from "@/validation/online-courses";
 import ItemWrapper from "./ItemWrapper";
 import EditableCustom from "../EditableCustom";
@@ -18,19 +18,15 @@ type Props = {
 const resolver = classValidatorResolver(EditOnlineCourseDayValidation);
 
 const Day: FC<Props> = ({ id, onlineCourseId, day, children }) => {
+  const queryClient = useQueryClient();
   const { control, setValue, handleSubmit } = useForm<EditOnlineCourseDayValidation>({
     defaultValues: { label: day, id },
     resolver,
   });
 
   const onSuccess = useCallback(
-    async () =>
-      await queryClient.refetchQueries({
-        queryKey: ["online-course", onlineCourseId.toString()],
-        type: "active",
-        exact: true,
-      }),
-    [onlineCourseId],
+    async () => await refetchOnlineCourseById(queryClient, onlineCourseId),
+    [onlineCourseId, queryClient],
   );
 
   const { mutate } = useMutation<number, { message: string }, EditOnlineCourseDayValidation>(

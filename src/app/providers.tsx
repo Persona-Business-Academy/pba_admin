@@ -13,7 +13,7 @@ const theme: ThemeConfig = extendTheme({
   },
 });
 
-export const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {

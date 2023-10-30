@@ -24,12 +24,12 @@ const uploadDocumentWithSignerToAWS = async (options: UploadFileToAwsReq) => {
       awsRegion: process.env.NEXT_PUBLIC_AWS_REGION,
       cloudfront: true,
       computeContentMd5: true,
-      cryptoMd5Method: (x) => {
+      cryptoMd5Method: x => {
         const o = MD5.md5.create();
         o.update(x);
         return o.base64();
       },
-      cryptoHexEncodedHash256: (x) => {
+      cryptoHexEncodedHash256: x => {
         const o = SHA256.create();
         o.update(x as Message);
         return o.hex();
@@ -42,12 +42,12 @@ const uploadDocumentWithSignerToAWS = async (options: UploadFileToAwsReq) => {
       name,
       contentType,
       xAmzHeadersAtInitiate: { "x-amz-acl": "public-read" },
-      progress: (progressValue) => {
+      progress: progressValue => {
         handleUploadProgress({ progress: progressValue, fileName: name });
       },
-      complete: (_xhr) => {
+      complete: _xhr => {
         const [URL] = _xhr.responseURL.split("?");
-        resolve({ url: URL, fileName: name });
+        resolve({ url: URL, key: name });
       },
     });
   } catch (e) {
@@ -56,10 +56,10 @@ const uploadDocumentWithSignerToAWS = async (options: UploadFileToAwsReq) => {
 };
 
 export const uploadDocumentToAWS = async (
-  options: Omit<UploadFileToAwsReq, "resolve">
+  options: Omit<UploadFileToAwsReq, "resolve">,
 ): Promise<UploadFileToAwsRes> => {
   try {
-    return await new Promise((resolve) => {
+    return await new Promise(resolve => {
       uploadDocumentWithSignerToAWS({
         ...options,
         resolve,
@@ -69,3 +69,10 @@ export const uploadDocumentToAWS = async (
     throw e;
   }
 };
+
+export const generateOnlineCourseFileName = (
+  id: number,
+  levelId: number,
+  dayId: number,
+  videoCount: number,
+) => `OnlineCourses/OnlineCourse-${id}/Level-${levelId}/Day-${dayId}/Video-${videoCount + 1}}`;

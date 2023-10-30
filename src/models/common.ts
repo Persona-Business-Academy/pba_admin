@@ -5,7 +5,7 @@ export type UploadProgressType = {
   progress: number;
 };
 
-export type UploadFileToAwsRes = { url: string; fileName: string };
+export type UploadFileToAwsRes = { url: string; key: string };
 export type GetSignatureReq = { datetime: string; to_sign: string };
 
 export type UploadFileToAwsReq = {
