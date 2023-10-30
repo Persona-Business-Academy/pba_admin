@@ -1,5 +1,6 @@
-import React, { FC, memo, useMemo } from "react";
-import { HStack, Progress, Text } from "@chakra-ui/react";
+import React, { FC, memo, useCallback, useMemo, useState } from "react";
+import { Button, HStack, Progress, Text } from "@chakra-ui/react";
+import VideoPreview from "@/components/atom/VideoPreview";
 import ItemWrapper from "./ItemWrapper";
 
 type Props = {
@@ -10,12 +11,17 @@ type Props = {
 };
 
 const Video: FC<Props> = ({ name, videoKey, uploading, uploadProgress }) => {
+  const [previewVideo, setPreviewVideo] = useState(false);
+
   const percent = useMemo(() => {
     if (uploadProgress) {
       return Number((uploadProgress * 100).toFixed(2));
     }
     return 0;
   }, [uploadProgress]);
+
+  const open = useCallback(() => setPreviewVideo(true), []);
+  const close = useCallback(() => setPreviewVideo(false), []);
 
   return (
     <ItemWrapper>
@@ -25,10 +31,11 @@ const Video: FC<Props> = ({ name, videoKey, uploading, uploadProgress }) => {
           <Text color="blue.500" fontSize={"24px"} fontWeight={"600"}>{`${percent}%`}</Text>
         </HStack>
       ) : (
-        <Text>
-          {name} - {videoKey}
-        </Text>
+        <Button variant="link" onClick={open}>
+          {name}
+        </Button>
       )}
+      {previewVideo && <VideoPreview title={name} videoKey={videoKey} onClose={close} />}
     </ItemWrapper>
   );
 };

@@ -1,11 +1,11 @@
-import React, { FC, memo, useCallback, useState } from "react";
+import React, { FC, memo, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { OnlineCourseVideo } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { refetchOnlineCourseById } from "@/helpers/queryClient";
 import { generateOnlineCourseFileName, uploadDocumentToAWS } from "@/helpers/uploadFile";
-import { Maybe, UploadProgressType } from "@/models/common";
+import { Maybe } from "@/models/common";
 import { CreateOnlineCourseVideoValidation } from "@/validation/online-courses";
 import { UploadFile, Video } from "../atom";
 
@@ -17,14 +17,19 @@ type Props = {
 };
 
 const OnlineCourseVideos: FC<Props> = ({ videos, onlineCourseId, levelId, dayId }) => {
-  const [uploadProgress, setUploadProgress] = useState<Record<string, UploadProgressType>>({});
-  const [localVideos, setLocalVideos] = useState(
-    videos.map(item => ({ ...item, uploading: false })),
+  const memoizedData = useMemo(
+    () => videos.map(item => ({ ...item, uploading: false, progress: 0 })),
+    [videos],
   );
+
+  const [localVideos, setLocalVideos] = useState(memoizedData);
   const queryClient = useQueryClient();
 
   const onSuccess = useCallback(
-    async () => await refetchOnlineCourseById(queryClient, onlineCourseId),
+    async (_: number, variables: CreateOnlineCourseVideoValidation) => {
+      setLocalVideos(prevData => prevData.filter(({ key }) => key !== variables.key));
+      await refetchOnlineCourseById(queryClient, onlineCourseId);
+    },
     [onlineCourseId, queryClient],
   );
 
@@ -51,17 +56,22 @@ const OnlineCourseVideos: FC<Props> = ({ videos, onlineCourseId, levelId, dayId 
           createdAt: new Date(),
           updatedAt: new Date(),
           uploading: true,
+          progress: 0,
         },
       ]);
 
       const res = await uploadDocumentToAWS({
         file: files[0],
         fileName: nameForAWS,
-        handleUploadProgress: ({ fileName, progress, key }) =>
-          setUploadProgress(prevData => ({
-            ...(prevData || {}),
-            [key]: { fileName, progress, key },
-          })),
+        handleUploadProgress: ({ progress, key }) =>
+          setLocalVideos(prevData =>
+            prevData.map(item => {
+              if (item.key === key) {
+                return { ...item, progress };
+              }
+              return item;
+            }),
+          ),
       });
 
       mutate({
@@ -75,20 +85,21 @@ const OnlineCourseVideos: FC<Props> = ({ videos, onlineCourseId, levelId, dayId 
     [dayId, levelId, mutate, onlineCourseId],
   );
 
+  const renderVideos = useCallback(
+    ({ id, key, name, uploading, progress }: (typeof localVideos)[0]) => (
+      <Video key={id} name={name} videoKey={key} uploadProgress={progress} uploading={uploading} />
+    ),
+    [],
+  );
+
+  useLayoutEffect(() => {
+    setLocalVideos(memoizedData);
+  }, [memoizedData]);
+
   return (
     <Box>
       <UploadFile title="Videos" changeHandler={submitHandler} />
-      {localVideos.map(({ id, key, name, uploading }) => {
-        return (
-          <Video
-            key={id}
-            name={name}
-            videoKey={key}
-            uploadProgress={uploadProgress[key]?.progress}
-            uploading={uploading}
-          />
-        );
-      })}
+      {localVideos.map(renderVideos)}
     </Box>
   );
 };

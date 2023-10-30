@@ -21,6 +21,7 @@ import {
   CreateEditOnlineCourseValidation,
   CreateOnlineCourseDayValidation,
   CreateOnlineCourseLevelValidation,
+  CreateOnlineCourseVideoValidation,
   EditOnlineCourseDayValidation,
   EditOnlineCourseLevelValidation,
 } from "@/validation/online-courses";
@@ -158,6 +159,28 @@ export class OnlineCourseHandler {
     });
 
     return updatedCourseLevel.id;
+  }
+
+  @Post("/create-video")
+  async createOnlineCourseVideo(@Body(ValidationPipe) body: CreateOnlineCourseVideoValidation) {
+    const { onlineCourseId, onlineCourseLevelId, onlineCourseDayId, key, name } = body;
+
+    if (
+      isNaN(Number(onlineCourseId)) ||
+      onlineCourseId === 0 ||
+      isNaN(Number(onlineCourseLevelId)) ||
+      onlineCourseLevelId === 0 ||
+      isNaN(Number(onlineCourseDayId)) ||
+      onlineCourseDayId === 0
+    ) {
+      throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
+    }
+
+    const newCourseVideo = await prisma.onlineCourseVideo.create({
+      data: { name, key, onlineCourseId, onlineCourseDayId, onlineCourseLevelId },
+    });
+
+    return newCourseVideo.id;
   }
 }
 

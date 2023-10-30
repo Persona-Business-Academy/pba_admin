@@ -6,5 +6,6 @@ import Day from "./OnlineCourseItem/Day";
 import Level from "./OnlineCourseItem/Level";
 import Video from "./OnlineCourseItem/Video";
 import UploadFile from "./UploadFile";
+import VideoPreview from "./VideoPreview";
 
-export { Button, FormInput, UploadFile, Level, Video, Day, EditableCustom };
+export { Button, FormInput, UploadFile, Level, Video, Day, EditableCustom, VideoPreview };

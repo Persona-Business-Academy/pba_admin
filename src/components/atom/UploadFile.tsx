@@ -37,7 +37,7 @@ const UploadFile: FC<Props> = ({ title, changeHandler }) => {
           type="file"
           name="file"
           title=""
-          accept="*"
+          accept="video/*"
           position="absolute"
           display="none"
           top={0}

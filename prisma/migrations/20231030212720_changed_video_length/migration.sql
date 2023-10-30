@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "OnlineCourseVideo" ALTER COLUMN "key" SET DATA TYPE TEXT,
+ALTER COLUMN "name" SET DATA TYPE TEXT;

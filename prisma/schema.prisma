@@ -74,8 +74,8 @@ model OnlineCourseDay {
 
 model OnlineCourseVideo {
     id        Int      @id @default(autoincrement())
-    key       String   @db.VarChar(60)
-    name      String   @db.VarChar(45)
+    key       String   @db.Text
+    name      String   @db.Text
     createdAt DateTime @default(now()) @db.Timestamp(0)
     updatedAt DateTime @updatedAt @db.Timestamp(0)
 
