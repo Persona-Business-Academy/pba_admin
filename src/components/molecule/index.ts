@@ -1,7 +1,7 @@
 "use client";
-import CreateEditOnlineCourseLevelModal from "./modals/OnlineCourse/CreateEditOnlineCourseLevelModal";
 import CreateEditOnlineCourseModal from "./modals/OnlineCourse/CreateEditOnlineCourseModal";
 import CreateOnlineCourseDayModal from "./modals/OnlineCourse/CreateOnlineCourseDayModal";
+import CreateOnlineCourseLevelModal from "./modals/OnlineCourse/CreateOnlineCourseLevelModal";
 import DeleteOnlineCourseModal from "./modals/OnlineCourse/DeleteOnlineCourseModal";
 import SearchTable from "./SearchTable";
 import SharedModal from "./SharedModal";
@@ -12,5 +12,5 @@ export {
   DeleteOnlineCourseModal,
   SharedModal,
   CreateOnlineCourseDayModal,
-  CreateEditOnlineCourseLevelModal,
+  CreateOnlineCourseLevelModal,
 };
