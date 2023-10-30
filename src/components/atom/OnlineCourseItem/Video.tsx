@@ -4,12 +4,13 @@ import ItemWrapper from "./ItemWrapper";
 
 type Props = {
   videoKey: string;
+  name: string;
 };
 
-const Video: FC<Props> = ({ videoKey }) => {
+const Video: FC<Props> = ({ name }) => {
   return (
     <ItemWrapper>
-      <Heading size="lg">{videoKey}</Heading>
+      <Heading size="lg">{name}</Heading>
     </ItemWrapper>
   );
 };
