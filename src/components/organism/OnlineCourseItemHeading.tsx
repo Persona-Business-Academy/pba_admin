@@ -1,11 +1,8 @@
 import React, { FC, memo, useCallback, useState } from "react";
 import { Box, Heading, HStack, IconButton } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
-import { useOnlineCourse } from "@/context/OnlineCourseContext";
-import { generateOnlineCourseFileName, uploadDocumentToAWS } from "@/helpers/uploadFile";
-import { Maybe, UploadProgressType } from "@/models/common";
+import { Maybe } from "@/models/common";
 import { OnlineCourseType } from "@/models/onlineCourses";
-import { UploadFile } from "../atom";
 import { CreateOnlineCourseDayModal, CreateOnlineCourseLevelModal } from "../molecule";
 
 type Props = {
@@ -17,36 +14,8 @@ type Props = {
   children: React.ReactNode;
 };
 
-const OnlineCourseItemHeading: FC<Props> = ({
-  title,
-  type,
-  onlineCourseId,
-  levelId,
-  dayId,
-  children,
-}) => {
+const OnlineCourseItemHeading: FC<Props> = ({ title, type, onlineCourseId, levelId, children }) => {
   const [openedModalType, setOpenedModalType] = useState<Maybe<OnlineCourseType>>(null);
-  const { setUploadProgress } = useOnlineCourse();
-
-  const handleUploadProgress = useCallback(
-    ({ fileName, progress }: UploadProgressType) =>
-      setUploadProgress({ [fileName]: { fileName, progress } }),
-    [setUploadProgress],
-  );
-
-  const submitHandler = useCallback(
-    async (files?: Maybe<FileList>) => {
-      if (!files?.length || !levelId || !dayId) return;
-
-      const fileData = await uploadDocumentToAWS({
-        file: files[0],
-        fileName: generateOnlineCourseFileName(onlineCourseId, levelId, dayId),
-        handleUploadProgress,
-      });
-      return fileData;
-    },
-    [dayId, handleUploadProgress, levelId, onlineCourseId],
-  );
 
   const onBtnClick = useCallback(() => {
     switch (type) {
@@ -66,18 +35,14 @@ const OnlineCourseItemHeading: FC<Props> = ({
         <Heading as="h4" size="lg" color="blue.500">
           {title}
         </Heading>
-        {type === "videos" ? (
-          <UploadFile changeHandler={submitHandler} />
-        ) : (
-          <IconButton
-            isRound
-            aria-label="add"
-            icon={<BsPlusCircleFill />}
-            colorScheme="blue"
-            fontSize="20px"
-            onClick={onBtnClick}
-          />
-        )}
+        <IconButton
+          isRound
+          aria-label="add"
+          icon={<BsPlusCircleFill />}
+          colorScheme="blue"
+          fontSize="20px"
+          onClick={onBtnClick}
+        />
       </HStack>
       {children}
       {openedModalType === "levels" && onlineCourseId && (

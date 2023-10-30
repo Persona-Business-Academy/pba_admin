@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import { Day, Level, Video } from "@/components/atom";
+import { Day, Level } from "@/components/atom";
+import { OnlineCourseVideos } from "@/components/molecule";
 import { OnlineCourseItemHeading } from "@/components/organism";
 import { useOnlineCourse } from "@/context/OnlineCourseContext";
 
@@ -20,16 +21,12 @@ export default function OnlineCourses() {
               {days.map(({ id: dayId, label, videos }) => {
                 return (
                   <Day key={`${label}-${dayId}`} id={dayId} day={label} onlineCourseId={data.id}>
-                    <OnlineCourseItemHeading
-                      title="Videos"
-                      type="videos"
+                    <OnlineCourseVideos
+                      videos={videos}
                       onlineCourseId={data.id}
                       levelId={levelId}
-                      dayId={dayId}>
-                      {videos.map(({ id: videoId, key, name }) => {
-                        return <Video key={`${key}-${videoId}`} videoKey={key} name={name} />;
-                      })}
-                    </OnlineCourseItemHeading>
+                      dayId={dayId}
+                    />
                   </Day>
                 );
               })}

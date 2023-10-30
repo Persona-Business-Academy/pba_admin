@@ -49,3 +49,25 @@ export class EditOnlineCourseDayValidation {
   @IsNumber()
   id: number;
 }
+
+export class CreateOnlineCourseVideoValidation {
+  @IsString()
+  @IsNotEmpty({ message: "Key is required" })
+  key: string;
+
+  @IsString()
+  @IsNotEmpty({ message: "Name is required" })
+  name: string;
+
+  @IsNotEmpty({ message: "Online Course is required" })
+  @IsNumber()
+  onlineCourseId: number;
+
+  @IsNotEmpty({ message: "Online Course Level is required" })
+  @IsNumber()
+  onlineCourseLevelId: number;
+
+  @IsNotEmpty({ message: "Online Course Day is required" })
+  @IsNumber()
+  onlineCourseDayId: number;
+}

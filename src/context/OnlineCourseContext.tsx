@@ -1,16 +1,14 @@
 "use client";
-import React, { createContext, FC, useContext, useState } from "react";
+import React, { createContext, FC, useContext } from "react";
 import { Center, Flex, Grid, GridItem, Heading, Spinner } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { ERROR_MESSAGES } from "@/constants/common";
-import { UploadProgressType } from "@/models/common";
+import { QUERY_KEY } from "@/helpers/queryClient";
 import { OnlineCourse } from "@/models/onlineCourses";
 
 interface OnlineCourseState {
   data: NonNullable<OnlineCourse>;
-  uploadProgress: Record<string, UploadProgressType>;
-  setUploadProgress: React.Dispatch<React.SetStateAction<Record<string, UploadProgressType>>>;
 }
 
 interface Props {
@@ -21,9 +19,8 @@ interface Props {
 const OnlineCourseContext = createContext<OnlineCourseState>({} as OnlineCourseState);
 
 export const OnlineCourseProvider: FC<Props> = ({ children, id }) => {
-  const [uploadProgress, setUploadProgress] = useState<Record<string, UploadProgressType>>({});
   const { data, isLoading, isSuccess } = useQuery({
-    queryKey: ["online-course", id],
+    queryKey: QUERY_KEY.onlineCourse(+id),
     queryFn: () => OnlineCourseService.getOnlineCourse(+id),
     enabled: !isNaN(+id),
   });
@@ -45,7 +42,7 @@ export const OnlineCourseProvider: FC<Props> = ({ children, id }) => {
   }
 
   return (
-    <OnlineCourseContext.Provider value={{ data, uploadProgress, setUploadProgress }}>
+    <OnlineCourseContext.Provider value={{ data }}>
       <Grid>
         <GridItem w="100%" padding={5}>
           <Heading textAlign="center">{data.name}</Heading>

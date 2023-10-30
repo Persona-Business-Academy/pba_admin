@@ -3,6 +3,7 @@ export type Maybe<T> = T | null;
 export type UploadProgressType = {
   fileName: string;
   progress: number;
+  key: string;
 };
 
 export type UploadFileToAwsRes = { url: string; key: string };

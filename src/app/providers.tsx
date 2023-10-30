@@ -13,7 +13,13 @@ const theme: ThemeConfig = extendTheme({
   },
 });
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+    },
+  },
+});
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
