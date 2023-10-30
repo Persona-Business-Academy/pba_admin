@@ -3,6 +3,7 @@ import {
   CreateEditOnlineCourseValidation,
   CreateOnlineCourseDayValidation,
   CreateOnlineCourseLevelValidation,
+  EditOnlineCourseDayValidation,
   EditOnlineCourseLevelValidation,
 } from "@/validation/online-courses";
 import $apiClient from "..";
@@ -41,6 +42,9 @@ export class OnlineCourseService {
   // days
   static createOnlineCourseDay(data: CreateOnlineCourseDayValidation): Promise<number> {
     return $apiClient.post("/online-courses/create-day", data);
+  }
+  static editOnlineCourseDay(data: EditOnlineCourseDayValidation): Promise<number> {
+    return $apiClient.put(`/online-courses/edit-day/${data.id}`, data);
   }
   // videos
   static createOnlineCourseVideo(data: CreateOnlineCourseLevelValidation): Promise<number> {

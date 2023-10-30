@@ -21,6 +21,7 @@ import {
   CreateEditOnlineCourseValidation,
   CreateOnlineCourseDayValidation,
   CreateOnlineCourseLevelValidation,
+  EditOnlineCourseDayValidation,
   EditOnlineCourseLevelValidation,
 } from "@/validation/online-courses";
 
@@ -138,6 +139,25 @@ export class OnlineCourseHandler {
     });
 
     return newCourseDay.id;
+  }
+  @Put("/edit-day/:id")
+  async editOnlineCourseDay(
+    @Body(ValidationPipe) body: EditOnlineCourseDayValidation,
+    @Param("id") id: string,
+  ) {
+    const { label } = body;
+    const dayId = Number(id);
+
+    if (isNaN(dayId) || dayId === 0) {
+      throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
+    }
+
+    const updatedCourseLevel = await prisma.onlineCourseDay.update({
+      where: { id: dayId },
+      data: { label },
+    });
+
+    return updatedCourseLevel.id;
   }
 }
 

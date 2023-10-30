@@ -52,7 +52,11 @@ export default function OnlineCourses({ params }: Props) {
                     levelId={levelId}>
                     {days.map(({ id: dayId, label, videos }) => {
                       return (
-                        <Day key={`${label}-${dayId}`} day={label}>
+                        <Day
+                          key={`${label}-${dayId}`}
+                          id={dayId}
+                          day={label}
+                          onlineCourseId={data.id}>
                           <OnlineCourseItemHeading title="Videos" type="videos">
                             {videos.map(({ id: videoId, key }) => {
                               return <Video key={`${key}-${videoId}`} video={key} />;
