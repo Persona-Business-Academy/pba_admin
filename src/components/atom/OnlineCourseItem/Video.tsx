@@ -1,7 +1,9 @@
-import React, { FC, memo, useCallback, useMemo, useState } from "react";
-import { Button, HStack, Progress, Text } from "@chakra-ui/react";
-import VideoPreview from "@/components/atom/VideoPreview";
-import ItemWrapper from "./ItemWrapper";
+import React, { FC, memo, useMemo } from "react";
+import { Button, HStack, Progress, Text, useBoolean } from "@chakra-ui/react";
+import dynamic from "next/dynamic";
+
+const ItemWrapper = dynamic(() => import("./ItemWrapper"));
+const VideoPreview = dynamic(() => import("@/components/atom/VideoPreview"));
 
 type Props = {
   videoKey: string;
@@ -11,7 +13,7 @@ type Props = {
 };
 
 const Video: FC<Props> = ({ name, videoKey, uploading, uploadProgress }) => {
-  const [previewVideo, setPreviewVideo] = useState(false);
+  const [previewVideo, setPreviewVideo] = useBoolean(false);
 
   const percent = useMemo(() => {
     if (uploadProgress) {
@@ -19,9 +21,6 @@ const Video: FC<Props> = ({ name, videoKey, uploading, uploadProgress }) => {
     }
     return 0;
   }, [uploadProgress]);
-
-  const open = useCallback(() => setPreviewVideo(true), []);
-  const close = useCallback(() => setPreviewVideo(false), []);
 
   return (
     <ItemWrapper>
@@ -31,11 +30,16 @@ const Video: FC<Props> = ({ name, videoKey, uploading, uploadProgress }) => {
           <Text color="blue.500" fontSize={"24px"} fontWeight={"600"}>{`${percent}%`}</Text>
         </HStack>
       ) : (
-        <Button variant="link" onClick={open}>
+        <Button variant="link" onClick={setPreviewVideo.on}>
           {name}
         </Button>
       )}
-      <VideoPreview title={name} videoKey={videoKey} isOpen={previewVideo} onClose={close} />
+      <VideoPreview
+        title={name}
+        videoKey={videoKey}
+        isOpen={previewVideo}
+        onClose={setPreviewVideo.off}
+      />
     </ItemWrapper>
   );
 };

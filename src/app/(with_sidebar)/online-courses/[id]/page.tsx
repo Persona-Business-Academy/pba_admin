@@ -3,7 +3,7 @@ import React from "react";
 import { Day, Level } from "@/components/atom";
 import { OnlineCourseVideos } from "@/components/molecule";
 import { OnlineCourseItemHeading } from "@/components/organism";
-import { useOnlineCourse } from "@/context/OnlineCourseContext";
+import { useOnlineCourse } from "@/contexts/OnlineCourseContext";
 
 export default function OnlineCourses() {
   const { data } = useOnlineCourse();

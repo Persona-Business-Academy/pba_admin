@@ -1,12 +1,14 @@
 import { FC, memo, useCallback } from "react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
 import { Controller, useForm } from "react-hook-form";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { FormInput } from "@/components/atom";
-import SharedModal from "@/components/molecule/SharedModal";
 import { refetchOnlineCourseById } from "@/helpers/queryClient";
 import { CreateOnlineCourseLevelValidation } from "@/validation/online-courses";
+
+const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
 
 type Props = {
   onlineCourseId: number;

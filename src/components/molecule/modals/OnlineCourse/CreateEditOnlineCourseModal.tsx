@@ -1,13 +1,15 @@
 import { FC, memo, useCallback } from "react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { useMutation } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
 import { Controller, useForm } from "react-hook-form";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { FormInput } from "@/components/atom";
-import SharedModal from "@/components/molecule/SharedModal";
 import { Maybe } from "@/models/common";
 import { OnlineCourse } from "@/models/onlineCourses";
 import { CreateEditOnlineCourseValidation } from "@/validation/online-courses";
+
+const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
 
 type Props = {
   isOpen: boolean;

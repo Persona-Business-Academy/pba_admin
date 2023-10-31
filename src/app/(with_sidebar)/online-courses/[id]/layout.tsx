@@ -1,4 +1,5 @@
-import { OnlineCourseProvider } from "@/context/OnlineCourseContext";
+import dynamic from "next/dynamic";
+const OnlineCourseProvider = dynamic(() => import("@/contexts/OnlineCourseContext"));
 
 type Props = { params: { id: string }; children: React.ReactNode };
 

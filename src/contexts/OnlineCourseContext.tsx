@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, FC, useContext } from "react";
+import React, { createContext, FC, memo, useContext } from "react";
 import { Center, Flex, Grid, GridItem, Heading, Spinner } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
@@ -18,7 +18,7 @@ interface Props {
 
 const OnlineCourseContext = createContext<OnlineCourseState>({} as OnlineCourseState);
 
-export const OnlineCourseProvider: FC<Props> = ({ children, id }) => {
+const OnlineCourseProvider: FC<Props> = ({ children, id }) => {
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: QUERY_KEY.onlineCourse(+id),
     queryFn: () => OnlineCourseService.getOnlineCourse(+id),
@@ -56,3 +56,5 @@ export const OnlineCourseProvider: FC<Props> = ({ children, id }) => {
 };
 
 export const useOnlineCourse = () => useContext(OnlineCourseContext);
+
+export default memo(OnlineCourseProvider);

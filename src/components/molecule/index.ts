@@ -1,11 +1,21 @@
 "use client";
-import CreateEditOnlineCourseModal from "./modals/OnlineCourse/CreateEditOnlineCourseModal";
-import CreateOnlineCourseDayModal from "./modals/OnlineCourse/CreateOnlineCourseDayModal";
-import CreateOnlineCourseLevelModal from "./modals/OnlineCourse/CreateOnlineCourseLevelModal";
-import DeleteOnlineCourseModal from "./modals/OnlineCourse/DeleteOnlineCourseModal";
-import OnlineCourseVideos from "./OnlineCourseVideos";
-import SearchTable from "./SearchTable";
-import SharedModal from "./SharedModal";
+import dynamic from "next/dynamic";
+
+const CreateEditOnlineCourseModal = dynamic(
+  () => import("./modals/OnlineCourse/CreateEditOnlineCourseModal"),
+);
+const CreateOnlineCourseDayModal = dynamic(
+  () => import("./modals/OnlineCourse/CreateOnlineCourseDayModal"),
+);
+const CreateOnlineCourseLevelModal = dynamic(
+  () => import("./modals/OnlineCourse/CreateOnlineCourseLevelModal"),
+);
+const DeleteOnlineCourseModal = dynamic(
+  () => import("./modals/OnlineCourse/DeleteOnlineCourseModal"),
+);
+const OnlineCourseVideos = dynamic(() => import("./OnlineCourseVideos"));
+const SearchTable = dynamic(() => import("./SearchTable"));
+const SharedModal = dynamic(() => import("./SharedModal"));
 
 export {
   SearchTable,
