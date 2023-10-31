@@ -1,5 +1,5 @@
 import { SortingType } from "@/api/types";
-import prisma from "../index";
+import prisma from "..";
 
 export class User {
   static async list(
@@ -15,7 +15,30 @@ export class User {
       orderBy[sortingField] = sortingDirection; // Set the orderBy object
     }
 
-    const count = await prisma.user.count();
+    const count = await prisma.user.count({
+      where: {
+        OR: [
+          {
+            firstName: {
+              contains: search,
+              mode: "insensitive", // Case-insensitive search
+            },
+          },
+          {
+            lastName: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            email: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+    });
     const users = await prisma.user.findMany({
       skip,
       take,
@@ -54,11 +77,10 @@ export class User {
     return {
       count,
       users,
-      skip,
     };
   }
 
-  static async findUserByEmail(email: string) {
+  static async findAdminByEmail(email: string) {
     return prisma.admin.findUnique({ where: { email } });
   }
 }

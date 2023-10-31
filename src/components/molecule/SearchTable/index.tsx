@@ -1,11 +1,12 @@
-import React, { Dispatch, SetStateAction, useCallback } from "react";
+import React, { Dispatch, memo, SetStateAction, useCallback } from "react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   chakra,
   Flex,
   FormControl,
-  FormLabel,
+  HStack,
   IconButton,
   Input,
   Spinner,
@@ -27,22 +28,28 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { ITEMS_PER_PAGE } from "@/constants/common";
 
-export type DataTableProps<Data extends object> = {
+export type DataTableProps<Data> = {
+  title?: string;
+  count: number;
   data: Data[];
   columns: ColumnDef<Data, any>[];
   sorting: SortingState;
   setSorting: Dispatch<SetStateAction<SortingState>>;
-  setSearch: Dispatch<SetStateAction<string>>;
+  setSearch: (value: string) => void;
   search: string;
   isLoading: boolean;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
   fetchNextPage: () => void;
   fetchPreviousPage: () => void;
+  addNew?: () => void;
 };
 
-function SearchTable<Data extends object>({
+function SearchTable<Data>({
+  title,
+  count,
   data,
   columns,
   sorting,
@@ -54,8 +61,9 @@ function SearchTable<Data extends object>({
   hasPreviousPage,
   fetchNextPage,
   fetchPreviousPage,
+  addNew,
 }: DataTableProps<Data>) {
-  const table = useReactTable({
+  const { getHeaderGroups, getRowModel } = useReactTable({
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
@@ -65,30 +73,29 @@ function SearchTable<Data extends object>({
       sorting,
       pagination: {
         pageIndex: 0,
-        pageSize: 10,
+        pageSize: ITEMS_PER_PAGE,
       },
     },
   });
+
   const userSearchHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearch(e.target.value);
     },
-    [setSearch]
+    [setSearch],
   );
 
   return (
-    <Box
-      border="1px solid rgb(226, 232, 240)"
-      overflow="auto"
-      minHeight="700px"
-    >
-      <Text as="h2" fontSize={24} textAlign="center">
-        USERS LIST
-      </Text>
+    <Box overflow="auto" minHeight="700px">
+      <Flex justifyContent="space-between" padding={5}>
+        <Text as="h2" fontSize={24} textAlign="center">
+          {title}
+        </Text>
+        <Button onClick={addNew}>Add New</Button>
+      </Flex>
       <FormControl py={4} px={4}>
-        <FormLabel mb="3px">Search Users</FormLabel>
         <Input
-          placeholder="Type here to search users"
+          placeholder="Type here to search"
           width="200px"
           onChange={userSearchHandler}
           value={search}
@@ -96,31 +103,21 @@ function SearchTable<Data extends object>({
       </FormControl>
       {isLoading ? (
         <Flex alignItems="center" justifyContent="center" minHeight="500px">
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-          />
+          <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
         </Flex>
       ) : (
         <Table borderTop="1px solid rgb(226, 232, 240)" height="100%">
           <Thead>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {getHeaderGroups().map(headerGroup => (
               <Tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map(header => {
                   const meta: any = header.column.columnDef.meta;
                   return (
                     <Th
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
-                      isNumeric={meta?.isNumeric}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      isNumeric={meta?.isNumeric}>
+                      {flexRender(header.column.columnDef.header, header.getContext())}
 
                       <chakra.span pl="4">
                         {header.column.getIsSorted() ? (
@@ -138,16 +135,13 @@ function SearchTable<Data extends object>({
             ))}
           </Thead>
           <Tbody>
-            {table.getRowModel().rows.map((row) => (
+            {getRowModel().rows.map(row => (
               <Tr key={row.id}>
-                {row.getVisibleCells().map((cell) => {
+                {row.getVisibleCells().map(cell => {
                   const meta: any = cell.column.columnDef.meta;
                   return (
                     <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </Td>
                   );
                 })}
@@ -157,29 +151,29 @@ function SearchTable<Data extends object>({
           <Tfoot>
             <Tr>
               <Td align="left" colSpan={5}>
-                <Text>Users count 12</Text>
+                <Text>Count - {count}</Text>
               </Td>
               <Td>
-                <IconButton
-                  className="border rounded p-1"
-                  aria-label="chevron-left"
-                  onClick={fetchPreviousPage}
-                  bg="transparent"
-                  icon={<BsChevronLeft />}
-                  isDisabled={hasPreviousPage}
-                >
-                  {"<"}
-                </IconButton>
-                <IconButton
-                  aria-label="chevron-right"
-                  className="border rounded p-1"
-                  bg="transparent"
-                  onClick={fetchNextPage}
-                  icon={<BsChevronRight />}
-                  isDisabled={!hasNextPage}
-                >
-                  {">"}
-                </IconButton>
+                <HStack>
+                  <IconButton
+                    className="border rounded p-1"
+                    aria-label="chevron-left"
+                    onClick={fetchPreviousPage}
+                    bg="transparent"
+                    icon={<BsChevronLeft />}
+                    isDisabled={!hasPreviousPage}>
+                    {"<"}
+                  </IconButton>
+                  <IconButton
+                    aria-label="chevron-right"
+                    className="border rounded p-1"
+                    bg="transparent"
+                    onClick={fetchNextPage}
+                    icon={<BsChevronRight />}
+                    isDisabled={!hasNextPage}>
+                    {">"}
+                  </IconButton>
+                </HStack>
               </Td>
             </Tr>
           </Tfoot>
@@ -189,4 +183,4 @@ function SearchTable<Data extends object>({
   );
 }
 
-export default SearchTable;
+export default memo(SearchTable);

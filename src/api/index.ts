@@ -1,52 +1,33 @@
-import { createStandaloneToast } from "@chakra-ui/react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { getSession } from "next-auth/react";
-import { toastDefaultOptions } from "@/constants/chakra";
+import { customToast } from "@/constants/chakra";
 
 const $apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
 
-const { toast } = createStandaloneToast();
-
-const handleError = (message: string) => {
-  toast({
-    title: message,
-    status: "error",
-    ...toastDefaultOptions,
-  });
+const handleError = (error: Error | AxiosError) => {
+  if (axios.isAxiosError(error) && !!error.response?.data?.message) {
+    customToast({ title: error.response.data.message, status: "error" });
+    return Promise.reject(error.response.data);
+  } else {
+    customToast({ title: error.message, status: "error" });
+    return Promise.reject(error);
+  }
 };
 
-$apiClient.interceptors.request.use(
-  async function (config) {
-    if (config.headers) {
-      const session = await getSession();
-      if (session?.user.token) {
-        config.headers.Authorization = `Bearer ${session.user.token}`; // todo when get token
-      }
-      config.headers["Content-Type"] = "application/json";
+$apiClient.interceptors.request.use(async (config) => {
+  if (config.headers) {
+    const session = await getSession();
+    if (session?.token) {
+      config.headers.Authorization = `Bearer ${session.token}`; // todo when get token
     }
-    return config;
-  },
-  function (error) {
-    if (!!error.response.data.message) {
-      handleError(error.response.data.responseMessage);
-    }
-    return Promise.reject(error.response.data);
+    config.headers["Content-Type"] = "application/json";
   }
-);
+  return config;
+}, handleError);
 
-$apiClient.interceptors.response.use(
-  function (response) {
-    return response.data;
-  },
-  function (error) {
-    if (!!error.response.data.responseMessage) {
-      handleError(error.response.data.responseMessage);
-    }
-    return Promise.reject(error.response.data);
-  }
-);
+$apiClient.interceptors.response.use((response) => response.data, handleError);
 
 export default $apiClient;

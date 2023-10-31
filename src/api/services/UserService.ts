@@ -1,18 +1,16 @@
-import { UserModel } from "@/models/user";
+import { UsersListModel } from "@/models/user";
 import $apiClient from "..";
-import { UsersParamsInput } from "../types";
+import { QueryParams } from "../types";
 
 export class UserService {
- static async getAllUsers(params: UsersParamsInput): Promise<UserModel[]> {
-  return $apiClient.get("/users/list", {
-   params: {
-    limit: params.limit,
-    offset: params.offset,
-    sorting: params.sorting,
-    search: params.search,
-   },
-  });
- }
-
- getUserById() {}
+  static getAllUsers(params: QueryParams): Promise<UsersListModel> {
+    return $apiClient.get("/users/list", {
+      params: {
+        limit: params.limit,
+        offset: params.offset,
+        sorting: params.sorting,
+        search: params.search,
+      },
+    });
+  }
 }

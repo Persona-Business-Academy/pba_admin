@@ -1,12 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { createMiddlewareDecorator, NextFunction } from "next-api-decorators";
-// import { validateJwt } from "./auth";
+import {
+  createMiddlewareDecorator,
+  NextFunction,
+  UnauthorizedException,
+} from "next-api-decorators";
+import { getToken } from "next-auth/jwt";
 
 export const AuthMiddleware = createMiddlewareDecorator(
- (req: NextApiRequest, res: NextApiResponse, next: NextFunction) => {
-  //   if (!validateJwt(req)) {
-  //    throw new UnauthorizedException();
-  //   }
-  next();
- }
+  async (req: NextApiRequest, res: NextApiResponse, next: NextFunction) => {
+    const token = await getToken({ req, secret: process.env.JWT_SECRET });
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    next();
+  }
 );

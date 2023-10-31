@@ -1,13 +1,12 @@
+import { Prisma } from "@prisma/client";
+import { User } from "@/lib/prisma/resolvers";
+
 export type UserModel = {
   id: number;
-  firstName: string;
-  lastName: string;
+  firstName: string | null;
+  lastName: string | null;
   email: string;
-  createdAt: string;
+  createdAt: Date;
 };
 
-export type UsersListModel = {
-  users: UserModel[];
-  count: number;
-  skip: number;
-};
+export type UsersListModel = Prisma.PromiseReturnType<typeof User.list>;

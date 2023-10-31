@@ -4,21 +4,21 @@ import { ERROR_MESSAGES } from "@/constants/common";
 import { User } from "../resolvers";
 
 export const validateUserPassword = async (email: string, password: string) => {
- try {
-  return User.findUserByEmail(email).then((user) => {
-   if (!user) {
-    throw new BadRequestException(ERROR_MESSAGES.invalidCredentials);
-   }
+  return User.findAdminByEmail(email)
+    .then((admin) => {
+      if (!admin) {
+        throw new BadRequestException(ERROR_MESSAGES.invalidCredentials);
+      }
 
-   bcrypt.compare(password, user.password || "").then((isValid) => {
-    if (!isValid) {
-     throw new BadRequestException(ERROR_MESSAGES.invalidCredentials);
-    }
-   });
+      bcrypt.compare(password, admin.password || "").then((isValid) => {
+        if (!isValid) {
+          throw new BadRequestException(ERROR_MESSAGES.invalidCredentials);
+        }
+      });
 
-   return { id: user.id, email: user.email };
-  });
- } catch (e) {
-  throw new Error(e as string);
- }
+      return admin;
+    })
+    .catch((e) => {
+      throw e;
+    });
 };
