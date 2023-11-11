@@ -122,6 +122,20 @@ export class OnlineCourseHandler {
 
     return updatedCourseLevel.id;
   }
+
+  @Delete("/delete-level/:id")
+  async deleteOnlineCourseLevel(@Param("id") id: string) {
+    if (isNaN(Number(id)) || +id === 0) {
+      throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
+    }
+
+    const deletedCourseLevel = await prisma.onlineCourseLevel.delete({
+      where: { id: +id },
+    });
+
+    return deletedCourseLevel.id;
+  }
+
   @Post("/create-day")
   async createOnlineCourseDay(@Body(ValidationPipe) body: CreateOnlineCourseDayValidation) {
     const { onlineCourseId, onlineCourseLevelId, label } = body;
@@ -159,6 +173,19 @@ export class OnlineCourseHandler {
     });
 
     return updatedCourseLevel.id;
+  }
+
+  @Delete("/delete-day/:id")
+  async deleteOnlineCourseDay(@Param("id") id: string) {
+    if (isNaN(Number(id)) || +id === 0) {
+      throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
+    }
+
+    const deletedCourseDay = await prisma.onlineCourseDay.delete({
+      where: { id: +id },
+    });
+
+    return deletedCourseDay.id;
   }
 
   @Post("/create-video")

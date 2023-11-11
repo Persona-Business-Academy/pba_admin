@@ -1,8 +1,11 @@
 import React, { FC, memo, useCallback } from "react";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { HStack, IconButton, useDisclosure } from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
+import SharedAlertDialog from "@/components/molecule/SharedAlertDialog";
 import { refetchOnlineCourseById } from "@/helpers/queryClient";
 import { EditOnlineCourseDayValidation } from "@/validation/online-courses";
 import ItemWrapper from "./ItemWrapper";
@@ -18,6 +21,7 @@ type Props = {
 const resolver = classValidatorResolver(EditOnlineCourseDayValidation);
 
 const Day: FC<Props> = ({ id, onlineCourseId, day, children }) => {
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const queryClient = useQueryClient();
   const { control, setValue, handleSubmit } = useForm<EditOnlineCourseDayValidation>({
     defaultValues: { label: day, id },
@@ -41,21 +45,46 @@ const Day: FC<Props> = ({ id, onlineCourseId, day, children }) => {
     [mutate],
   );
 
+  const { mutate: deleteDay, isLoading } = useMutation<number, { message: string }>(
+    () => OnlineCourseService.deleteOnlineCourseDay(id),
+    { onSuccess },
+  );
+
   return (
     <ItemWrapper>
-      <Controller
-        name="label"
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <EditableCustom
-            value={value}
-            onChange={onChange}
-            onCancel={onCancel}
-            onSubmit={handleSubmit(onSubmit)}
-          />
-        )}
-      />
+      <HStack>
+        <Controller
+          name="label"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <>
+              Day -
+              <EditableCustom
+                value={value}
+                onChange={onChange}
+                onCancel={onCancel}
+                onSubmit={handleSubmit(onSubmit)}
+              />
+            </>
+          )}
+        />
+        <IconButton
+          size="sm"
+          aria-label="add"
+          icon={<DeleteIcon />}
+          colorScheme="red"
+          fontSize="20px"
+          onClick={onOpen}
+        />
+      </HStack>
       {children}
+      <SharedAlertDialog
+        isOpen={isOpen}
+        isLoading={isLoading}
+        title={`Delete day - ${day}`}
+        onClose={onClose}
+        deleteFn={deleteDay}
+      />
     </ItemWrapper>
   );
 };
