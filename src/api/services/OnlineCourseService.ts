@@ -53,4 +53,7 @@ export class OnlineCourseService {
   static editOnlineCourseVideo(data: any): Promise<number> {
     return $apiClient.put("/online-courses/edit-video", data);
   }
+  static deleteOnlineCourseVideo(id: number): Promise<number> {
+    return $apiClient.delete(`/online-courses/delete-video/${id}`);
+  }
 }

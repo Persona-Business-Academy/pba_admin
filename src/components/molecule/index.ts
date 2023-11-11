@@ -16,6 +16,7 @@ const DeleteOnlineCourseModal = dynamic(
 const OnlineCourseVideos = dynamic(() => import("./OnlineCourseVideos"));
 const SearchTable = dynamic(() => import("./SearchTable"));
 const SharedModal = dynamic(() => import("./SharedModal"));
+const SharedAlertDialog = dynamic(() => import("./SharedAlertDialog"));
 
 export {
   SearchTable,
@@ -25,4 +26,5 @@ export {
   CreateOnlineCourseDayModal,
   CreateOnlineCourseLevelModal,
   OnlineCourseVideos,
+  SharedAlertDialog,
 };
