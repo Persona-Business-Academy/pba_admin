@@ -1,82 +1,87 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Admin {
-    id        Int       @id @default(autoincrement())
-    email     String    @unique
-    firstName String?   @db.VarChar(45)
-    lastName  String?   @db.VarChar(45)
-    password  String    @db.VarChar(60)
-    role      AdminRole
-    createdAt DateTime  @default(now()) @db.Timestamp(0)
-    updatedAt DateTime  @db.Timestamp(0)
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  firstName String?   @db.VarChar(45)
+  lastName  String?   @db.VarChar(45)
+  password  String    @db.VarChar(60)
+  role      AdminRole
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @db.Timestamp(0)
 }
 
 model OnlineCourse {
-    id                Int                 @id @default(autoincrement())
-    name              String              @db.VarChar(45)
-    createdAt         DateTime            @default(now()) @db.Timestamp(0)
-    updatedAt         DateTime            @db.Timestamp(0)
-    OnlineCourseDay   OnlineCourseDay[]
-    OnlineCourseLevel OnlineCourseLevel[]
-    OnlineCourseVideo OnlineCourseVideo[]
+  id                Int                 @id @default(autoincrement())
+  name              String              @db.VarChar(45)
+  createdAt         DateTime            @default(now()) @db.Timestamp(0)
+  updatedAt         DateTime            @db.Timestamp(0)
+  OnlineCourseDay   OnlineCourseDay[]
+  OnlineCourseLevel OnlineCourseLevel[]
+  OnlineCourseVideo OnlineCourseVideo[]
 }
 
 model OnlineCourseDay {
-    id                  Int                 @id @default(autoincrement())
-    label               String              @db.VarChar(45)
-    createdAt           DateTime            @default(now()) @db.Timestamp(0)
-    updatedAt           DateTime            @db.Timestamp(0)
-    onlineCourseId      Int
-    onlineCourseLevelId Int
-    OnlineCourse        OnlineCourse        @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
-    OnlineCourseLevel   OnlineCourseLevel   @relation(fields: [onlineCourseLevelId], references: [id], onDelete: Cascade)
-    OnlineCourseVideo   OnlineCourseVideo[]
+  id                  Int                 @id @default(autoincrement())
+  label               String              @db.VarChar(45)
+  createdAt           DateTime            @default(now()) @db.Timestamp(0)
+  updatedAt           DateTime            @db.Timestamp(0)
+  onlineCourseId      Int
+  onlineCourseLevelId Int
+  OnlineCourse        OnlineCourse        @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
+  OnlineCourseLevel   OnlineCourseLevel   @relation(fields: [onlineCourseLevelId], references: [id], onDelete: Cascade)
+  OnlineCourseVideo   OnlineCourseVideo[]
 }
 
 model OnlineCourseLevel {
-    id                Int                 @id @default(autoincrement())
-    level             String              @db.VarChar(45)
-    createdAt         DateTime            @default(now()) @db.Timestamp(0)
-    updatedAt         DateTime            @db.Timestamp(0)
-    onlineCourseId    Int
-    OnlineCourseDay   OnlineCourseDay[]
-    OnlineCourse      OnlineCourse        @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
-    OnlineCourseVideo OnlineCourseVideo[]
+  id                Int                 @id @default(autoincrement())
+  level             String              @db.VarChar(45)
+  createdAt         DateTime            @default(now()) @db.Timestamp(0)
+  updatedAt         DateTime            @db.Timestamp(0)
+  onlineCourseId    Int
+  OnlineCourseDay   OnlineCourseDay[]
+  OnlineCourse      OnlineCourse        @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
+  OnlineCourseVideo OnlineCourseVideo[]
 }
 
 model OnlineCourseVideo {
-    id                  Int               @id @default(autoincrement())
-    key                 String
-    name                String
-    createdAt           DateTime          @default(now()) @db.Timestamp(0)
-    updatedAt           DateTime          @db.Timestamp(0)
-    onlineCourseId      Int
-    onlineCourseLevelId Int
-    onlineCourseDayId   Int
-    OnlineCourseDay     OnlineCourseDay   @relation(fields: [onlineCourseDayId], references: [id], onDelete: Cascade)
-    OnlineCourse        OnlineCourse      @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
-    OnlineCourseLevel   OnlineCourseLevel @relation(fields: [onlineCourseLevelId], references: [id], onDelete: Cascade)
+  id                  Int               @id @default(autoincrement())
+  key                 String
+  name                String
+  createdAt           DateTime          @default(now()) @db.Timestamp(0)
+  updatedAt           DateTime          @db.Timestamp(0)
+  onlineCourseId      Int
+  onlineCourseLevelId Int
+  onlineCourseDayId   Int
+  OnlineCourseDay     OnlineCourseDay   @relation(fields: [onlineCourseDayId], references: [id], onDelete: Cascade)
+  OnlineCourse        OnlineCourse      @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
+  OnlineCourseLevel   OnlineCourseLevel @relation(fields: [onlineCourseLevelId], references: [id], onDelete: Cascade)
 }
 
 model User {
-    id               Int      @id @default(autoincrement())
-    email            String   @unique
-    confirmationCode Int?     @unique
-    firstName        String?  @db.VarChar(45)
-    lastName         String?  @db.VarChar(45)
-    password         String   @db.VarChar(60)
-    createdAt        DateTime @default(now()) @db.Timestamp(0)
-    updatedAt        DateTime @db.Timestamp(0)
+  id               Int      @id @default(autoincrement())
+  email            String   @unique
+  firstName        String?  @db.VarChar(45)
+  lastName         String?  @db.VarChar(45)
+  password         String   @db.VarChar(60)
+  phone            String?  @db.VarChar(60)
+  address          String?  @db.VarChar(60)
+  country          String?  @db.VarChar(60)
+  state            String?  @db.VarChar(60)
+  city             String?  @db.VarChar(60)
+  confirmationCode Int?     @unique
+  createdAt        DateTime @default(now()) @db.Timestamp(0)
+  updatedAt        DateTime @db.Timestamp(0)
 }
 
 enum AdminRole {
-    ADMIN
-    SUPER_ADMIN
+  ADMIN
+  SUPER_ADMIN
 }
