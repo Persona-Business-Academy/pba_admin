@@ -1,8 +1,6 @@
 "use client";
-import dynamic from "next/dynamic";
-
-const Footer = dynamic(() => import("./Footer"));
-const Sidebar = dynamic(() => import("./Sidebar"));
-const OnlineCourseItemHeading = dynamic(() => import("./OnlineCourseItemHeading"));
+import Footer from "./Footer";
+import OnlineCourseItemHeading from "./OnlineCourseItemHeading";
+import Sidebar from "./Sidebar";
 
 export { Footer, Sidebar, OnlineCourseItemHeading };

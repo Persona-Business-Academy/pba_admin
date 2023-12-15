@@ -1,8 +1,10 @@
 import { FC, memo, useMemo } from "react";
 import { OnlineCourse } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
-import SharedAlertDialog from "../../SharedAlertDialog";
+
+const SharedAlertDialog = dynamic(() => import("../../SharedAlertDialog"));
 
 type Props = {
   isOpen: boolean;

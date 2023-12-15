@@ -3,14 +3,16 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { Box, HStack, IconButton, useDisclosure } from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
-import SharedAlertDialog from "@/components/molecule/SharedAlertDialog";
 import { colors } from "@/constants/chakra";
 import { refetchOnlineCourseById } from "@/helpers/queryClient";
 import { EditOnlineCourseLevelValidation } from "@/validation/online-courses";
 import ItemWrapper from "./ItemWrapper";
 import EditableCustom from "../EditableCustom";
+
+const SharedAlertDialog = dynamic(() => import("@/components/molecule/SharedAlertDialog"));
 
 type Props = {
   id: number;

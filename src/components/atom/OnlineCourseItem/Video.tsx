@@ -1,8 +1,8 @@
 import React, { FC, memo, useMemo } from "react";
 import { Button, HStack, Progress, Text, useBoolean } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
+import ItemWrapper from "./ItemWrapper";
 
-const ItemWrapper = dynamic(() => import("./ItemWrapper"));
 const VideoPreview = dynamic(() => import("@/components/atom/VideoPreview"));
 
 type Props = {

@@ -1,15 +1,15 @@
 "use client";
 import dynamic from "next/dynamic";
+import Button from "./Button";
+import CustomSelect from "./CustomSelect";
+import EditableCustom from "./EditableCustom";
+import FormInput from "./FormInput";
+import Day from "./OnlineCourseItem/Day";
+import Level from "./OnlineCourseItem/Level";
+import Video from "./OnlineCourseItem/Video";
+import UploadFile from "./UploadFile";
 
-const Button = dynamic(() => import("./Button"));
-const EditableCustom = dynamic(() => import("./EditableCustom"));
-const FormInput = dynamic(() => import("./FormInput"));
-const Day = dynamic(() => import("./OnlineCourseItem/Day"));
-const Level = dynamic(() => import("./OnlineCourseItem/Level"));
-const Video = dynamic(() => import("./OnlineCourseItem/Video"));
-const UploadFile = dynamic(() => import("./UploadFile"));
 const VideoPreview = dynamic(() => import("./VideoPreview"));
-const CustomSelect = dynamic(() => import("./CustomSelect"));
 
 export {
   Button,

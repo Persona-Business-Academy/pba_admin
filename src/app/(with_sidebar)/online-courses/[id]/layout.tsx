@@ -1,8 +1,8 @@
-import dynamic from "next/dynamic";
-const OnlineCourseProvider = dynamic(() => import("@/contexts/OnlineCourseContext"));
+import { PropsWithChildren } from "react";
+import OnlineCourseProvider from "@/contexts/OnlineCourseContext";
 
-type Props = { params: { id: string }; children: React.ReactNode };
+type Props = { params: { id: string } };
 
-export default function OnlineCourseLayout({ children, params }: Props) {
+export default function OnlineCourseLayout({ children, params }: PropsWithChildren<Props>) {
   return <OnlineCourseProvider id={params.id}>{children}</OnlineCourseProvider>;
 }

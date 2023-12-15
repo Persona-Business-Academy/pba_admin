@@ -1,8 +1,10 @@
 import { FC, memo, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
 import { InstructorService } from "@/api/services/InstructorsService";
 import { InstructorType } from "@/models/instructors";
-import SharedAlertDialog from "../../SharedAlertDialog";
+
+const SharedAlertDialog = dynamic(() => import("../../SharedAlertDialog"));
 
 type Props = {
   isOpen: boolean;
