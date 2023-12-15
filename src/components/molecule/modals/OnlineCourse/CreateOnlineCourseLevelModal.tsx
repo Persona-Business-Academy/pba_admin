@@ -17,7 +17,7 @@ type Props = {
 
 const resolver = classValidatorResolver(CreateOnlineCourseLevelValidation);
 
-const AddEditOnlineCourseLevelModal: FC<Props> = ({ onlineCourseId, onClose }) => {
+const CreateOnlineCourseLevelModal: FC<Props> = ({ onlineCourseId, onClose }) => {
   const queryClient = useQueryClient();
   const {
     control,
@@ -69,4 +69,4 @@ const AddEditOnlineCourseLevelModal: FC<Props> = ({ onlineCourseId, onClose }) =
   );
 };
 
-export default memo(AddEditOnlineCourseLevelModal);
+export default memo(CreateOnlineCourseLevelModal);

@@ -98,7 +98,7 @@ const OnlineCourseVideos: FC<Props> = ({ videos, onlineCourseId, levelId, dayId 
 
   return (
     <Box>
-      <UploadFile title="Videos" changeHandler={submitHandler} />
+      <UploadFile content="Videos" changeHandler={submitHandler} accept="video/*" />
       {localVideos.map(renderVideos)}
     </Box>
   );

@@ -1,14 +1,15 @@
-import { ChangeEventHandler, FC, memo, useCallback, useRef } from "react";
+import React, { ChangeEventHandler, FC, memo, useCallback, useRef } from "react";
 import { Heading, HStack, IconButton, Input } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { Maybe } from "@/models/common";
 
 interface Props {
-  title: string;
+  content: string | React.ReactNode;
   changeHandler: (files: Maybe<FileList>) => void;
+  accept: string;
 }
 
-const UploadFile: FC<Props> = ({ title, changeHandler }) => {
+const UploadFile: FC<Props> = ({ content, changeHandler, accept }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadFileClick = useCallback(() => fileInputRef.current?.click(), []);
 
@@ -20,9 +21,13 @@ const UploadFile: FC<Props> = ({ title, changeHandler }) => {
   return (
     <>
       <HStack spacing={5} paddingY={5}>
-        <Heading as="h4" size="lg" color="blue.500">
-          {title}
-        </Heading>
+        {typeof content === "string" ? (
+          <Heading as="h4" size="lg" color="blue.500">
+            {content}
+          </Heading>
+        ) : (
+          content
+        )}
         <IconButton
           isRound
           aria-label="Upload file"
@@ -37,7 +42,7 @@ const UploadFile: FC<Props> = ({ title, changeHandler }) => {
           type="file"
           name="file"
           title=""
-          accept="video/*"
+          accept={accept}
           position="absolute"
           display="none"
           top={0}

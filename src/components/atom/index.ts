@@ -9,5 +9,16 @@ const Level = dynamic(() => import("./OnlineCourseItem/Level"));
 const Video = dynamic(() => import("./OnlineCourseItem/Video"));
 const UploadFile = dynamic(() => import("./UploadFile"));
 const VideoPreview = dynamic(() => import("./VideoPreview"));
+const CustomSelect = dynamic(() => import("./CustomSelect"));
 
-export { Button, FormInput, UploadFile, Level, Video, Day, EditableCustom, VideoPreview };
+export {
+  Button,
+  FormInput,
+  UploadFile,
+  Level,
+  Video,
+  Day,
+  EditableCustom,
+  VideoPreview,
+  CustomSelect,
+};

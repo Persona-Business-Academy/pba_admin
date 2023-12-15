@@ -42,9 +42,13 @@ const uploadDocumentWithSignerToAWS = async (options: UploadFileToAwsReq) => {
       name,
       contentType,
       xAmzHeadersAtInitiate: { "x-amz-acl": "public-read" },
-      progress: progressValue => {
-        handleUploadProgress({ progress: progressValue, key: fileName, fileName: name });
-      },
+      ...(!!handleUploadProgress
+        ? {
+            progress: progressValue => {
+              handleUploadProgress({ progress: progressValue, key: fileName, fileName: name });
+            },
+          }
+        : {}),
       complete: _xhr => {
         const [URL] = _xhr.responseURL.split("?");
         resolve({ url: URL, key: name });
@@ -72,3 +76,9 @@ export const uploadDocumentToAWS = async (
 
 export const generateOnlineCourseFileName = (id: number, levelId: number, dayId: number) =>
   `OnlineCourses/OnlineCourse-${id}/Level-${levelId}/Day-${dayId}/Video-${Date.now()}`;
+
+export const generateOnlineCourseCoverPhotoName = (id: string) =>
+  `OnlineCourses/OnlineCourse-${id}/CoverPhoto`;
+
+export const generateInstructorAvatarName = (id: string) =>
+  `Instructors/Instructor-${id}/CoverPhoto`;

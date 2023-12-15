@@ -1,3 +1,5 @@
+import { Language } from "@prisma/client";
+
 export type Maybe<T> = T | null;
 
 export type UploadProgressType = {
@@ -13,5 +15,7 @@ export type UploadFileToAwsReq = {
   file: File;
   fileName: string;
   resolve: (url: UploadFileToAwsRes) => void;
-  handleUploadProgress: (args: UploadProgressType) => void;
+  handleUploadProgress?: (args: UploadProgressType) => void;
 };
+
+export type LanguageType = Language;

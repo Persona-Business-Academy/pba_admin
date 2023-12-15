@@ -43,12 +43,13 @@ model OnlineCourse {
   updatedAt              DateTime              @updatedAt @db.Timestamp(0)
   courseLevel            SkillLevel
   coverPhoto             String
+  coverPhotoId           String                @unique
   description            String
-  duration               Float
-  graduatedStudentsCount Int
+  duration               Float                 @default(0)
+  graduatedStudentsCount Int                   @default(0)
   instructorId           Int
   language               Language
-  rate                   Float
+  rate                   Float?
   topic                  String                @db.VarChar(45)
   whatYouWillLearn       Json                  @db.Json
   Instructor             Instructor            @relation(fields: [instructorId], references: [id])
@@ -113,6 +114,7 @@ model Instructor {
   lastName     String         @db.VarChar(45)
   about        String
   avatar       String
+  avatarId     String         @unique
   createdAt    DateTime       @default(now()) @db.Timestamp(0)
   updatedAt    DateTime       @updatedAt @db.Timestamp(0)
   onlineCourse OnlineCourse[]

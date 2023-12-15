@@ -9,6 +9,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  ResponsiveValue,
 } from "@chakra-ui/react";
 
 type Props = {
@@ -20,6 +21,20 @@ type Props = {
   actionButtonDisabled?: boolean;
   action: () => void;
   isLoading: boolean;
+  size?: ResponsiveValue<
+    | "md"
+    | "sm"
+    | "lg"
+    | "xl"
+    | "2xl"
+    | (string & {})
+    | "xs"
+    | "3xl"
+    | "4xl"
+    | "5xl"
+    | "6xl"
+    | "full"
+  >;
 };
 
 const SharedModal: FC<Props> = ({
@@ -31,9 +46,11 @@ const SharedModal: FC<Props> = ({
   actionButtonDisabled,
   action,
   isLoading,
+  size,
 }) => (
   <Modal
     isCentered
+    size={size}
     isOpen={isOpen}
     onClose={onClose}
     closeOnOverlayClick={!isLoading}

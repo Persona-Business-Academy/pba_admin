@@ -1,9 +1,38 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import type { LanguageType } from "@/models/common";
+import type { OnlineCourseSkillLevelType } from "@/models/onlineCourses";
 
 export class CreateEditOnlineCourseValidation {
   @IsString()
   @IsNotEmpty({ message: "Name is required" })
   name: string;
+
+  @IsString()
+  @IsNotEmpty({ message: "Description is required" })
+  description: string;
+
+  @IsString()
+  @IsNotEmpty({ message: "Course level is required" })
+  courseLevel: OnlineCourseSkillLevelType;
+
+  @IsString()
+  @IsNotEmpty({ message: "Topic is required" })
+  topic: string;
+
+  @IsString()
+  @IsNotEmpty({ message: "Language is required" })
+  language: LanguageType;
+
+  @IsNotEmpty({ message: "Instructor is required" })
+  @IsNumber()
+  instructorId: number;
+
+  @IsString()
+  coverPhoto: string;
+
+  @IsString()
+  @IsNotEmpty({ message: "Missing query params" })
+  coverPhotoId: string;
 }
 
 export class CreateOnlineCourseLevelValidation {

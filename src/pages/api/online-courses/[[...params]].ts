@@ -52,8 +52,20 @@ export class OnlineCourseHandler {
 
   @Post("/create")
   async createOnlineCourse(@Body(ValidationPipe) body: CreateEditOnlineCourseValidation) {
-    const { name } = body;
-    const newCourse = await prisma.onlineCourse.create({ data: { name } });
+    const { name, description, courseLevel, topic, coverPhoto, language, coverPhotoId } = body;
+    const newCourse = await prisma.onlineCourse.create({
+      data: {
+        name,
+        description,
+        courseLevel,
+        topic,
+        coverPhoto,
+        coverPhotoId,
+        language,
+        instructorId: 1,
+        whatYouWillLearn: [],
+      },
+    });
     return newCourse.id;
   }
 
@@ -62,7 +74,7 @@ export class OnlineCourseHandler {
     @Body(ValidationPipe) body: CreateEditOnlineCourseValidation,
     @Param("id") id: string,
   ) {
-    const { name } = body;
+    const { name, description, courseLevel, topic, coverPhoto, language, coverPhotoId } = body;
 
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
@@ -70,7 +82,16 @@ export class OnlineCourseHandler {
 
     const updatedCourse = await prisma.onlineCourse.update({
       where: { id: +id },
-      data: { name },
+      data: {
+        name,
+        description,
+        courseLevel,
+        topic,
+        coverPhoto,
+        language,
+        coverPhotoId,
+        whatYouWillLearn: [],
+      },
     });
 
     return updatedCourse.id;
