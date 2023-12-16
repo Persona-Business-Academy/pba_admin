@@ -76,7 +76,7 @@ export class Instructors {
   }
 
   static async delete(id: number) {
-    const deletedCourse = await prisma.onlineCourse.delete({ where: { id } });
-    return deletedCourse.id;
+    const deletedInstructor = await prisma.instructor.delete({ where: { id } });
+    return deletedInstructor.id;
   }
 }
