@@ -10,7 +10,7 @@ export default function OnlineCourses() {
 
   return (
     <OnlineCourseItemHeading title="Levels" type="levels" onlineCourseId={data.id}>
-      {data.levels.map(({ id: levelId, level, days }: any) => {
+      {data.levels.map(({ id: levelId, level, days }) => {
         return (
           <Level key={`${level}-${levelId}`} id={levelId} level={level} onlineCourseId={data.id}>
             <OnlineCourseItemHeading
@@ -18,7 +18,7 @@ export default function OnlineCourses() {
               type="days"
               onlineCourseId={data.id}
               levelId={levelId}>
-              {days.map(({ id: dayId, label, videos }: any) => {
+              {days.map(({ id: dayId, label, videos }) => {
                 return (
                   <Day key={`${label}-${dayId}`} id={dayId} day={label} onlineCourseId={data.id}>
                     <OnlineCourseVideos
