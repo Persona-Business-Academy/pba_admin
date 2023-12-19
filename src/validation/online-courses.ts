@@ -1,6 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
-import type { LanguageType } from "@/models/common";
-import type { OnlineCourseSkillLevelType } from "@/models/onlineCourses";
+import type { LanguageType, SkillLevelType } from "@/models/common";
 
 export class CreateEditOnlineCourseValidation {
   @IsString()
@@ -13,7 +12,7 @@ export class CreateEditOnlineCourseValidation {
 
   @IsString()
   @IsNotEmpty({ message: "Course level is required" })
-  courseLevel: OnlineCourseSkillLevelType;
+  courseLevel: SkillLevelType;
 
   @IsString()
   @IsNotEmpty({ message: "Topic is required" })

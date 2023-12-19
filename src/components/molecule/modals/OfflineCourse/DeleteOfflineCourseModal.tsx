@@ -1,8 +1,8 @@
 import { FC, memo, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
-import { OnlineCourseService } from "@/api/services/OnlineCourseService";
-import { OnlineCourse } from "@/models/onlineCourses";
+import { OfflineCourseService } from "@/api/services/OfflineCourseService";
+import { OfflineCourse } from "@/models/offlineCourses";
 
 const SharedAlertDialog = dynamic(() => import("../../SharedAlertDialog"));
 
@@ -10,12 +10,12 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSave: () => void;
-  onlineCourse: NonNullable<OnlineCourse>;
+  offlineCourse: NonNullable<OfflineCourse>;
 };
 
-const DeleteOnlineCourseModal: FC<Props> = ({ isOpen, onClose, onSave, onlineCourse }) => {
+const DeleteOfflineCourseModal: FC<Props> = ({ isOpen, onClose, onSave, offlineCourse }) => {
   const { mutate, isLoading } = useMutation<number, { message: string }>(
-    () => OnlineCourseService.deleteOnlineCourse(onlineCourse.id),
+    () => OfflineCourseService.deleteOfflineCourse(offlineCourse.id),
     {
       onSuccess: async () => {
         onSave();
@@ -27,10 +27,10 @@ const DeleteOnlineCourseModal: FC<Props> = ({ isOpen, onClose, onSave, onlineCou
   const Title = useMemo(
     () => (
       <>
-        Delete <b>{onlineCourse.name}</b> Online Course
+        Delete <b>{offlineCourse.title}</b> Offline Course
       </>
     ),
-    [onlineCourse.name],
+    [offlineCourse.title],
   );
 
   return (
@@ -44,4 +44,4 @@ const DeleteOnlineCourseModal: FC<Props> = ({ isOpen, onClose, onSave, onlineCou
   );
 };
 
-export default memo(DeleteOnlineCourseModal);
+export default memo(DeleteOfflineCourseModal);

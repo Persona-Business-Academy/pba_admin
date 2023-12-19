@@ -1,4 +1,4 @@
-import { Language } from "@prisma/client";
+import { Currency, Language, SkillLevel } from "@prisma/client";
 
 export type Maybe<T> = T | null;
 
@@ -19,3 +19,5 @@ export type UploadFileToAwsReq = {
 };
 
 export type LanguageType = Language;
+export type CurrencyType = Currency;
+export type SkillLevelType = SkillLevel;

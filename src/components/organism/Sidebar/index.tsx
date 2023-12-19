@@ -3,6 +3,7 @@ import { Box, Drawer, DrawerContent, useDisclosure } from "@chakra-ui/react";
 import { FiHome, FiTrendingUp } from "react-icons/fi";
 import {
   INSTRUCTORS,
+  OFFLINE_COURSES_ROUTE,
   ONLINE_COURSES_ROUTE,
   USERS_ACTIVITY_ROUTE,
   USERS_ANALYTICS_ROUTE,
@@ -48,6 +49,7 @@ const linkItems: LinkItemProps[] = [
         href: "/project-management",
       },
       { title: "Online", href: ONLINE_COURSES_ROUTE },
+      { title: "Offline", href: OFFLINE_COURSES_ROUTE },
       { title: "Instructors", href: INSTRUCTORS },
     ],
   },

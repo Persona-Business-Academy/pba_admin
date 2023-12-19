@@ -24,6 +24,14 @@ const CreateEditInstructorModal = dynamic(
 );
 const DeleteInstructorModal = dynamic(() => import("./modals/Instructor/DeleteInstructorModal"));
 
+const CreateEditOfflineCourseModal = dynamic(
+  () => import("./modals/OfflineCourse/CreateEditOfflineCourse"),
+);
+
+const DeleteOfflineCourseModal = dynamic(
+  () => import("./modals/OfflineCourse/DeleteOfflineCourseModal"),
+);
+
 export {
   SearchTable,
   OnlineCourseVideos,
@@ -35,4 +43,6 @@ export {
   SharedAlertDialog,
   CreateEditInstructorModal,
   DeleteInstructorModal,
+  CreateEditOfflineCourseModal,
+  DeleteOfflineCourseModal,
 };

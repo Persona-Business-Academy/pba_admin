@@ -4,7 +4,6 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(req: NextRequest) {
   try {
     const token = await getToken({ req, secret: process.env.JWT_SECRET });
-    console.log(token);
     if (!token) {
       return NextResponse.redirect(`${process.env.BASE_URL}/signin`);
     }
@@ -22,5 +21,7 @@ export const config = {
     "/online-courses/(.*)",
     "/instructors",
     "/instructors/(.*)",
+    "/offline-courses",
+    "/offline-courses/(.*)",
   ],
 };

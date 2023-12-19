@@ -16,8 +16,8 @@ import { colors } from "@/constants/chakra";
 import { INSTRUCTORS } from "@/constants/routes";
 import { generateAWSUrl } from "@/helpers/common";
 import { generateOnlineCourseCoverPhotoName, uploadDocumentToAWS } from "@/helpers/uploadFile";
-import { LanguageType, Maybe } from "@/models/common";
-import { OnlineCourse, OnlineCourseSkillLevelType } from "@/models/onlineCourses";
+import { LanguageType, Maybe, SkillLevelType } from "@/models/common";
+import { OnlineCourse } from "@/models/onlineCourses";
 import { CreateEditOnlineCourseValidation } from "@/validation/online-courses";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
@@ -29,13 +29,12 @@ type Props = {
   onlineCourse: Maybe<OnlineCourse>;
 };
 
-const SKILL_LEVELS: Array<{ name: OnlineCourseSkillLevelType; value: OnlineCourseSkillLevelType }> =
-  [
-    { name: "ADVANCED", value: "ADVANCED" },
-    { name: "BEGINNER", value: "BEGINNER" },
-    { name: "INTERMEDIATE", value: "INTERMEDIATE" },
-    { name: "MASTER", value: "MASTER" },
-  ];
+const SKILL_LEVELS: Array<{ name: SkillLevelType; value: SkillLevelType }> = [
+  { name: "ADVANCED", value: "ADVANCED" },
+  { name: "BEGINNER", value: "BEGINNER" },
+  { name: "INTERMEDIATE", value: "INTERMEDIATE" },
+  { name: "MASTER", value: "MASTER" },
+];
 
 const TOPICS = [
   { name: "MARKETING", value: "MARKETING" },
