@@ -1,12 +1,11 @@
-import { FC, memo, useCallback, useMemo } from "react";
+import { FC, memo, useCallback } from "react";
+import { HStack } from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { InstructorService } from "@/api/services/InstructorsService";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
-import { FormInput } from "@/components/atom";
-import CustomSelect from "@/components/atom/CustomSelect";
+import { CustomSelect, FormInput } from "@/components/atom";
 import { CurrencyType, LanguageType, Maybe } from "@/models/common";
 import { SkillLevelType } from "@/models/common";
 import { OfflineCourse } from "@/models/offlineCourses";
@@ -41,22 +40,6 @@ const CURRENCIES: Array<{ name: CurrencyType; value: CurrencyType }> = [
 const resolver = classValidatorResolver(CreateEditOfflineCourseValidation);
 
 const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClose, onSave }) => {
-  const { data } = useQuery({
-    queryKey: ["all-instructors"],
-    queryFn: () =>
-      InstructorService.getAllInstructors({ offset: 0, limit: 100000, sorting: [], search: "" }),
-    keepPreviousData: true,
-  });
-
-  const _instructors = useMemo(
-    () =>
-      data?.instructors.map(({ id, firstName, lastName }) => ({
-        name: `${firstName} ${lastName}`,
-        value: id,
-      })) || [],
-    [data?.instructors],
-  );
-
   const {
     control,
     handleSubmit,
@@ -115,7 +98,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
           <FormInput
             isRequired
             isInvalid={!!errors[name]?.message}
-            name="title"
+            name={name}
             type="text"
             formLabelName="Title"
             value={value}
@@ -126,17 +109,19 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
         )}
       />
       <Controller
-        name="language"
+        name="subTitle"
         control={control}
         render={({ field: { onChange, value, name } }) => (
-          <CustomSelect
+          <FormInput
             isRequired
-            name={name}
-            formLabelName="Language"
-            options={LANGUAGES}
-            defaultValue={value}
             isInvalid={!!errors[name]?.message}
-            onChange={onChange}
+            name={name}
+            type="text"
+            formLabelName="Subtitle"
+            value={value}
+            placeholder="Type something..."
+            handleInputChange={onChange}
+            formErrorMessage={errors[name]?.message}
           />
         )}
       />
@@ -158,52 +143,124 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
         )}
       />
       <Controller
-        name="level"
-        control={control}
-        render={({ field: { onChange, value, name } }) => (
-          <CustomSelect
-            isRequired
-            name={name}
-            formLabelName="Course Level"
-            options={SKILL_LEVELS}
-            defaultValue={value}
-            isInvalid={!!errors[name]?.message}
-            onChange={onChange}
-          />
-        )}
-      />
-      <Controller
-        name="currency"
-        control={control}
-        render={({ field: { onChange, value, name } }) => (
-          <CustomSelect
-            isRequired
-            name={name}
-            formLabelName="Currency"
-            options={CURRENCIES}
-            defaultValue={value}
-            isInvalid={!!errors[name]?.message}
-            onChange={onChange}
-          />
-        )}
-      />
-      <Controller
-        name="subTitle"
+        name="graduatedStudentsCount"
         control={control}
         render={({ field: { onChange, value, name } }) => (
           <FormInput
             isRequired
             isInvalid={!!errors[name]?.message}
             name={name}
-            type="text"
-            formLabelName="Sub title"
+            type="number"
+            formLabelName="Graduated Students Count"
             value={value}
-            placeholder="Type something..."
+            placeholder="345"
             handleInputChange={onChange}
             formErrorMessage={errors[name]?.message}
           />
         )}
       />
+      <HStack>
+        <Controller
+          name="language"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <CustomSelect
+              isRequired
+              name={name}
+              formLabelName="Language"
+              options={LANGUAGES}
+              defaultValue={value}
+              isInvalid={!!errors[name]?.message}
+              onChange={onChange}
+            />
+          )}
+        />
+        <Controller
+          name="level"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <CustomSelect
+              isRequired
+              name={name}
+              formLabelName="Level"
+              options={SKILL_LEVELS}
+              defaultValue={value}
+              isInvalid={!!errors[name]?.message}
+              onChange={onChange}
+            />
+          )}
+        />
+      </HStack>
+      <HStack>
+        <Controller
+          name="price"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <FormInput
+              isRequired
+              isInvalid={!!errors[name]?.message}
+              name={name}
+              type="number"
+              formLabelName="Price"
+              value={value}
+              placeholder="400"
+              handleInputChange={onChange}
+              formErrorMessage={errors[name]?.message}
+            />
+          )}
+        />
+        <Controller
+          name="currency"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <CustomSelect
+              isRequired
+              name={name}
+              formLabelName="Currency"
+              options={CURRENCIES}
+              defaultValue={value}
+              isInvalid={!!errors[name]?.message}
+              onChange={onChange}
+            />
+          )}
+        />
+      </HStack>
+      <HStack>
+        <Controller
+          name="ageLimit"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <FormInput
+              isRequired
+              isInvalid={!!errors[name]?.message}
+              name={name}
+              type="text"
+              formLabelName="Age limit"
+              value={value}
+              placeholder="10-17"
+              handleInputChange={onChange}
+              formErrorMessage={errors[name]?.message}
+            />
+          )}
+        />
+        <Controller
+          name="totalDuration"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <FormInput
+              isRequired
+              isInvalid={!!errors[name]?.message}
+              name={name}
+              type="number"
+              formLabelName="Total duration of month"
+              value={value}
+              placeholder="3"
+              handleInputChange={onChange}
+              formErrorMessage={errors[name]?.message}
+            />
+          )}
+        />
+      </HStack>
     </SharedModal>
   );
 };

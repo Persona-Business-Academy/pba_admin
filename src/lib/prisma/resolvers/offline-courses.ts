@@ -1,7 +1,10 @@
 import { BadRequestException } from "next-api-decorators";
 import { SortingType } from "@/api/types";
 import { ERROR_MESSAGES } from "@/constants/common";
-import { CreateEditOfflineCourseValidation } from "@/validation/offline-courses";
+import {
+  AddOfflineInstructorsValidation,
+  CreateEditOfflineCourseValidation,
+} from "@/validation/offline-courses";
 import prisma from "..";
 
 export class OfflineCourses {
@@ -22,6 +25,7 @@ export class OfflineCourses {
       take,
       orderBy,
       where: { OR: [{ title: { contains: search, mode: "insensitive" } }] },
+      include: { OfflineCourseInstructors: { select: { id: true, instructor: true } } },
     });
 
     return { count, offlineCourses };
@@ -32,6 +36,7 @@ export class OfflineCourses {
       where: {
         id: courseId,
       },
+      include: { OfflineCourseInstructors: { select: { id: true, instructor: true } } },
     });
 
     return offlineCourse;
@@ -41,6 +46,7 @@ export class OfflineCourses {
     const newCourse = await prisma.offlineCourse.create({
       data: {
         ...data,
+        rating: 0,
         whatYouWillLearn: [],
         benefits: [],
       },
@@ -53,13 +59,7 @@ export class OfflineCourses {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
-    const updatedCourse = await prisma.offlineCourse.update({
-      where: { id: +id },
-      data: {
-        ...data,
-        whatYouWillLearn: [],
-      },
-    });
+    const updatedCourse = await prisma.offlineCourse.update({ where: { id: +id }, data });
 
     return updatedCourse.id;
   }
@@ -74,5 +74,25 @@ export class OfflineCourses {
     });
 
     return deletedCourse.id;
+  }
+
+  static async addInstructors({ instructorId, offlineCourseId }: AddOfflineInstructorsValidation) {
+    const addedInstructor = await prisma.offlineCourseInstructors.create({
+      data: { instructorId, offlineCourseId },
+    });
+
+    return addedInstructor.id;
+  }
+
+  static async removeInstructors(id: string) {
+    if (isNaN(Number(id)) || +id === 0) {
+      throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
+    }
+
+    const removedInstructor = await prisma.offlineCourseInstructors.delete({
+      where: { id: +id },
+    });
+
+    return removedInstructor.id;
   }
 }

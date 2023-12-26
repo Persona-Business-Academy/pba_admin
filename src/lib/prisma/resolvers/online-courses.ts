@@ -62,7 +62,10 @@ export class OnlineCourses {
   static async create(data: CreateEditOnlineCourseValidation) {
     const newCourse = await prisma.onlineCourse.create({
       data: {
-        ...data,
+        ...data, // todo
+        duration: 0,
+        graduatedStudentsCount: 0,
+        rating: 0,
         whatYouWillLearn: [],
       },
     });

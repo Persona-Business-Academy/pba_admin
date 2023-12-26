@@ -17,9 +17,9 @@ type Props = {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  actionButtonText: string;
+  actionButtonText?: string;
   actionButtonDisabled?: boolean;
-  action: () => void;
+  action?: () => void;
   isLoading: boolean;
   size?: ResponsiveValue<
     | "md"
@@ -60,18 +60,20 @@ const SharedModal: FC<Props> = ({
       <ModalHeader>{title}</ModalHeader>
       <ModalCloseButton />
       <ModalBody>{children}</ModalBody>
-      <ModalFooter>
-        <Button mr={3} onClick={onClose} isDisabled={isLoading}>
-          Close
-        </Button>
-        <Button
-          colorScheme="blue"
-          onClick={action}
-          isLoading={isLoading}
-          isDisabled={actionButtonDisabled}>
-          {actionButtonText}
-        </Button>
-      </ModalFooter>
+      {!!action && !!actionButtonText && (
+        <ModalFooter>
+          <Button mr={3} onClick={onClose} isDisabled={isLoading}>
+            Close
+          </Button>
+          <Button
+            colorScheme="blue"
+            onClick={action}
+            isLoading={isLoading}
+            isDisabled={actionButtonDisabled}>
+            {actionButtonText}
+          </Button>
+        </ModalFooter>
+      )}
     </ModalContent>
   </Modal>
 );

@@ -23,13 +23,14 @@ const CreateEditInstructorModal = dynamic(
   () => import("./modals/Instructor/CreateEditInstructorModal"),
 );
 const DeleteInstructorModal = dynamic(() => import("./modals/Instructor/DeleteInstructorModal"));
-
 const CreateEditOfflineCourseModal = dynamic(
   () => import("./modals/OfflineCourse/CreateEditOfflineCourse"),
 );
-
 const DeleteOfflineCourseModal = dynamic(
   () => import("./modals/OfflineCourse/DeleteOfflineCourseModal"),
+);
+const ChangeInstructorsModal = dynamic(
+  () => import("./modals/OfflineCourse/ChangeInstructorsModal"),
 );
 
 export {
@@ -45,4 +46,5 @@ export {
   DeleteInstructorModal,
   CreateEditOfflineCourseModal,
   DeleteOfflineCourseModal,
+  ChangeInstructorsModal,
 };

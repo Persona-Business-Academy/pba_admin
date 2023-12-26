@@ -16,7 +16,10 @@ import { ERROR_MESSAGES } from "@/constants/common";
 import { exceptionHandler } from "@/lib/prisma/error";
 import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
 import { OfflineCourses } from "@/lib/prisma/resolvers/offline-courses";
-import { CreateEditOfflineCourseValidation } from "@/validation/offline-courses";
+import {
+  AddOfflineInstructorsValidation,
+  CreateEditOfflineCourseValidation,
+} from "@/validation/offline-courses";
 
 @Catch(exceptionHandler)
 @AuthMiddleware()
@@ -53,6 +56,16 @@ export class OfflineCourseHandler {
   @Delete("/delete/:id")
   delete(@Param("id") id: string) {
     return OfflineCourses.delete(id);
+  }
+
+  @Post("/add-instructor")
+  addInstructor(@Body(ValidationPipe) body: AddOfflineInstructorsValidation) {
+    return OfflineCourses.addInstructors(body);
+  }
+
+  @Delete("/remove-instructor/:id")
+  removeInstructor(@Param("id") id: string) {
+    return OfflineCourses.removeInstructors(id);
   }
 }
 

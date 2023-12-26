@@ -42,3 +42,13 @@ export class CreateEditOfflineCourseValidation {
   @IsNotEmpty({ message: "Currency is required" })
   currency: CurrencyType;
 }
+
+export class AddOfflineInstructorsValidation {
+  @IsNumber()
+  @IsNotEmpty({ message: "Id is required" })
+  instructorId: number;
+
+  @IsNumber()
+  @IsNotEmpty({ message: "Id is required" })
+  offlineCourseId: number;
+}

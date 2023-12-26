@@ -8,6 +8,7 @@ import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import { CreateEditOfflineCourseModal, SearchTable } from "@/components/molecule";
+import ChangeInstructorsModal from "@/components/molecule/modals/OfflineCourse/ChangeInstructorsModal";
 import DeleteOfflineCourseModal from "@/components/molecule/modals/OfflineCourse/DeleteOfflineCourseModal";
 import { ITEMS_PER_PAGE } from "@/constants/common";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -22,6 +23,15 @@ export default function OfflineCourses() {
   const [editableOfflineCourse, setEditableOfflineCourse] = useState<Maybe<OfflineCourse>>(null);
   const [deletableOfflineCourse, setDeletableOfflineCourse] = useState<Maybe<OfflineCourse>>(null);
   const { isOpen, onOpen, onClose } = useDisclosure({
+    onClose() {
+      if (!!editableOfflineCourse) setEditableOfflineCourse(null);
+    },
+  });
+  const {
+    isOpen: isOpenInstructorsModal,
+    onOpen: onOpenInstructorsModal,
+    onClose: onCloseInstructorsModal,
+  } = useDisclosure({
     onClose() {
       if (!!editableOfflineCourse) setEditableOfflineCourse(null);
     },
@@ -112,6 +122,15 @@ export default function OfflineCourses() {
               Edit
             </Button>
             <Button
+              colorScheme="blue"
+              variant="outline"
+              onClick={() => {
+                setEditableOfflineCourse(row.original);
+                onOpenInstructorsModal();
+              }}>
+              Edit
+            </Button>
+            <Button
               colorScheme="red"
               onClick={() => {
                 setDeletableOfflineCourse(row.original);
@@ -124,7 +143,7 @@ export default function OfflineCourses() {
         header: "Actions",
       }),
     ],
-    [columnHelper, onOpen, onOpenDeleteOfflineCourse],
+    [columnHelper, onOpen, onOpenDeleteOfflineCourse, onOpenInstructorsModal],
   );
 
   return (
@@ -154,6 +173,14 @@ export default function OfflineCourses() {
           isOpen
           offlineCourse={editableOfflineCourse}
           onClose={onClose}
+          onSave={refetch}
+        />
+      )}
+      {isOpenInstructorsModal && !!editableOfflineCourse && (
+        <ChangeInstructorsModal
+          isOpen
+          offlineCourse={editableOfflineCourse}
+          onClose={onCloseInstructorsModal}
           onSave={refetch}
         />
       )}
