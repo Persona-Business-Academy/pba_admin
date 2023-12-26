@@ -7,9 +7,12 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
-import { CreateEditOfflineCourseModal, SearchTable } from "@/components/molecule";
-import ChangeInstructorsModal from "@/components/molecule/modals/OfflineCourse/ChangeInstructorsModal";
-import DeleteOfflineCourseModal from "@/components/molecule/modals/OfflineCourse/DeleteOfflineCourseModal";
+import {
+  ChangeInstructorsModal,
+  CreateEditOfflineCourseModal,
+  DeleteOfflineCourseModal,
+  SearchTable,
+} from "@/components/molecule";
 import { ITEMS_PER_PAGE } from "@/constants/common";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Maybe } from "@/models/common";
@@ -128,7 +131,7 @@ export default function OfflineCourses() {
                 setEditableOfflineCourse(row.original);
                 onOpenInstructorsModal();
               }}>
-              Edit
+              Add Instructors
             </Button>
             <Button
               colorScheme="red"
@@ -179,9 +182,8 @@ export default function OfflineCourses() {
       {isOpenInstructorsModal && !!editableOfflineCourse && (
         <ChangeInstructorsModal
           isOpen
-          offlineCourse={editableOfflineCourse}
+          offlineCourseId={editableOfflineCourse.id}
           onClose={onCloseInstructorsModal}
-          onSave={refetch}
         />
       )}
       {isOpenDeleteOfflineCourse && !!deletableOfflineCourse && (

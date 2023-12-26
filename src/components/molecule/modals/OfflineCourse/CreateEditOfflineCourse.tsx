@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import { CustomSelect, FormInput } from "@/components/atom";
+import { validateAgeLimit } from "@/helpers/common";
 import { CurrencyType, LanguageType, Maybe } from "@/models/common";
 import { SkillLevelType } from "@/models/common";
 import { OfflineCourse } from "@/models/offlineCourses";
@@ -43,6 +44,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors, isDirty },
   } = useForm<CreateEditOfflineCourseValidation>({
     defaultValues: {
@@ -77,8 +79,13 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
   );
 
   const onSubmit: SubmitHandler<CreateEditOfflineCourseValidation> = useCallback(
-    data => mutate(data),
-    [mutate],
+    data => {
+      if (!validateAgeLimit(data.ageLimit)) {
+        return setError("ageLimit", { message: "Invalid age limit" });
+      }
+      mutate(data);
+    },
+    [mutate, setError],
   );
 
   return (
@@ -154,12 +161,13 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
             formLabelName="Graduated Students Count"
             value={value}
             placeholder="345"
-            handleInputChange={onChange}
+            handleInputChange={e => onChange(+e.target.value)}
             formErrorMessage={errors[name]?.message}
+            inputProps={{ min: 0 }}
           />
         )}
       />
-      <HStack>
+      <HStack alignItems="flex-start">
         <Controller
           name="language"
           control={control}
@@ -191,7 +199,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
           )}
         />
       </HStack>
-      <HStack>
+      <HStack alignItems="flex-start">
         <Controller
           name="price"
           control={control}
@@ -204,8 +212,9 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
               formLabelName="Price"
               value={value}
               placeholder="400"
-              handleInputChange={onChange}
+              handleInputChange={e => onChange(+e.target.value)}
               formErrorMessage={errors[name]?.message}
+              inputProps={{ min: 0 }}
             />
           )}
         />
@@ -225,7 +234,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
           )}
         />
       </HStack>
-      <HStack>
+      <HStack alignItems="flex-start">
         <Controller
           name="ageLimit"
           control={control}
@@ -255,8 +264,9 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
               formLabelName="Total duration of month"
               value={value}
               placeholder="3"
-              handleInputChange={onChange}
+              handleInputChange={e => onChange(+e.target.value)}
               formErrorMessage={errors[name]?.message}
+              inputProps={{ min: 0 }}
             />
           )}
         />

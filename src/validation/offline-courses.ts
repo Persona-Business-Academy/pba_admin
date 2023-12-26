@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, Matches } from "class-validator";
 import type { CurrencyType, LanguageType, SkillLevelType } from "@/models/common";
 
 export class CreateEditOfflineCourseValidation {
@@ -20,6 +20,7 @@ export class CreateEditOfflineCourseValidation {
 
   @IsString()
   @IsNotEmpty({ message: "Age limit is required" })
+  @Matches(/[0-9]+-[0-9]+/i, { message: "Invalid age limit" })
   ageLimit: string;
 
   @IsNumber()
