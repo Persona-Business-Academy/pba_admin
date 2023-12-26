@@ -58,6 +58,30 @@ const ChangeInstructorsModal: FC<Props> = ({ offlineCourseId, isOpen, onClose })
     { id: number }
   >(OfflineCourseService.removeInstructor, { onSuccess: () => refetch() });
 
+  const mutate = useCallback(
+    (type: "add" | "remove", id: number) => {
+      if (addLoading || removeLoading) {
+        return;
+      }
+
+      switch (type) {
+        case "add": {
+          return add({ offlineCourseId, instructorId: id });
+        }
+        case "remove": {
+          const _id = instructorExist(id)?.id;
+          if (_id) {
+            return remove({ id: _id });
+          }
+          return;
+        }
+        default:
+          return;
+      }
+    },
+    [add, addLoading, instructorExist, offlineCourseId, remove, removeLoading],
+  );
+
   return (
     <SharedModal
       size="2xl"
@@ -93,17 +117,14 @@ const ChangeInstructorsModal: FC<Props> = ({ offlineCourseId, isOpen, onClose })
                       as={DeleteIcon}
                       color="red.500"
                       cursor={"pointer"}
-                      onClick={() => {
-                        const _id = instructorExist(id)?.id;
-                        if (_id) remove({ id: _id });
-                      }}
+                      onClick={() => mutate("remove", id)}
                     />
                   ) : (
                     <ListIcon
                       as={PlusSquareIcon}
                       color="green.500"
                       cursor={"pointer"}
-                      onClick={() => add({ offlineCourseId, instructorId: id })}
+                      onClick={() => mutate("add", id)}
                     />
                   )}
                   <Avatar
