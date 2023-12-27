@@ -15,7 +15,7 @@ import { SortingType } from "@/api/types";
 import { ERROR_MESSAGES } from "@/constants/common";
 import { exceptionHandler } from "@/lib/prisma/error";
 import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
-import { OnlineCourses } from "@/lib/prisma/resolvers/online-courses";
+import { OnlineCourses } from "@/lib/prisma/resolvers";
 import {
   CreateEditOnlineCourseValidation,
   CreateOnlineCourseDayValidation,

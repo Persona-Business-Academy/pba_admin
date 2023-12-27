@@ -11,43 +11,45 @@ import { SignInFormData } from "@/models/auth";
 
 function Signin() {
   const toast = useToast();
-  const { push } = useRouter();
+  const router = useRouter();
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    setError,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<SignInFormData>({
     defaultValues: { email: "", password: "" },
   });
 
   const onSubmit: SubmitHandler<SignInFormData> = useCallback(
-    ({ email, password }) => {
-      signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      })
-        .then(res => {
-          if (res?.ok) {
-            push(DASHBOARD_ROUTE);
-          } else {
-            toast({
-              title: "Invalid credentials",
-              description: ERROR_MESSAGES.invalidCredentials,
-              status: "error",
-            });
-          }
-        })
-        .catch(() => {
-          toast({
-            title: ERROR_MESSAGES.somethingWentWrong,
-            status: "error",
-          });
+    async ({ email, password }: { email: string; password: string }) => {
+      try {
+        const res = await signIn("credentials", {
+          email,
+          password,
+          callbackUrl: DASHBOARD_ROUTE,
+          redirect: false,
         });
+
+        if (res?.ok && res.url) {
+          router.push(res.url);
+          router.refresh();
+        } else {
+          setError("root", { message: ERROR_MESSAGES.invalidCredentials });
+        }
+      } catch (error) {
+        setError("root", { message: ERROR_MESSAGES.invalidCredentials });
+      }
     },
-    [push, toast],
+    [router, setError],
   );
+
+  useEffect(() => {
+    if (errors.root && errors.root.message) {
+      toast({ title: errors.root.message, status: "error" });
+    }
+  }, [errors.root, toast]);
 
   const handleKeyPress = useCallback(
     (e: KeyboardEvent) => {
@@ -127,7 +129,7 @@ function Signin() {
               w="100%"
               h="45"
               my="24px"
-              isDisabled={isSubmitting}
+              isLoading={isSubmitting || isSubmitSuccessful}
               onClick={handleSubmit(onSubmit)}>
               SIGN IN
             </Button>

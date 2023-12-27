@@ -1,8 +1,4 @@
-import {
-  ComponentStyleConfig,
-  createStandaloneToast,
-  UseToastOptions,
-} from "@chakra-ui/react";
+import { ComponentStyleConfig, UseToastOptions } from "@chakra-ui/react";
 
 const Button: ComponentStyleConfig = {
   baseStyle: {
@@ -161,7 +157,3 @@ export const toastDefaultOptions: UseToastOptions = {
   position: "bottom-right",
   isClosable: true,
 };
-
-export const { toast: customToast } = createStandaloneToast({
-  defaultOptions: toastDefaultOptions,
-});
