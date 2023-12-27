@@ -1,9 +1,10 @@
 import { FC, memo, useCallback, useEffect, useMemo, useState } from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { Center, Fade, HStack, IconButton, Image, Link, Text, useToast } from "@chakra-ui/react";
+import { Center, Fade, HStack, IconButton, Link, Text, useToast } from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import NextLink from "next/link";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
@@ -169,13 +170,19 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
                 localImage?.localUrl || value ? (
                   <Fade in>
                     <Image
+                      priority
                       src={localImage?.localUrl || generateAWSUrl(value)}
                       width={150}
                       height={150}
-                      borderRadius={6}
-                      objectFit={"cover"}
-                      backgroundColor={"gray.200"}
-                      alt="Cover photo"
+                      style={{
+                        width: 150,
+                        height: 150,
+                        borderRadius: 6,
+                        backgroundColor: "gray.200",
+                        objectFit: "cover",
+                      }}
+                      quality={50}
+                      alt="Avatar"
                     />
                   </Fade>
                 ) : (

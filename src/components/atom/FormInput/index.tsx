@@ -4,13 +4,15 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
+  IconButton,
   Input,
   InputGroup,
   InputProps,
   InputRightElement,
   Text,
 } from "@chakra-ui/react";
-import Image from "next/image";
+import EyeClosed from "/public/icons/eye_closed.svg";
+import EyeOpen from "/public/icons/eye_open.svg";
 
 type Props = {
   isInvalid?: boolean;
@@ -88,29 +90,13 @@ const FormInput: FC<Props> = ({
         />
         {type === "password" && (
           <InputRightElement>
-            {isPasswordType ? (
-              <Image
-                width={20}
-                height={20}
-                alt="eye"
-                style={{
-                  cursor: "pointer",
-                }}
-                src={"/icons/eye_open.svg"}
-                onClick={() => setIsPasswordType(false)}
-              />
-            ) : (
-              <Image
-                width={20}
-                height={20}
-                alt="eye"
-                style={{
-                  cursor: "pointer",
-                }}
-                src={"/icons/eye_closed.svg"}
-                onClick={() => setIsPasswordType(true)}
-              />
-            )}
+            <IconButton
+              background="transparent"
+              aria-label="eye"
+              icon={isPasswordType ? <EyeOpen /> : <EyeClosed />}
+              isDisabled={!value}
+              onClick={() => setIsPasswordType(prev => !prev)}
+            />
           </InputRightElement>
         )}
       </InputGroup>

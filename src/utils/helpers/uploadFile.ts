@@ -78,7 +78,7 @@ export const generateOnlineCourseFileName = (id: number, levelId: number, dayId:
   `OnlineCourses/OnlineCourse-${id}/Level-${levelId}/Day-${dayId}/Video-${Date.now()}`;
 
 export const generateOnlineCourseCoverPhotoName = (id: string) =>
-  `OnlineCourses/OnlineCourse-${id}/CoverPhoto`;
+  `OnlineCourses/OnlineCourse-${id}/CoverPhoto-${Date.now()}`;
 
 export const generateInstructorAvatarName = (id: string) =>
-  `Instructors/Instructor-${id}/CoverPhoto`;
+  `Instructors/Instructor-${id}/CoverPhoto-${Date.now()}`;
