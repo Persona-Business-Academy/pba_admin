@@ -1,5 +1,5 @@
 import { SortingType } from "@/api/types";
-import { CreateEditInstructorValidation } from "@/validation/instructors";
+import { CreateEditInstructorValidation } from "@/utils/validation/instructors";
 import prisma from "..";
 
 export class Instructors {

@@ -16,9 +16,9 @@ import dynamic from "next/dynamic";
 import NextLink from "next/link";
 import { InstructorService } from "@/api/services/InstructorsService";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
-import { INSTRUCTORS } from "@/constants/routes";
-import { generateAWSUrl } from "@/helpers/common";
-import { AddOfflineInstructorsValidation } from "@/validation/offline-courses";
+import { INSTRUCTORS } from "@/utils/constants/routes";
+import { generateAWSUrl } from "@/utils/helpers/common";
+import { AddOfflineInstructorsValidation } from "@/utils/validation/offline-courses";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
 

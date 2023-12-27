@@ -13,10 +13,10 @@ import {
   DeleteOfflineCourseModal,
   SearchTable,
 } from "@/components/molecule";
-import { ITEMS_PER_PAGE } from "@/constants/common";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Maybe } from "@/models/common";
-import { OfflineCourse } from "@/models/offlineCourses";
+import { ITEMS_PER_PAGE } from "@/utils/constants/common";
+import { Maybe } from "@/utils/models/common";
+import { OfflineCourse } from "@/utils/models/offlineCourses";
 
 export default function OfflineCourses() {
   const [sorting, setSorting] = useState<SortingState>([]);

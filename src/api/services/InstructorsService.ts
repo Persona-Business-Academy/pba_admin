@@ -1,5 +1,5 @@
-import { InstructorsListModel, InstructorType } from "@/models/instructors";
-import { CreateEditInstructorValidation } from "@/validation/instructors";
+import { InstructorsListModel, InstructorType } from "@/utils/models/instructors";
+import { CreateEditInstructorValidation } from "@/utils/validation/instructors";
 import $apiClient from "..";
 import { QueryParams } from "../types";
 

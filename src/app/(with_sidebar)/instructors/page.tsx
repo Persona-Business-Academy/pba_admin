@@ -12,11 +12,11 @@ import {
   DeleteInstructorModal,
   SearchTable,
 } from "@/components/molecule";
-import { ITEMS_PER_PAGE } from "@/constants/common";
-import { INSTRUCTORS } from "@/constants/routes";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Maybe } from "@/models/common";
-import { InstructorType } from "@/models/instructors";
+import { ITEMS_PER_PAGE } from "@/utils/constants/common";
+import { INSTRUCTORS } from "@/utils/constants/routes";
+import { Maybe } from "@/utils/models/common";
+import { InstructorType } from "@/utils/models/instructors";
 
 export default function Instructors() {
   const [sorting, setSorting] = useState<SortingState>([]);

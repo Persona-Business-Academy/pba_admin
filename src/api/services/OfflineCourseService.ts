@@ -1,8 +1,8 @@
-import { OfflineCourse, OfflineCoursesListModel } from "@/models/offlineCourses";
+import { OfflineCourse, OfflineCoursesListModel } from "@/utils/models/offlineCourses";
 import {
   AddOfflineInstructorsValidation,
   CreateEditOfflineCourseValidation,
-} from "@/validation/offline-courses";
+} from "@/utils/validation/offline-courses";
 import $apiClient from "..";
 import { QueryParams } from "../types";
 

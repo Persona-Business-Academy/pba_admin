@@ -6,9 +6,9 @@ import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { UserService } from "@/api/services/UserService";
 import { SearchTable } from "@/components/molecule";
-import { ITEMS_PER_PAGE } from "@/constants/common";
 import { useDebounce } from "@/hooks/useDebounce";
-import { UserModel } from "@/models/user";
+import { ITEMS_PER_PAGE } from "@/utils/constants/common";
+import { UserModel } from "@/utils/models/user";
 
 export default function UsersList() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -17,10 +17,7 @@ export default function UsersList() {
   const debouncedSearch = useDebounce(search);
 
   const { data, isLoading, isPreviousData } = useQuery({
-    queryKey: [
-      debouncedSearch ? `all-users/${debouncedSearch}` : "all-users",
-      page,
-    ],
+    queryKey: [debouncedSearch ? `all-users/${debouncedSearch}` : "all-users", page],
     queryFn: () =>
       UserService.getAllUsers({
         offset: page === 1 ? 0 : (page - 1) * ITEMS_PER_PAGE,
@@ -44,7 +41,7 @@ export default function UsersList() {
       }
       setSearch(value);
     },
-    [page]
+    [page],
   );
 
   const columnHelper = useMemo(() => createColumnHelper<UserModel>(), []);
@@ -52,22 +49,22 @@ export default function UsersList() {
     () => [
       columnHelper.accessor("firstName", {
         id: uuidv4(),
-        cell: (info) => info.getValue(),
+        cell: info => info.getValue(),
         header: "First Name",
       }),
       columnHelper.accessor("lastName", {
         id: uuidv4(),
-        cell: (info) => info.getValue(),
+        cell: info => info.getValue(),
         header: "Last Name",
       }),
       columnHelper.accessor("email", {
         id: uuidv4(),
-        cell: (info) => info.getValue(),
+        cell: info => info.getValue(),
         header: "Email",
       }),
       columnHelper.accessor("createdAt", {
         id: uuidv4(),
-        cell: (info) => {
+        cell: info => {
           const currentDate = dayjs(info.getValue());
           return currentDate.format("YYYY-MM-DD HH:mm:ss");
         },
@@ -84,7 +81,7 @@ export default function UsersList() {
         header: "Action Buttons",
       }),
     ],
-    [columnHelper]
+    [columnHelper],
   );
 
   return (
@@ -101,14 +98,11 @@ export default function UsersList() {
       setSearch={setSearchValue}
       hasNextPage={useMemo(
         () => !(!pageCount || page === pageCount || isPreviousData),
-        [isPreviousData, page, pageCount]
+        [isPreviousData, page, pageCount],
       )}
-      hasPreviousPage={useMemo(
-        () => !(page === 1 || isPreviousData),
-        [isPreviousData, page]
-      )}
-      fetchNextPage={useCallback(() => setPage((prev) => ++prev), [])}
-      fetchPreviousPage={useCallback(() => setPage((prev) => --prev), [])}
+      hasPreviousPage={useMemo(() => !(page === 1 || isPreviousData), [isPreviousData, page])}
+      fetchNextPage={useCallback(() => setPage(prev => ++prev), [])}
+      fetchPreviousPage={useCallback(() => setPage(prev => --prev), [])}
     />
   );
 }

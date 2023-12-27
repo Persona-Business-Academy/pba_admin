@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FormInput } from "@/components/atom";
-import { ERROR_MESSAGES } from "@/constants/common";
-import { DASHBOARD_ROUTE } from "@/constants/routes";
-import { SignInFormData } from "@/models/auth";
+import { ERROR_MESSAGES } from "@/utils/constants/common";
+import { DASHBOARD_ROUTE } from "@/utils/constants/routes";
+import { SignInFormData } from "@/utils/models/auth";
 
 function Signin() {
   const toast = useToast();

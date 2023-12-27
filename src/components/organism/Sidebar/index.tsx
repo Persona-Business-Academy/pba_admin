@@ -8,8 +8,8 @@ import {
   USERS_ACTIVITY_ROUTE,
   USERS_ANALYTICS_ROUTE,
   USERS_LIST_ROUTE,
-} from "@/constants/routes";
-import { LinkItemProps } from "@/models/sidebar";
+} from "@/utils/constants/routes";
+import { LinkItemProps } from "@/utils/models/sidebar";
 import MobileNav from "./MobileNav";
 import SidebarContent from "./SidebarContent";
 

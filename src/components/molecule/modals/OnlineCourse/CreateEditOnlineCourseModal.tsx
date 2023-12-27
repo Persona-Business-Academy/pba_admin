@@ -12,13 +12,16 @@ import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { FormInput } from "@/components/atom";
 import CustomSelect from "@/components/atom/CustomSelect";
 import UploadFile from "@/components/atom/UploadFile";
-import { colors } from "@/constants/chakra";
-import { INSTRUCTORS } from "@/constants/routes";
-import { generateAWSUrl } from "@/helpers/common";
-import { generateOnlineCourseCoverPhotoName, uploadDocumentToAWS } from "@/helpers/uploadFile";
-import { LanguageType, Maybe, SkillLevelType } from "@/models/common";
-import { OnlineCourse } from "@/models/onlineCourses";
-import { CreateEditOnlineCourseValidation } from "@/validation/online-courses";
+import { colors } from "@/utils/constants/chakra";
+import { INSTRUCTORS } from "@/utils/constants/routes";
+import { generateAWSUrl } from "@/utils/helpers/common";
+import {
+  generateOnlineCourseCoverPhotoName,
+  uploadDocumentToAWS,
+} from "@/utils/helpers/uploadFile";
+import { LanguageType, Maybe, SkillLevelType } from "@/utils/models/common";
+import { OnlineCourse } from "@/utils/models/onlineCourses";
+import { CreateEditOnlineCourseValidation } from "@/utils/validation/online-courses";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
 

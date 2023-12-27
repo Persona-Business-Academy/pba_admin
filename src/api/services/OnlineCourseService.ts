@@ -1,4 +1,4 @@
-import { OnlineCourse, OnlineCoursesListModel } from "@/models/onlineCourses";
+import { OnlineCourse, OnlineCoursesListModel } from "@/utils/models/onlineCourses";
 import {
   CreateEditOnlineCourseValidation,
   CreateOnlineCourseDayValidation,
@@ -6,7 +6,7 @@ import {
   CreateOnlineCourseVideoValidation,
   EditOnlineCourseDayValidation,
   EditOnlineCourseLevelValidation,
-} from "@/validation/online-courses";
+} from "@/utils/validation/online-courses";
 import $apiClient from "..";
 import { QueryParams } from "../types";
 

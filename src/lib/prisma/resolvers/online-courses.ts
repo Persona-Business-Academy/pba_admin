@@ -1,6 +1,6 @@
 import { BadRequestException } from "next-api-decorators";
 import { SortingType } from "@/api/types";
-import { ERROR_MESSAGES } from "@/constants/common";
+import { ERROR_MESSAGES } from "@/utils/constants/common";
 import {
   CreateEditOnlineCourseValidation,
   CreateOnlineCourseDayValidation,
@@ -8,7 +8,7 @@ import {
   CreateOnlineCourseVideoValidation,
   EditOnlineCourseDayValidation,
   EditOnlineCourseLevelValidation,
-} from "@/validation/online-courses";
+} from "@/utils/validation/online-courses";
 import prisma from "..";
 
 export class OnlineCourses {

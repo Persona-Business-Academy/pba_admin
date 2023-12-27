@@ -1,7 +1,7 @@
 import { createStandaloneToast } from "@chakra-ui/react";
 import axios, { AxiosError } from "axios";
 import { signOut } from "next-auth/react";
-import { toastDefaultOptions } from "@/constants/chakra";
+import { toastDefaultOptions } from "@/utils/constants/chakra";
 
 const $apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,

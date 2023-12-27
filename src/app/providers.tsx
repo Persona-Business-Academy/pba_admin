@@ -4,7 +4,7 @@ import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider, extendTheme, LightMode, ThemeConfig } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
-import { toastDefaultOptions } from "@/constants/chakra";
+import { toastDefaultOptions } from "@/utils/constants/chakra";
 
 const theme: ThemeConfig = extendTheme({
   config: {

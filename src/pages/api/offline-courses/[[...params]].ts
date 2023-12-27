@@ -12,14 +12,14 @@ import {
   ValidationPipe,
 } from "next-api-decorators";
 import { SortingType } from "@/api/types";
-import { ERROR_MESSAGES } from "@/constants/common";
 import { exceptionHandler } from "@/lib/prisma/error";
 import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
 import { OfflineCourses } from "@/lib/prisma/resolvers";
+import { ERROR_MESSAGES } from "@/utils/constants/common";
 import {
   AddOfflineInstructorsValidation,
   CreateEditOfflineCourseValidation,
-} from "@/validation/offline-courses";
+} from "@/utils/validation/offline-courses";
 
 @Catch(exceptionHandler)
 @AuthMiddleware()

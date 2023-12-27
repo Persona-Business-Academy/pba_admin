@@ -6,8 +6,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
-import { refetchOnlineCourseById } from "@/helpers/queryClient";
-import { EditOnlineCourseDayValidation } from "@/validation/online-courses";
+import { refetchOnlineCourseById } from "@/utils/helpers/queryClient";
+import { EditOnlineCourseDayValidation } from "@/utils/validation/online-courses";
 import ItemWrapper from "./ItemWrapper";
 import EditableCustom from "../EditableCustom";
 

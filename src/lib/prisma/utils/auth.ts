@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { UnauthorizedException } from "next-api-decorators";
-import { ERROR_MESSAGES } from "@/constants/common";
+import { ERROR_MESSAGES } from "@/utils/constants/common";
 import { User } from "../resolvers";
 
 export const validateUserPassword = async (email: string, password: string) => {

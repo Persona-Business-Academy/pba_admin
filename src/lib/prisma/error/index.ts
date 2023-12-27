@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { HttpException } from 'next-api-decorators';
-import { ERROR_MESSAGES } from '@/constants/common';
+import { NextApiRequest, NextApiResponse } from "next";
+import { HttpException } from "next-api-decorators";
+import { ERROR_MESSAGES } from "@/utils/constants/common";
 
 export const exceptionHandler = (
   error: HttpException,
@@ -10,7 +10,7 @@ export const exceptionHandler = (
   console.error(error);
   res.status(error instanceof HttpException ? error.statusCode : 500).json({
     message:
-      !(error instanceof HttpException) && process.env.NODE_ENV !== 'development'
+      !(error instanceof HttpException) && process.env.NODE_ENV !== "development"
         ? ERROR_MESSAGES.somethingWentWrong
         : error.message,
   });

@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString, Matches } from "class-validator";
-import type { CurrencyType, LanguageType, SkillLevelType } from "@/models/common";
+import type { CurrencyType, LanguageType, SkillLevelType } from "@/utils/models/common";
 
 export class CreateEditOfflineCourseValidation {
   @IsString()

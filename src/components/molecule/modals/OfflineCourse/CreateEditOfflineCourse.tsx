@@ -6,11 +6,11 @@ import dynamic from "next/dynamic";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import { CustomSelect, FormInput } from "@/components/atom";
-import { validateAgeLimit } from "@/helpers/common";
-import { CurrencyType, LanguageType, Maybe } from "@/models/common";
-import { SkillLevelType } from "@/models/common";
-import { OfflineCourse } from "@/models/offlineCourses";
-import { CreateEditOfflineCourseValidation } from "@/validation/offline-courses";
+import { validateAgeLimit } from "@/utils/helpers/common";
+import { CurrencyType, LanguageType, Maybe } from "@/utils/models/common";
+import { SkillLevelType } from "@/utils/models/common";
+import { OfflineCourse } from "@/utils/models/offlineCourses";
+import { CreateEditOfflineCourseValidation } from "@/utils/validation/offline-courses";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
 

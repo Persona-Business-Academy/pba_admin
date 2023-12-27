@@ -2,7 +2,7 @@ import { FC, memo, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
-import { OfflineCourse } from "@/models/offlineCourses";
+import { OfflineCourse } from "@/utils/models/offlineCourses";
 
 const SharedAlertDialog = dynamic(() => import("../../SharedAlertDialog"));
 

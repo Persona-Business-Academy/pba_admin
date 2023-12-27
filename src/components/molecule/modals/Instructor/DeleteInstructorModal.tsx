@@ -2,7 +2,7 @@ import { FC, memo, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { InstructorService } from "@/api/services/InstructorsService";
-import { InstructorType } from "@/models/instructors";
+import { InstructorType } from "@/utils/models/instructors";
 
 const SharedAlertDialog = dynamic(() => import("../../SharedAlertDialog"));
 

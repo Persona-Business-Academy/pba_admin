@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import Logo from "/public/icons/persona_logo.svg";
-import { LinkItemProps } from "@/models/sidebar";
+import { LinkItemProps } from "@/utils/models/sidebar";
 
 interface SidebarContentProps extends BoxProps {
   onClose: () => void;

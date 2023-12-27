@@ -3,9 +3,9 @@ import React, { createContext, FC, memo, useContext } from "react";
 import { Center, Flex, Grid, GridItem, Heading, Spinner } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
-import { ERROR_MESSAGES } from "@/constants/common";
-import { QUERY_KEY } from "@/helpers/queryClient";
-import { OnlineCourse } from "@/models/onlineCourses";
+import { ERROR_MESSAGES } from "@/utils/constants/common";
+import { QUERY_KEY } from "@/utils/helpers/queryClient";
+import { OnlineCourse } from "@/utils/models/onlineCourses";
 
 interface OnlineCourseState {
   data: NonNullable<OnlineCourse>;

@@ -28,7 +28,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
-import { ITEMS_PER_PAGE } from "@/constants/common";
+import { ITEMS_PER_PAGE } from "@/utils/constants/common";
 
 export type DataTableProps<Data> = {
   title?: string;

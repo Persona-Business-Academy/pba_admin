@@ -5,8 +5,8 @@ import dynamic from "next/dynamic";
 import { Controller, useForm } from "react-hook-form";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { FormInput } from "@/components/atom";
-import { refetchOnlineCourseById } from "@/helpers/queryClient";
-import { CreateOnlineCourseDayValidation } from "@/validation/online-courses";
+import { refetchOnlineCourseById } from "@/utils/helpers/queryClient";
+import { CreateOnlineCourseDayValidation } from "@/utils/validation/online-courses";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
 

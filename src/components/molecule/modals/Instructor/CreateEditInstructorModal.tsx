@@ -8,12 +8,12 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { InstructorService } from "@/api/services/InstructorsService";
 import { FormInput, UploadFile } from "@/components/atom";
-import { colors } from "@/constants/chakra";
-import { generateAWSUrl } from "@/helpers/common";
-import { generateInstructorAvatarName, uploadDocumentToAWS } from "@/helpers/uploadFile";
-import { Maybe } from "@/models/common";
-import { InstructorType } from "@/models/instructors";
-import { CreateEditInstructorValidation } from "@/validation/instructors";
+import { colors } from "@/utils/constants/chakra";
+import { generateAWSUrl } from "@/utils/helpers/common";
+import { generateInstructorAvatarName, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
+import { Maybe } from "@/utils/models/common";
+import { InstructorType } from "@/utils/models/instructors";
+import { CreateEditInstructorValidation } from "@/utils/validation/instructors";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
 

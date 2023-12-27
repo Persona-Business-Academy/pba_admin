@@ -1,7 +1,7 @@
 import Evaporate from "evaporate";
 import MD5 from "js-md5";
 import { Message, sha256 as SHA256 } from "js-sha256";
-import { UploadFileToAwsReq, UploadFileToAwsRes } from "@/models/common";
+import { UploadFileToAwsReq, UploadFileToAwsRes } from "@/utils/models/common";
 
 const uploadDocumentWithSignerToAWS = async (options: UploadFileToAwsReq) => {
   try {

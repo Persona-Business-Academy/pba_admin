@@ -12,11 +12,11 @@ import {
   ValidationPipe,
 } from "next-api-decorators";
 import { SortingType } from "@/api/types";
-import { ERROR_MESSAGES } from "@/constants/common";
 import { exceptionHandler } from "@/lib/prisma/error";
 import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
 import { Instructors } from "@/lib/prisma/resolvers";
-import { CreateEditInstructorValidation } from "@/validation/instructors";
+import { ERROR_MESSAGES } from "@/utils/constants/common";
+import { CreateEditInstructorValidation } from "@/utils/validation/instructors";
 
 @Catch(exceptionHandler)
 @AuthMiddleware()

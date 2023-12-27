@@ -1,4 +1,4 @@
-import { UsersListModel } from "@/models/user";
+import { UsersListModel } from "@/utils/models/user";
 import $apiClient from "..";
 import { QueryParams } from "../types";
 

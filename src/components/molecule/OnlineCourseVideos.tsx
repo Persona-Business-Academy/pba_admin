@@ -3,10 +3,10 @@ import { Box } from "@chakra-ui/react";
 import { OnlineCourseVideo } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
-import { refetchOnlineCourseById } from "@/helpers/queryClient";
-import { generateOnlineCourseFileName, uploadDocumentToAWS } from "@/helpers/uploadFile";
-import { Maybe } from "@/models/common";
-import { CreateOnlineCourseVideoValidation } from "@/validation/online-courses";
+import { refetchOnlineCourseById } from "@/utils/helpers/queryClient";
+import { generateOnlineCourseFileName, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
+import { Maybe } from "@/utils/models/common";
+import { CreateOnlineCourseVideoValidation } from "@/utils/validation/online-courses";
 import { UploadFile, Video } from "../atom";
 
 type Props = {

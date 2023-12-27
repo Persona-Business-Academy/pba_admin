@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
-import type { LanguageType, SkillLevelType } from "@/models/common";
+import type { LanguageType, SkillLevelType } from "@/utils/models/common";
 
 export class CreateEditOnlineCourseValidation {
   @IsString()

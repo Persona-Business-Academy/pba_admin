@@ -1,7 +1,7 @@
 import React, { ChangeEventHandler, FC, memo, useCallback, useRef } from "react";
 import { Heading, HStack, IconButton, Input } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
-import { Maybe } from "@/models/common";
+import { Maybe } from "@/utils/models/common";
 
 interface Props {
   content: string | React.ReactNode;

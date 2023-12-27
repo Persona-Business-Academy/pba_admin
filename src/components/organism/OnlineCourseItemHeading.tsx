@@ -1,8 +1,8 @@
 import React, { FC, memo, useCallback, useState } from "react";
 import { Box, Heading, HStack, IconButton } from "@chakra-ui/react";
 import { BsPlusCircleFill } from "react-icons/bs";
-import { Maybe } from "@/models/common";
-import { OnlineCourseType } from "@/models/onlineCourses";
+import { Maybe } from "@/utils/models/common";
+import { OnlineCourseType } from "@/utils/models/onlineCourses";
 import { CreateOnlineCourseDayModal, CreateOnlineCourseLevelModal } from "../molecule";
 
 type Props = {
