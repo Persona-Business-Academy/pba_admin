@@ -1,5 +1,6 @@
-import { IsNotEmpty, IsNumber, IsString, Matches } from "class-validator";
-import type { CurrencyType, LanguageType, SkillLevelType } from "@/utils/models/common";
+import { Topic } from "@prisma/client";
+import { IsEnum, IsNotEmpty, IsNumber, IsString, Matches } from "class-validator";
+import type { CurrencyType, LanguageType, SkillLevelType, TopicType } from "@/utils/models/common";
 
 export class CreateEditOfflineCourseValidation {
   @IsString()
@@ -13,6 +14,11 @@ export class CreateEditOfflineCourseValidation {
   @IsString()
   @IsNotEmpty({ message: "Description is required" })
   description: string;
+
+  @IsString()
+  @IsEnum(Topic, { message: "Invalid topic type" })
+  @IsNotEmpty({ message: "Topic is required" })
+  topic: TopicType;
 
   @IsString()
   @IsNotEmpty({ message: "Language is required" })
@@ -34,6 +40,14 @@ export class CreateEditOfflineCourseValidation {
   @IsNumber()
   @IsNotEmpty({ message: "Graduated students count is required" })
   graduatedStudentsCount: number;
+
+  @IsNumber()
+  @IsNotEmpty({ message: "Graduated students count is required" })
+  enrolledStudentsCount: number;
+
+  @IsNumber()
+  @IsNotEmpty({ message: "Lessons count is required" })
+  lessonsCount: number;
 
   @IsNumber()
   @IsNotEmpty({ message: "Price is required" })

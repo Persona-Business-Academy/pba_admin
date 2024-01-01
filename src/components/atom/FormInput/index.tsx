@@ -1,4 +1,4 @@
-import React, { FC, memo, useState } from "react";
+import React, { ChangeEvent, FC, memo, useState } from "react";
 import {
   FormControl,
   FormErrorMessage,
@@ -18,7 +18,7 @@ type Props = {
   isInvalid?: boolean;
   formLabelName?: string;
   value?: string | number;
-  handleInputChange?: (_event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleInputChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   formHelperText?: string;
   formErrorMessage?: string;
   type?: React.HTMLInputTypeAttribute;

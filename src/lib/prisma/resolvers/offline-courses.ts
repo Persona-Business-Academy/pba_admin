@@ -47,6 +47,7 @@ export class OfflineCourses {
       data: {
         ...data,
         rating: 0,
+        coverPhoto: "",
         whatYouWillLearn: [],
         benefits: [],
       },
