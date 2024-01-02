@@ -8,9 +8,9 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import { CustomSelect, FormInput } from "@/components/atom";
 import FormTextarea from "@/components/atom/FormTextarea";
+import { CURRENCIES, LANGUAGES, SKILL_LEVELS, TOPICS } from "@/utils/constants/courses";
 import { validateAgeLimit } from "@/utils/helpers/common";
-import { CurrencyType, LanguageType, Maybe, TopicType } from "@/utils/models/common";
-import { SkillLevelType } from "@/utils/models/common";
+import { Maybe } from "@/utils/models/common";
 import { OfflineCourse } from "@/utils/models/offlineCourses";
 import { CreateEditOfflineCourseValidation } from "@/utils/validation/offline-courses";
 
@@ -22,34 +22,6 @@ type Props = {
   onSave: () => void;
   offlineCourse: Maybe<OfflineCourse>;
 };
-
-const SKILL_LEVELS: Array<{ name: SkillLevelType; value: SkillLevelType }> = [
-  { name: "ADVANCED", value: "ADVANCED" },
-  { name: "BEGINNER", value: "BEGINNER" },
-  { name: "INTERMEDIATE", value: "INTERMEDIATE" },
-  { name: "MASTER", value: "MASTER" },
-];
-
-const LANGUAGES: Array<{ name: string; value: LanguageType }> = [
-  { name: "Armenian", value: "ARM" },
-  { name: "English", value: "EN" },
-];
-
-const TOPICS: Array<{ name: string; value: TopicType }> = [
-  { name: "Front End", value: Topic.FRONT_END },
-  { name: "Back End", value: Topic.BACK_END },
-  { name: "SMM", value: Topic.SMM },
-  { name: "Digital Marketing", value: Topic.DIGITAL_MARKETING },
-  { name: "Graphic Design", value: Topic.GRAPHIC_DESIGN },
-  { name: "UI UX Design", value: Topic.UI_UX_DESIGN },
-  { name: "Business Law", value: Topic.BUSINESS_LAW },
-  { name: "Business English", value: Topic.BUSINESS_ENGLISH },
-];
-
-const CURRENCIES: Array<{ name: CurrencyType; value: CurrencyType }> = [
-  { name: "AMD", value: "AMD" },
-  { name: "USD", value: "USD" },
-];
 
 const resolver = classValidatorResolver(CreateEditOfflineCourseValidation);
 
