@@ -6,11 +6,11 @@ import { useMutation } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
 import { InstructorService } from "@/api/services/InstructorsService";
 import { FormInput, UploadFile } from "@/components/atom";
 import { colors } from "@/utils/constants/chakra";
 import { generateAWSUrl } from "@/utils/helpers/common";
+import { generateInstructorDefaultValues } from "@/utils/helpers/formData";
 import { generateInstructorAvatarName, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
 import { Maybe } from "@/utils/models/common";
 import { InstructorType } from "@/utils/models/instructors";
@@ -38,13 +38,7 @@ const CreateEditInstructorModal: FC<Props> = ({ instructor, isOpen, onClose, onS
     handleSubmit,
     formState: { errors, isDirty },
   } = useForm<CreateEditInstructorValidation>({
-    defaultValues: {
-      firstName: !!instructor ? instructor.firstName : "",
-      lastName: !!instructor ? instructor.lastName : "",
-      about: !!instructor ? instructor.about : "",
-      avatar: !!instructor ? instructor.avatar : "",
-      avatarId: !!instructor ? instructor.avatarId : uuidv4(),
-    },
+    defaultValues: generateInstructorDefaultValues(instructor),
     resolver,
   });
 

@@ -12,7 +12,7 @@ import FormTextarea from "@/components/atom/FormTextarea";
 import { colors } from "@/utils/constants/chakra";
 import { CURRENCIES, LANGUAGES, SKILL_LEVELS, TOPICS } from "@/utils/constants/courses";
 import { generateAWSUrl, validateAgeLimit } from "@/utils/helpers/common";
-import { generateOfflineCourseDefaultValues } from "@/utils/helpers/offlineCourse";
+import { generateOfflineCourseDefaultValues } from "@/utils/helpers/formData";
 import {
   generateOfflineCourseCoverPhotoName,
   uploadDocumentToAWS,

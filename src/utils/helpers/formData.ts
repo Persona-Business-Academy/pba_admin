@@ -1,6 +1,8 @@
 import { Topic } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
+import { InstructorType } from "../models/instructors";
 import { OfflineCourse } from "../models/offlineCourses";
+import { OnlineCourse } from "../models/onlineCourses";
 
 export const generateOfflineCourseDefaultValues = (offlineCourse: OfflineCourse) => ({
   title: !!offlineCourse ? offlineCourse.title : "",
@@ -18,4 +20,23 @@ export const generateOfflineCourseDefaultValues = (offlineCourse: OfflineCourse)
   lessonsCount: !!offlineCourse ? offlineCourse.lessonsCount : 0,
   coverPhoto: !!offlineCourse ? offlineCourse.coverPhoto : "",
   coverPhotoId: !!offlineCourse ? offlineCourse.coverPhotoId : uuidv4(),
+});
+
+export const generateOnlineCourseDefaultValues = (onlineCourse: OnlineCourse) => ({
+  title: !!onlineCourse ? onlineCourse.title : "",
+  description: !!onlineCourse ? onlineCourse.description : "",
+  courseLevel: !!onlineCourse ? onlineCourse.courseLevel : "BEGINNER",
+  topic: !!onlineCourse ? onlineCourse.topic : "FRONT_END",
+  language: !!onlineCourse ? onlineCourse.language : "ARM",
+  instructorId: !!onlineCourse ? onlineCourse.instructorId : undefined,
+  coverPhoto: !!onlineCourse ? onlineCourse.coverPhoto : "",
+  coverPhotoId: !!onlineCourse ? onlineCourse.coverPhotoId : uuidv4(),
+});
+
+export const generateInstructorDefaultValues = (instructor: InstructorType) => ({
+  firstName: !!instructor ? instructor.firstName : "",
+  lastName: !!instructor ? instructor.lastName : "",
+  about: !!instructor ? instructor.about : "",
+  avatar: !!instructor ? instructor.avatar : "",
+  avatarId: !!instructor ? instructor.avatarId : uuidv4(),
 });

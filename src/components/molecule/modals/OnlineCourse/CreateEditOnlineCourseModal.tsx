@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, memo, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { Center, Fade, HStack, IconButton, Link, Text, useToast } from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
@@ -7,7 +7,6 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import NextLink from "next/link";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
 import { InstructorService } from "@/api/services/InstructorsService";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { FormInput } from "@/components/atom";
@@ -17,6 +16,7 @@ import { colors } from "@/utils/constants/chakra";
 import { LANGUAGES, SKILL_LEVELS, TOPICS } from "@/utils/constants/courses";
 import { INSTRUCTORS } from "@/utils/constants/routes";
 import { generateAWSUrl } from "@/utils/helpers/common";
+import { generateOnlineCourseDefaultValues } from "@/utils/helpers/formData";
 import {
   generateOnlineCourseCoverPhotoName,
   uploadDocumentToAWS,
@@ -64,16 +64,7 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
     setValue,
     formState: { errors, isDirty },
   } = useForm<CreateEditOnlineCourseValidation>({
-    defaultValues: {
-      title: !!onlineCourse ? onlineCourse.title : "",
-      description: !!onlineCourse ? onlineCourse.description : "",
-      courseLevel: !!onlineCourse ? onlineCourse.courseLevel : "BEGINNER",
-      topic: !!onlineCourse ? onlineCourse.topic : "FRONT_END",
-      language: !!onlineCourse ? onlineCourse.language : "ARM",
-      instructorId: !!onlineCourse ? onlineCourse.instructorId : undefined,
-      coverPhoto: !!onlineCourse ? onlineCourse.coverPhoto : "",
-      coverPhotoId: !!onlineCourse ? onlineCourse.coverPhotoId : uuidv4(),
-    },
+    defaultValues: generateOnlineCourseDefaultValues(onlineCourse),
     resolver,
   });
 
@@ -127,7 +118,7 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
     [localImage?.file, mutate, toast],
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (data?.count && data.instructors) {
       setValue("instructorId", data.instructors[0].id);
     }
