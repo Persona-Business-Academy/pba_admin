@@ -21,14 +21,14 @@ export class OnlineCourses {
     }
 
     const count = await prisma.onlineCourse.count({
-      where: { OR: [{ name: { contains: search, mode: "insensitive" } }] },
+      where: { OR: [{ title: { contains: search, mode: "insensitive" } }] },
     });
 
     const onlineCourses = await prisma.onlineCourse.findMany({
       skip,
       take,
       orderBy,
-      where: { OR: [{ name: { contains: search, mode: "insensitive" } }] },
+      where: { OR: [{ title: { contains: search, mode: "insensitive" } }] },
     });
 
     return { count, onlineCourses };
@@ -63,9 +63,7 @@ export class OnlineCourses {
     const newCourse = await prisma.onlineCourse.create({
       data: {
         ...data, // todo
-        duration: 0,
-        graduatedStudentsCount: 0,
-        rating: 0,
+        subTitle: "",
         whatYouWillLearn: [],
       },
     });

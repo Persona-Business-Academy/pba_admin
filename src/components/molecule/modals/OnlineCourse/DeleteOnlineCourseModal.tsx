@@ -27,10 +27,10 @@ const DeleteOnlineCourseModal: FC<Props> = ({ isOpen, onClose, onSave, onlineCou
   const Title = useMemo(
     () => (
       <>
-        Delete <b>{onlineCourse.name}</b> Online Course
+        Delete <b>{onlineCourse.title}</b> Online Course
       </>
     ),
-    [onlineCourse.name],
+    [onlineCourse.title],
   );
 
   return (

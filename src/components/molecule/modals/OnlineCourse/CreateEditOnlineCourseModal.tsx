@@ -2,6 +2,7 @@ import { FC, memo, useCallback, useEffect, useMemo, useState } from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { Center, Fade, HStack, IconButton, Link, Text, useToast } from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
+import { Topic } from "@prisma/client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -20,7 +21,7 @@ import {
   generateOnlineCourseCoverPhotoName,
   uploadDocumentToAWS,
 } from "@/utils/helpers/uploadFile";
-import { LanguageType, Maybe, SkillLevelType } from "@/utils/models/common";
+import { LanguageType, Maybe, SkillLevelType, TopicType } from "@/utils/models/common";
 import { OnlineCourse } from "@/utils/models/onlineCourses";
 import { CreateEditOnlineCourseValidation } from "@/utils/validation/online-courses";
 
@@ -40,10 +41,15 @@ const SKILL_LEVELS: Array<{ name: SkillLevelType; value: SkillLevelType }> = [
   { name: "MASTER", value: "MASTER" },
 ];
 
-const TOPICS = [
-  { name: "MARKETING", value: "MARKETING" },
-  { name: "DESIGN", value: "DESIGN" },
-  { name: "DEVELOPMENT", value: "DEVELOPMENT" },
+const TOPICS: Array<{ name: string; value: TopicType }> = [
+  { name: "Front End", value: Topic.FRONT_END },
+  { name: "Back End", value: Topic.BACK_END },
+  { name: "SMM", value: Topic.SMM },
+  { name: "Digital Marketing", value: Topic.DIGITAL_MARKETING },
+  { name: "Graphic Design", value: Topic.GRAPHIC_DESIGN },
+  { name: "UI UX Design", value: Topic.UI_UX_DESIGN },
+  { name: "Business Law", value: Topic.BUSINESS_LAW },
+  { name: "Business English", value: Topic.BUSINESS_ENGLISH },
 ];
 
 const LANGUAGES: Array<{ name: string; value: LanguageType }> = [
@@ -82,10 +88,10 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
     formState: { errors, isDirty },
   } = useForm<CreateEditOnlineCourseValidation>({
     defaultValues: {
-      name: !!onlineCourse ? onlineCourse.name : "",
+      title: !!onlineCourse ? onlineCourse.title : "",
       description: !!onlineCourse ? onlineCourse.description : "",
       courseLevel: !!onlineCourse ? onlineCourse.courseLevel : "BEGINNER",
-      topic: !!onlineCourse ? onlineCourse.topic : "MARKETING",
+      topic: !!onlineCourse ? onlineCourse.topic : "FRONT_END",
       language: !!onlineCourse ? onlineCourse.language : "ARM",
       instructorId: !!onlineCourse ? onlineCourse.instructorId : undefined,
       coverPhoto: !!onlineCourse ? onlineCourse.coverPhoto : "",
@@ -216,7 +222,7 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
       />
       <HStack>
         <Controller
-          name="name"
+          name="title"
           control={control}
           render={({ field: { onChange, value, name } }) => (
             <FormInput

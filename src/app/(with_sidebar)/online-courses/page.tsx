@@ -87,10 +87,10 @@ export default function OnlineCourses() {
         },
         header: "ID",
       }),
-      columnHelper.accessor("name", {
+      columnHelper.accessor("title", {
         id: uuidv4(),
         cell: info => info.getValue(),
-        header: "Name",
+        header: "Title",
       }),
       columnHelper.accessor("createdAt", {
         id: uuidv4(),

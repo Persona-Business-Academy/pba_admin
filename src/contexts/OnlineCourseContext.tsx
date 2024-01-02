@@ -45,7 +45,7 @@ const OnlineCourseProvider: FC<Props> = ({ children, id }) => {
     <OnlineCourseContext.Provider value={{ data }}>
       <Grid>
         <GridItem w="100%" padding={5}>
-          <Heading textAlign="center">{data.name}</Heading>
+          <Heading textAlign="center">{data.title}</Heading>
           <Flex flexDirection="column" paddingTop={10}>
             {children}
           </Flex>

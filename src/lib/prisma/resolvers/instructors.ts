@@ -54,6 +54,7 @@ export class Instructors {
         about,
         avatar,
         avatarId,
+        profession: "",
       },
     });
     return instructor.id;
