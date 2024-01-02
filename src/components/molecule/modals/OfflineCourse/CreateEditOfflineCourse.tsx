@@ -1,15 +1,22 @@
-import { FC, memo, useCallback } from "react";
-import { Flex, HStack } from "@chakra-ui/react";
+import { FC, memo, useCallback, useState } from "react";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { Center, Fade, HStack, IconButton, Text, useToast } from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
-import { Topic } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
-import { CustomSelect, FormInput } from "@/components/atom";
+import { CustomSelect, FormInput, UploadFile } from "@/components/atom";
 import FormTextarea from "@/components/atom/FormTextarea";
+import { colors } from "@/utils/constants/chakra";
 import { CURRENCIES, LANGUAGES, SKILL_LEVELS, TOPICS } from "@/utils/constants/courses";
-import { validateAgeLimit } from "@/utils/helpers/common";
+import { generateAWSUrl, validateAgeLimit } from "@/utils/helpers/common";
+import { generateOfflineCourseDefaultValues } from "@/utils/helpers/offlineCourse";
+import {
+  generateOfflineCourseCoverPhotoName,
+  uploadDocumentToAWS,
+} from "@/utils/helpers/uploadFile";
 import { Maybe } from "@/utils/models/common";
 import { OfflineCourse } from "@/utils/models/offlineCourses";
 import { CreateEditOfflineCourseValidation } from "@/utils/validation/offline-courses";
@@ -26,27 +33,17 @@ type Props = {
 const resolver = classValidatorResolver(CreateEditOfflineCourseValidation);
 
 const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClose, onSave }) => {
+  const [localImage, setLocalImage] = useState<{ file: File; localUrl: string } | null>(null);
+  const [fileLoading, setFileLoading] = useState<boolean>(false);
+  const toast = useToast();
+
   const {
     control,
     handleSubmit,
     setError,
     formState: { errors, isDirty },
   } = useForm<CreateEditOfflineCourseValidation>({
-    defaultValues: {
-      title: !!offlineCourse ? offlineCourse.title : "",
-      topic: !!offlineCourse ? offlineCourse.topic : Topic.FRONT_END,
-      subTitle: !!offlineCourse ? offlineCourse.subTitle : "",
-      description: !!offlineCourse ? offlineCourse.description : "",
-      language: !!offlineCourse ? offlineCourse.language : "ARM",
-      ageLimit: !!offlineCourse ? offlineCourse.ageLimit : "",
-      totalDuration: !!offlineCourse ? offlineCourse.totalDuration : 0,
-      level: !!offlineCourse ? offlineCourse.level : "BEGINNER",
-      graduatedStudentsCount: !!offlineCourse ? offlineCourse.graduatedStudentsCount : 0,
-      enrolledStudentsCount: !!offlineCourse ? offlineCourse.enrolledStudentsCount : 0,
-      price: !!offlineCourse ? offlineCourse.price : 0,
-      currency: !!offlineCourse ? offlineCourse.currency : "AMD",
-      lessonsCount: !!offlineCourse ? offlineCourse.lessonsCount : 0,
-    },
+    defaultValues: generateOfflineCourseDefaultValues(offlineCourse),
     resolver,
   });
 
@@ -63,17 +60,45 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
     !!offlineCourse
       ? data => OfflineCourseService.editOfflineCourse(offlineCourse.id, data)
       : OfflineCourseService.createOfflineCourse,
-    { onSuccess },
+    { onSuccess, onError: () => setFileLoading(false) },
   );
 
+  const onFileSelect = useCallback((files: Maybe<FileList>) => {
+    if (files?.length) {
+      setLocalImage({ file: files[0], localUrl: URL.createObjectURL(files[0]) });
+    }
+  }, []);
+
+  const removeCoverPhoto = useCallback(() => setLocalImage(null), []);
+
   const onSubmit: SubmitHandler<CreateEditOfflineCourseValidation> = useCallback(
-    data => {
-      if (!validateAgeLimit(data.ageLimit)) {
-        return setError("ageLimit", { message: "Invalid age limit" });
+    async data => {
+      try {
+        if (!validateAgeLimit(data.ageLimit)) {
+          return setError("ageLimit", { message: "Invalid age limit" });
+        }
+
+        if (localImage?.file) {
+          if (localImage.file.size > 3 * 1024 * 1024) {
+            return toast({
+              title: "File size too large. Maximum size allowed is 3mb",
+              status: "warning",
+            });
+          }
+          setFileLoading(true);
+          const res = await uploadDocumentToAWS({
+            file: localImage.file,
+            fileName: generateOfflineCourseCoverPhotoName(data.coverPhotoId),
+          });
+          mutate({ ...data, coverPhoto: res.key });
+        } else {
+          mutate(data);
+        }
+      } catch (e) {
+        setFileLoading(false);
       }
-      mutate(data);
     },
-    [mutate, setError],
+    [localImage?.file, mutate, setError, toast],
   );
 
   return (
@@ -84,8 +109,56 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
       action={handleSubmit(onSubmit)}
       actionButtonText={!!offlineCourse ? "Save" : "Create"}
       onClose={onClose}
-      isLoading={isLoading}
-      actionButtonDisabled={!isDirty}>
+      isLoading={isLoading || fileLoading}
+      actionButtonDisabled={!isDirty && !localImage}>
+      <Controller
+        name="coverPhoto"
+        control={control}
+        render={({ field: { value } }) => (
+          <HStack>
+            <UploadFile
+              content={
+                localImage?.localUrl || value ? (
+                  <Fade in>
+                    <Image
+                      priority
+                      src={localImage?.localUrl || generateAWSUrl(value)}
+                      width={150}
+                      height={150}
+                      style={{
+                        width: 150,
+                        height: 150,
+                        borderRadius: 6,
+                        backgroundColor: "gray.200",
+                        objectFit: "cover",
+                      }}
+                      alt="Avatar"
+                    />
+                  </Fade>
+                ) : (
+                  <Fade in>
+                    <Center
+                      boxSize={"150px"}
+                      borderRadius={6}
+                      border={`2px solid ${colors.blue[500]}`}>
+                      <Text color="blue.500">No photo</Text>
+                    </Center>
+                  </Fade>
+                )
+              }
+              changeHandler={onFileSelect}
+              accept="image/*"
+            />
+            <Fade in={!!localImage?.localUrl}>
+              <IconButton
+                aria-label="remove local photo"
+                icon={<DeleteIcon />}
+                onClick={removeCoverPhoto}
+              />
+            </Fade>
+          </HStack>
+        )}
+      />
       <Controller
         name="title"
         control={control}
@@ -150,7 +223,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
           />
         )}
       />
-      <Flex>
+      <HStack alignItems="flex-start">
         <Controller
           name="graduatedStudentsCount"
           control={control}
@@ -161,10 +234,11 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
               name={name}
               type="number"
               formLabelName="Graduated Students Count"
-              value={value}
+              value={value || ""}
               placeholder="345"
               handleInputChange={e => onChange(+e.target.value)}
               formErrorMessage={errors[name]?.message}
+              inputProps={{ min: 0 }}
             />
           )}
         />
@@ -178,15 +252,15 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
               name={name}
               type="number"
               formLabelName="Enrolled students count"
-              value={value}
+              value={value || ""}
               placeholder="345"
               handleInputChange={e => onChange(+e.target.value)}
               formErrorMessage={errors[name]?.message}
+              inputProps={{ min: 0 }}
             />
           )}
         />
-      </Flex>
-
+      </HStack>
       <HStack alignItems="flex-start">
         <Controller
           name="language"
@@ -230,10 +304,11 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
               name={name}
               type="number"
               formLabelName="Price"
-              value={value}
+              value={value || ""}
               placeholder="400"
               handleInputChange={e => onChange(+e.target.value)}
               formErrorMessage={errors[name]?.message}
+              inputProps={{ min: 0 }}
             />
           )}
         />
@@ -281,10 +356,11 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
               name={name}
               type="number"
               formLabelName="Total duration of month"
-              value={value}
+              value={value || ""}
               placeholder="3"
               handleInputChange={e => onChange(+e.target.value)}
               formErrorMessage={errors[name]?.message}
+              inputProps={{ min: 0 }}
             />
           )}
         />
@@ -299,10 +375,11 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
               name={name}
               type="number"
               formLabelName="Lessons count"
-              value={value}
+              value={value || ""}
               placeholder="3"
               handleInputChange={e => onChange(+e.target.value)}
               formErrorMessage={errors[name]?.message}
+              inputProps={{ min: 0 }}
             />
           )}
         />

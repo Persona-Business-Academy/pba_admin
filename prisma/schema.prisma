@@ -135,6 +135,7 @@ model OfflineCourse {
   subTitle                 String
   topic                    Topic
   coverPhoto               String
+  coverPhotoId             String                     @unique
   rating                   Float                      @default(0)
   description              String
   language                 Language

@@ -82,3 +82,6 @@ export const generateOnlineCourseCoverPhotoName = (id: string) =>
 
 export const generateInstructorAvatarName = (id: string) =>
   `Instructors/Instructor-${id}/CoverPhoto-${Date.now()}`;
+
+export const generateOfflineCourseCoverPhotoName = (id: string) =>
+  `OfflineCourses/OfflineCourse-${id}/CoverPhoto-${Date.now()}`;

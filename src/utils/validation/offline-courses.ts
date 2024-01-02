@@ -56,6 +56,13 @@ export class CreateEditOfflineCourseValidation {
   @IsString()
   @IsNotEmpty({ message: "Currency is required" })
   currency: CurrencyType;
+
+  @IsString()
+  coverPhoto: string;
+
+  @IsString()
+  @IsNotEmpty({ message: "Missing query params" })
+  coverPhotoId: string;
 }
 
 export class AddOfflineInstructorsValidation {

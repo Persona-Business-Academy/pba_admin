@@ -129,7 +129,6 @@ const CreateEditInstructorModal: FC<Props> = ({ instructor, isOpen, onClose, onS
                         backgroundColor: "gray.200",
                         objectFit: "cover",
                       }}
-                      quality={50}
                       alt="Avatar"
                     />
                   </Fade>

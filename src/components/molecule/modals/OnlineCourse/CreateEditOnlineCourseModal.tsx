@@ -164,7 +164,6 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
                         backgroundColor: "gray.200",
                         objectFit: "cover",
                       }}
-                      quality={50}
                       alt="Avatar"
                     />
                   </Fade>
