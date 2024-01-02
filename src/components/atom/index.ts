@@ -4,6 +4,7 @@ import Button from "./Button";
 import CustomSelect from "./CustomSelect";
 import EditableCustom from "./EditableCustom";
 import FormInput from "./FormInput";
+import FormTextarea from "./FormTextarea";
 import Day from "./OnlineCourseItem/Day";
 import Level from "./OnlineCourseItem/Level";
 import Video from "./OnlineCourseItem/Video";
@@ -21,4 +22,5 @@ export {
   EditableCustom,
   VideoPreview,
   CustomSelect,
+  FormTextarea,
 };

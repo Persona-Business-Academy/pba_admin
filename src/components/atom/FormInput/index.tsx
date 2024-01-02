@@ -27,6 +27,7 @@ type Props = {
   isReadOnly?: boolean;
   name: string;
   inputProps?: InputProps;
+  InputRight?: React.ReactNode;
 };
 
 const FormInput: FC<Props> = ({
@@ -42,6 +43,7 @@ const FormInput: FC<Props> = ({
   isReadOnly,
   name,
   inputProps,
+  InputRight,
 }) => {
   const [isPasswordType, setIsPasswordType] = useState(false);
 
@@ -99,6 +101,7 @@ const FormInput: FC<Props> = ({
             />
           </InputRightElement>
         )}
+        {InputRight && <InputRightElement>{InputRight}</InputRightElement>}
       </InputGroup>
       {!isInvalid ? (
         <FormHelperText fontWeight={400} color="#5b5b5b" marginTop={4}>

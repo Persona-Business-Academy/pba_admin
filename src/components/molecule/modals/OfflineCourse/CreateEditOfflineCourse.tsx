@@ -5,10 +5,9 @@ import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { useMutation } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
-import { CustomSelect, FormInput, UploadFile } from "@/components/atom";
-import FormTextarea from "@/components/atom/FormTextarea";
+import { CustomSelect, FormInput, FormTextarea, UploadFile } from "@/components/atom";
 import { colors } from "@/utils/constants/chakra";
 import { CURRENCIES, LANGUAGES, SKILL_LEVELS, TOPICS } from "@/utils/constants/courses";
 import { generateAWSUrl, validateAgeLimit } from "@/utils/helpers/common";
@@ -20,6 +19,7 @@ import {
 import { Maybe } from "@/utils/models/common";
 import { OfflineCourse } from "@/utils/models/offlineCourses";
 import { CreateEditOfflineCourseValidation } from "@/utils/validation/offline-courses";
+import WhatYouWillLearn from "../../WhatYouWillLearn";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
 
@@ -46,6 +46,9 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
     defaultValues: generateOfflineCourseDefaultValues(offlineCourse),
     resolver,
   });
+  const { append, remove } = useFieldArray({ control, name: "whatYouWillLearn" });
+
+  console.log(errors);
 
   const onSuccess = useCallback(() => {
     onSave();
@@ -384,6 +387,13 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
           )}
         />
       </HStack>
+      <Controller
+        name="whatYouWillLearn"
+        control={control}
+        render={({ field: { value } }) => (
+          <WhatYouWillLearn data={value} add={append} remove={remove} />
+        )}
+      />
     </SharedModal>
   );
 };

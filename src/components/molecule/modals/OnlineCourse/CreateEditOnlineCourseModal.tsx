@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import NextLink from "next/link";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { InstructorService } from "@/api/services/InstructorsService";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { FormInput } from "@/components/atom";
@@ -24,6 +24,7 @@ import {
 import { Maybe } from "@/utils/models/common";
 import { OnlineCourse } from "@/utils/models/onlineCourses";
 import { CreateEditOnlineCourseValidation } from "@/utils/validation/online-courses";
+import WhatYouWillLearn from "../../WhatYouWillLearn";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
 
@@ -67,6 +68,8 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
     defaultValues: generateOnlineCourseDefaultValues(onlineCourse),
     resolver,
   });
+
+  const { append, remove } = useFieldArray({ control, name: "whatYouWillLearn" });
 
   const onSuccess = useCallback(() => {
     onSave();
@@ -285,6 +288,13 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
           )}
         />
       )}
+      <Controller
+        name="whatYouWillLearn"
+        control={control}
+        render={({ field: { value } }) => (
+          <WhatYouWillLearn data={value} add={append} remove={remove} />
+        )}
+      />
     </SharedModal>
   );
 };

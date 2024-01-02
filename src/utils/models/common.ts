@@ -22,3 +22,5 @@ export type LanguageType = Language;
 export type TopicType = Topic;
 export type CurrencyType = Currency;
 export type SkillLevelType = SkillLevel;
+
+export type WhatYouWillLearnType = { id: string; value: string };

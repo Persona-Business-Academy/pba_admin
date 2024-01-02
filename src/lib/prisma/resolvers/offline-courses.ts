@@ -43,12 +43,12 @@ export class OfflineCourses {
   }
 
   static async create(data: CreateEditOfflineCourseValidation) {
+    const { whatYouWillLearn, ..._data } = data;
+
     const newCourse = await prisma.offlineCourse.create({
       data: {
-        ...data,
-        rating: 0,
-        coverPhoto: "",
-        whatYouWillLearn: [],
+        ..._data,
+        whatYouWillLearn: whatYouWillLearn.map(item => item.value),
         benefits: [],
       },
     });
@@ -59,8 +59,15 @@ export class OfflineCourses {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
+    const { whatYouWillLearn, ..._data } = data;
 
-    const updatedCourse = await prisma.offlineCourse.update({ where: { id: +id }, data });
+    const updatedCourse = await prisma.offlineCourse.update({
+      where: { id: +id },
+      data: {
+        ..._data,
+        whatYouWillLearn: whatYouWillLearn.map(item => item.value),
+      },
+    });
 
     return updatedCourse.id;
   }

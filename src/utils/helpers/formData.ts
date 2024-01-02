@@ -20,6 +20,9 @@ export const generateOfflineCourseDefaultValues = (offlineCourse: OfflineCourse)
   lessonsCount: !!offlineCourse ? offlineCourse.lessonsCount : 0,
   coverPhoto: !!offlineCourse ? offlineCourse.coverPhoto : "",
   coverPhotoId: !!offlineCourse ? offlineCourse.coverPhotoId : uuidv4(),
+  whatYouWillLearn: !!offlineCourse
+    ? offlineCourse.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item }))
+    : [],
 });
 
 export const generateOnlineCourseDefaultValues = (onlineCourse: OnlineCourse) => ({
@@ -31,6 +34,9 @@ export const generateOnlineCourseDefaultValues = (onlineCourse: OnlineCourse) =>
   instructorId: !!onlineCourse ? onlineCourse.instructorId : undefined,
   coverPhoto: !!onlineCourse ? onlineCourse.coverPhoto : "",
   coverPhotoId: !!onlineCourse ? onlineCourse.coverPhotoId : uuidv4(),
+  whatYouWillLearn: !!onlineCourse
+    ? onlineCourse.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item }))
+    : [],
 });
 
 export const generateInstructorDefaultValues = (instructor: InstructorType) => ({

@@ -1,6 +1,12 @@
 import { Topic } from "@prisma/client";
-import { IsEnum, IsNotEmpty, IsNumber, IsString, Matches } from "class-validator";
-import type { CurrencyType, LanguageType, SkillLevelType, TopicType } from "@/utils/models/common";
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsString, Matches } from "class-validator";
+import type {
+  CurrencyType,
+  LanguageType,
+  SkillLevelType,
+  TopicType,
+  WhatYouWillLearnType,
+} from "@/utils/models/common";
 
 export class CreateEditOfflineCourseValidation {
   @IsString()
@@ -63,6 +69,9 @@ export class CreateEditOfflineCourseValidation {
   @IsString()
   @IsNotEmpty({ message: "Missing query params" })
   coverPhotoId: string;
+
+  @IsArray()
+  whatYouWillLearn: WhatYouWillLearnType[];
 }
 
 export class AddOfflineInstructorsValidation {

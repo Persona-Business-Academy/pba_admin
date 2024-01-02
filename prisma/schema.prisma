@@ -52,7 +52,7 @@ model OnlineCourse {
   language               Language
   rating                 Float                 @default(0)
   topic                  Topic
-  whatYouWillLearn       Json                  @db.Json
+  whatYouWillLearn       String[]
   createdAt              DateTime              @default(now()) @db.Timestamp(0)
   updatedAt              DateTime              @updatedAt @db.Timestamp(0)
   Instructor             Instructor            @relation(fields: [instructorId], references: [id])
@@ -147,7 +147,7 @@ model OfflineCourse {
   lessonsCount             Int                        @default(0)
   price                    Float
   currency                 Currency
-  whatYouWillLearn         Json                       @db.Json
+  whatYouWillLearn         String[]
   benefits                 Json                       @db.Json
   createdAt                DateTime                   @default(now()) @db.Timestamp(0)
   updatedAt                DateTime                   @updatedAt @db.Timestamp(0)

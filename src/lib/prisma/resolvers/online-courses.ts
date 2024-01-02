@@ -60,11 +60,13 @@ export class OnlineCourses {
   }
 
   static async create(data: CreateEditOnlineCourseValidation) {
+    const { whatYouWillLearn, ..._data } = data;
+
     const newCourse = await prisma.onlineCourse.create({
       data: {
-        ...data, // todo
+        ..._data, // todo
         subTitle: "",
-        whatYouWillLearn: [],
+        whatYouWillLearn: whatYouWillLearn.map(item => item.value),
       },
     });
     return newCourse.id;
@@ -75,11 +77,13 @@ export class OnlineCourses {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
+    const { whatYouWillLearn, ..._data } = data;
+
     const updatedCourse = await prisma.onlineCourse.update({
       where: { id: +id },
       data: {
-        ...data,
-        whatYouWillLearn: [],
+        ..._data,
+        whatYouWillLearn: whatYouWillLearn.map(item => item.value),
       },
     });
 

@@ -1,5 +1,10 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
-import type { LanguageType, SkillLevelType, TopicType } from "@/utils/models/common";
+import { IsArray, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import type {
+  LanguageType,
+  SkillLevelType,
+  TopicType,
+  WhatYouWillLearnType,
+} from "@/utils/models/common";
 
 export class CreateEditOnlineCourseValidation {
   @IsString()
@@ -32,6 +37,9 @@ export class CreateEditOnlineCourseValidation {
   @IsString()
   @IsNotEmpty({ message: "Missing query params" })
   coverPhotoId: string;
+
+  @IsArray()
+  whatYouWillLearn: WhatYouWillLearnType[];
 }
 
 export class CreateOnlineCourseLevelValidation {
