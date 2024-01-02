@@ -1,13 +1,15 @@
 import { FC, memo, useCallback } from "react";
-import { HStack } from "@chakra-ui/react";
+import { Flex, HStack } from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
+import { Topic } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import { CustomSelect, FormInput } from "@/components/atom";
+import FormTextarea from "@/components/atom/FormTextarea";
 import { validateAgeLimit } from "@/utils/helpers/common";
-import { CurrencyType, LanguageType, Maybe } from "@/utils/models/common";
+import { CurrencyType, LanguageType, Maybe, TopicType } from "@/utils/models/common";
 import { SkillLevelType } from "@/utils/models/common";
 import { OfflineCourse } from "@/utils/models/offlineCourses";
 import { CreateEditOfflineCourseValidation } from "@/utils/validation/offline-courses";
@@ -33,6 +35,17 @@ const LANGUAGES: Array<{ name: string; value: LanguageType }> = [
   { name: "English", value: "EN" },
 ];
 
+const TOPICS: Array<{ name: string; value: TopicType }> = [
+  { name: "Front End", value: Topic.FRONT_END },
+  { name: "Back End", value: Topic.BACK_END },
+  { name: "SMM", value: Topic.SMM },
+  { name: "Digital Marketing", value: Topic.DIGITAL_MARKETING },
+  { name: "Graphic Design", value: Topic.GRAPHIC_DESIGN },
+  { name: "UI UX Design", value: Topic.UI_UX_DESIGN },
+  { name: "Business Law", value: Topic.BUSINESS_LAW },
+  { name: "Business English", value: Topic.BUSINESS_ENGLISH },
+];
+
 const CURRENCIES: Array<{ name: CurrencyType; value: CurrencyType }> = [
   { name: "AMD", value: "AMD" },
   { name: "USD", value: "USD" },
@@ -49,6 +62,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
   } = useForm<CreateEditOfflineCourseValidation>({
     defaultValues: {
       title: !!offlineCourse ? offlineCourse.title : "",
+      topic: !!offlineCourse ? offlineCourse.topic : Topic.FRONT_END,
       subTitle: !!offlineCourse ? offlineCourse.subTitle : "",
       description: !!offlineCourse ? offlineCourse.description : "",
       language: !!offlineCourse ? offlineCourse.language : "ARM",
@@ -56,8 +70,10 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
       totalDuration: !!offlineCourse ? offlineCourse.totalDuration : 0,
       level: !!offlineCourse ? offlineCourse.level : "BEGINNER",
       graduatedStudentsCount: !!offlineCourse ? offlineCourse.graduatedStudentsCount : 0,
+      enrolledStudentsCount: !!offlineCourse ? offlineCourse.enrolledStudentsCount : 0,
       price: !!offlineCourse ? offlineCourse.price : 0,
       currency: !!offlineCourse ? offlineCourse.currency : "AMD",
+      lessonsCount: !!offlineCourse ? offlineCourse.lessonsCount : 0,
     },
     resolver,
   });
@@ -119,11 +135,10 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
         name="subTitle"
         control={control}
         render={({ field: { onChange, value, name } }) => (
-          <FormInput
+          <FormTextarea
             isRequired
             isInvalid={!!errors[name]?.message}
             name={name}
-            type="text"
             formLabelName="Subtitle"
             value={value}
             placeholder="Type something..."
@@ -136,11 +151,10 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
         name="description"
         control={control}
         render={({ field: { onChange, value, name } }) => (
-          <FormInput
+          <FormTextarea
             isRequired
             isInvalid={!!errors[name]?.message}
             name={name}
-            type="text"
             formLabelName="Description"
             value={value}
             placeholder="Type something..."
@@ -150,23 +164,57 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
         )}
       />
       <Controller
-        name="graduatedStudentsCount"
+        name="topic"
         control={control}
         render={({ field: { onChange, value, name } }) => (
-          <FormInput
+          <CustomSelect
             isRequired
-            isInvalid={!!errors[name]?.message}
             name={name}
-            type="number"
-            formLabelName="Graduated Students Count"
-            value={value}
-            placeholder="345"
-            handleInputChange={e => onChange(+e.target.value)}
-            formErrorMessage={errors[name]?.message}
-            inputProps={{ min: 0 }}
+            formLabelName="Topic"
+            options={TOPICS}
+            defaultValue={value}
+            isInvalid={!!errors[name]?.message}
+            onChange={onChange}
           />
         )}
       />
+      <Flex>
+        <Controller
+          name="graduatedStudentsCount"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <FormInput
+              isRequired
+              isInvalid={!!errors[name]?.message}
+              name={name}
+              type="number"
+              formLabelName="Graduated Students Count"
+              value={value}
+              placeholder="345"
+              handleInputChange={e => onChange(+e.target.value)}
+              formErrorMessage={errors[name]?.message}
+            />
+          )}
+        />
+        <Controller
+          name="enrolledStudentsCount"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <FormInput
+              isRequired
+              isInvalid={!!errors[name]?.message}
+              name={name}
+              type="number"
+              formLabelName="Enrolled students count"
+              value={value}
+              placeholder="345"
+              handleInputChange={e => onChange(+e.target.value)}
+              formErrorMessage={errors[name]?.message}
+            />
+          )}
+        />
+      </Flex>
+
       <HStack alignItems="flex-start">
         <Controller
           name="language"
@@ -214,7 +262,6 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
               placeholder="400"
               handleInputChange={e => onChange(+e.target.value)}
               formErrorMessage={errors[name]?.message}
-              inputProps={{ min: 0 }}
             />
           )}
         />
@@ -266,7 +313,24 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
               placeholder="3"
               handleInputChange={e => onChange(+e.target.value)}
               formErrorMessage={errors[name]?.message}
-              inputProps={{ min: 0 }}
+            />
+          )}
+        />
+
+        <Controller
+          name="lessonsCount"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <FormInput
+              isRequired
+              isInvalid={!!errors[name]?.message}
+              name={name}
+              type="number"
+              formLabelName="Lessons count"
+              value={value}
+              placeholder="3"
+              handleInputChange={e => onChange(+e.target.value)}
+              formErrorMessage={errors[name]?.message}
             />
           )}
         />
