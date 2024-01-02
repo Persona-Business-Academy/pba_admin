@@ -183,7 +183,11 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
               />
             </Fade>
             {!data?.count && (
-              <Link as={NextLink} href={INSTRUCTORS} marginLeft={5} color={colors.blue[500]}>
+              <Link
+                as={NextLink}
+                href={INSTRUCTORS}
+                marginLeft={5}
+                color={errors.instructorId ? "red.500" : "blue.500"}>
                 {`Go to create Instructor >`}
               </Link>
             )}

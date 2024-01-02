@@ -1,3 +1,4 @@
+import { ConflictException } from "next-api-decorators";
 import { SortingType } from "@/api/types";
 import { CreateEditInstructorValidation } from "@/utils/validation/instructors";
 import prisma from "..";
@@ -77,6 +78,12 @@ export class Instructors {
   }
 
   static async delete(id: number) {
+    const referance = await prisma.onlineCourse.findFirst({ where: { instructorId: id } });
+
+    if (referance) {
+      throw new ConflictException("You has a online course");
+    }
+
     const deletedInstructor = await prisma.instructor.delete({ where: { id } });
     return deletedInstructor.id;
   }
