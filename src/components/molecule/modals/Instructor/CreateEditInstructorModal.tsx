@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { InstructorService } from "@/api/services/InstructorsService";
-import { FormInput, UploadFile } from "@/components/atom";
+import { FormInput, FormTextarea, UploadFile } from "@/components/atom";
 import { colors } from "@/utils/constants/chakra";
 import { generateAWSUrl } from "@/utils/helpers/common";
 import { generateInstructorDefaultValues } from "@/utils/helpers/formData";
@@ -187,7 +187,7 @@ const CreateEditInstructorModal: FC<Props> = ({ instructor, isOpen, onClose, onS
         />
       </HStack>
       <Controller
-        name="about"
+        name="profession"
         control={control}
         render={({ field: { onChange, value, name } }) => (
           <FormInput
@@ -195,6 +195,22 @@ const CreateEditInstructorModal: FC<Props> = ({ instructor, isOpen, onClose, onS
             isInvalid={!!errors[name]?.message}
             name={name}
             type="text"
+            formLabelName="Profession"
+            value={value}
+            placeholder="Type something..."
+            handleInputChange={onChange}
+            formErrorMessage={errors[name]?.message}
+          />
+        )}
+      />
+      <Controller
+        name="about"
+        control={control}
+        render={({ field: { onChange, value, name } }) => (
+          <FormTextarea
+            isRequired
+            isInvalid={!!errors[name]?.message}
+            name={name}
             formLabelName="About"
             value={value}
             placeholder="Type something..."
