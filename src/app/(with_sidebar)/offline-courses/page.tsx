@@ -4,7 +4,6 @@ import { Button, HStack, useDisclosure } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
-import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import {
@@ -89,11 +88,7 @@ export default function OfflineCourses() {
         id: uuidv4(),
         cell: info => {
           const id = info.getValue();
-          return (
-            <Button as={Link} href={`/offline-courses/${id}`}>
-              {id}
-            </Button>
-          );
+          return <Button>{id}</Button>;
         },
         header: "ID",
       }),
