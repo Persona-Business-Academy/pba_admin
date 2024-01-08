@@ -108,7 +108,7 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
           setFileLoading(true);
           const res = await uploadDocumentToAWS({
             file: localImage.file,
-            fileName: generateOnlineCourseCoverPhotoName(data.coverPhotoId),
+            fileName: generateOnlineCourseCoverPhotoName(data.mediaId),
           });
           mutate({ ...data, coverPhoto: res.key });
         } else {

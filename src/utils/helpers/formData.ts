@@ -12,14 +12,14 @@ export const generateOfflineCourseDefaultValues = (offlineCourse: OfflineCourse)
   language: !!offlineCourse ? offlineCourse.language : "ARM",
   ageLimit: !!offlineCourse ? offlineCourse.ageLimit : "",
   totalDuration: !!offlineCourse ? offlineCourse.totalDuration : 0,
-  level: !!offlineCourse ? offlineCourse.level : "BEGINNER",
+  level: !!offlineCourse ? offlineCourse.courseLevel : "BEGINNER",
   graduatedStudentsCount: !!offlineCourse ? offlineCourse.graduatedStudentsCount : 0,
   enrolledStudentsCount: !!offlineCourse ? offlineCourse.enrolledStudentsCount : 0,
   price: !!offlineCourse ? offlineCourse.price : 0,
   currency: !!offlineCourse ? offlineCourse.currency : "AMD",
   lessonsCount: !!offlineCourse ? offlineCourse.lessonsCount : 0,
   coverPhoto: !!offlineCourse ? offlineCourse.coverPhoto : "",
-  coverPhotoId: !!offlineCourse ? offlineCourse.coverPhotoId : uuidv4(),
+  mediaId: !!offlineCourse ? offlineCourse.mediaId : uuidv4(),
   whatYouWillLearn: !!offlineCourse
     ? offlineCourse.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item }))
     : [],
@@ -33,7 +33,7 @@ export const generateOnlineCourseDefaultValues = (onlineCourse: OnlineCourse) =>
   language: !!onlineCourse ? onlineCourse.language : "ARM",
   instructorId: !!onlineCourse ? onlineCourse.instructorId : undefined,
   coverPhoto: !!onlineCourse ? onlineCourse.coverPhoto : "",
-  coverPhotoId: !!onlineCourse ? onlineCourse.coverPhotoId : uuidv4(),
+  coverPhotoId: !!onlineCourse ? onlineCourse.mediaId : uuidv4(),
   whatYouWillLearn: !!onlineCourse
     ? onlineCourse.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item }))
     : [],
@@ -44,5 +44,5 @@ export const generateInstructorDefaultValues = (instructor: InstructorType) => (
   lastName: !!instructor ? instructor.lastName : "",
   about: !!instructor ? instructor.about : "",
   avatar: !!instructor ? instructor.avatar : "",
-  avatarId: !!instructor ? instructor.avatarId : uuidv4(),
+  avatarId: !!instructor ? instructor.mediaId : uuidv4(),
 });

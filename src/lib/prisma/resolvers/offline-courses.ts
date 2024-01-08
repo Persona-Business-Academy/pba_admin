@@ -48,6 +48,7 @@ export class OfflineCourses {
     const newCourse = await prisma.offlineCourse.create({
       data: {
         ..._data,
+        video: "",
         whatYouWillLearn: whatYouWillLearn.map(item => item.value),
         benefits: [],
       },

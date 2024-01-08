@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import {
   Accordion,
   AccordionButton,
@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import Logo from "/public/icons/persona_logo.svg";
+import { usePathname } from "next/navigation";
 import { LinkItemProps } from "@/utils/models/sidebar";
 
 interface SidebarContentProps extends BoxProps {
@@ -20,6 +21,21 @@ interface SidebarContentProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, linkItems, ...rest }: SidebarContentProps) => {
+  const pathname = usePathname();
+
+  const defaultIndex = useMemo(() => {
+    let idx = 0;
+    linkItems.some((item, index) => {
+      const isExist = item.children.some(el => pathname?.includes(el.href));
+      if (isExist) {
+        idx = index;
+        return true;
+      }
+      return false;
+    });
+    return [idx];
+  }, [linkItems, pathname]);
+
   return (
     <Box
       bg="#fff"
@@ -33,7 +49,7 @@ const SidebarContent = ({ onClose, linkItems, ...rest }: SidebarContentProps) =>
         <Logo />
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      <Accordion defaultIndex={[0]} allowMultiple>
+      <Accordion defaultIndex={defaultIndex} allowMultiple>
         {linkItems.map((link: LinkItemProps) => (
           <AccordionItem key={link.name}>
             <h2>
@@ -49,6 +65,7 @@ const SidebarContent = ({ onClose, linkItems, ...rest }: SidebarContentProps) =>
                 <Flex
                   key={subLink.href}
                   align="center"
+                  onClick={onClose}
                   as={NextLink}
                   href={subLink.href}
                   p="4"
@@ -56,10 +73,16 @@ const SidebarContent = ({ onClose, linkItems, ...rest }: SidebarContentProps) =>
                   textDecoration="none"
                   role="group"
                   cursor="pointer"
-                  _hover={{
-                    bg: "cyan.400",
-                    color: "white",
-                  }}
+                  bg={pathname?.includes(subLink.href) ? "cyan.400" : "unset"}
+                  color={pathname?.includes(subLink.href) ? "white" : "unset"}
+                  _hover={
+                    !pathname?.includes(subLink.href)
+                      ? {
+                          bg: "cyan.300",
+                          color: "white",
+                        }
+                      : {}
+                  }
                   {...rest}>
                   {subLink.title}
                 </Flex>

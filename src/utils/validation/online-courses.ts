@@ -36,7 +36,7 @@ export class CreateEditOnlineCourseValidation {
 
   @IsString()
   @IsNotEmpty({ message: "Missing query params" })
-  coverPhotoId: string;
+  mediaId: string;
 
   @IsArray()
   whatYouWillLearn: WhatYouWillLearnType[];

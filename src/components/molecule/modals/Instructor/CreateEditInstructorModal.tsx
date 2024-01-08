@@ -79,7 +79,7 @@ const CreateEditInstructorModal: FC<Props> = ({ instructor, isOpen, onClose, onS
           setFileLoading(true);
           const res = await uploadDocumentToAWS({
             file: localImage.file,
-            fileName: generateInstructorAvatarName(data.avatarId),
+            fileName: generateInstructorAvatarName(data.mediaId),
           });
           mutate({ ...data, avatar: res.key });
         } else {

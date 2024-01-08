@@ -91,7 +91,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
           setFileLoading(true);
           const res = await uploadDocumentToAWS({
             file: localImage.file,
-            fileName: generateOfflineCourseCoverPhotoName(data.coverPhotoId),
+            fileName: generateOfflineCourseCoverPhotoName(data.mediaId),
           });
           mutate({ ...data, coverPhoto: res.key });
         } else {
@@ -281,7 +281,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
           )}
         />
         <Controller
-          name="level"
+          name="courseLevel"
           control={control}
           render={({ field: { onChange, value, name } }) => (
             <CustomSelect

@@ -8,21 +8,22 @@ datasource db {
 }
 
 model User {
-  id                  Int                   @id @default(autoincrement())
-  email               String                @unique
-  firstName           String?               @db.VarChar(45)
-  lastName            String?               @db.VarChar(45)
-  password            String                @db.VarChar(60)
-  phone               String?               @db.VarChar(60)
-  address             String?               @db.VarChar(60)
-  country             String?               @db.VarChar(60)
-  state               String?               @db.VarChar(60)
-  city                String?               @db.VarChar(60)
-  confirmationCode    Int?                  @unique
-  createdAt           DateTime              @default(now()) @db.Timestamp(0)
-  updatedAt           DateTime              @updatedAt @db.Timestamp(0)
-  avatar              String?
-  onlineCourseComment OnlineCourseComment[]
+  id                   Int                   @id @default(autoincrement())
+  email                String                @unique
+  firstName            String?               @db.VarChar(45)
+  lastName             String?               @db.VarChar(45)
+  password             String                @db.VarChar(60)
+  isVerified           Boolean               @default(false)
+  phone                String?               @db.VarChar(60)
+  address              String?               @db.VarChar(60)
+  country              String?               @db.VarChar(60)
+  state                String?               @db.VarChar(60)
+  city                 String?               @db.VarChar(60)
+  confirmationCode     Int?                  @unique
+  createdAt            DateTime              @default(now()) @db.Timestamp(0)
+  updatedAt            DateTime              @updatedAt @db.Timestamp(0)
+  avatar               String?
+  onlineCourseComments OnlineCourseComment[]
 }
 
 model Admin {
@@ -42,7 +43,7 @@ model OnlineCourse {
   subTitle               String                @db.VarChar(45)
   courseLevel            SkillLevel
   coverPhoto             String
-  coverPhotoId           String                @unique
+  mediaId                String                @unique
   description            String
   duration               Float                 @default(0)
   lessonsCount           Int                   @default(0)
@@ -68,8 +69,8 @@ model OnlineCourseLevel {
   createdAt      DateTime            @default(now()) @db.Timestamp(0)
   updatedAt      DateTime            @updatedAt @db.Timestamp(0)
   onlineCourseId Int
-  days           OnlineCourseDay[]
   OnlineCourse   OnlineCourse        @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
+  days           OnlineCourseDay[]
   videos         OnlineCourseVideo[]
 }
 
@@ -107,10 +108,10 @@ model OnlineCourseComment {
   onlineCourseId  Int?
   createdAt       DateTime       @default(now()) @db.Timestamp(0)
   updatedAt       DateTime       @updatedAt @db.Timestamp(0)
-  offlineCourseId Int?
   author          User           @relation(fields: [authorId], references: [id])
-  OfflineCourse   OfflineCourse? @relation(fields: [offlineCourseId], references: [id])
   OnlineCourse    OnlineCourse?  @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
+  offlineCourseId Int?
+  OfflineCourse   OfflineCourse? @relation(fields: [offlineCourseId], references: [id])
 }
 
 model Instructor {
@@ -122,26 +123,27 @@ model Instructor {
   enrolledStudentsCount    Int                        @default(0)
   about                    String
   avatar                   String
-  avatarId                 String                     @unique
+  mediaId                  String                     @unique
   createdAt                DateTime                   @default(now()) @db.Timestamp(0)
   updatedAt                DateTime                   @updatedAt @db.Timestamp(0)
+  onlineCourses            OnlineCourse[]
   OfflineCourseInstructors OfflineCourseInstructors[]
-  onlineCourse             OnlineCourse[]
 }
 
 model OfflineCourse {
   id                       Int                        @id @default(autoincrement())
   title                    String                     @db.VarChar(45)
-  subTitle                 String
+  subTitle                 String                     @db.Text
   topic                    Topic
   coverPhoto               String
-  coverPhotoId             String                     @unique
+  video                    String
+  mediaId                  String                     @unique
   rating                   Float                      @default(0)
-  description              String
+  description              String                     @db.Text
   language                 Language
   ageLimit                 String
   totalDuration            Float                      @default(0)
-  level                    SkillLevel
+  courseLevel              SkillLevel
   graduatedStudentsCount   Int                        @default(0)
   enrolledStudentsCount    Int                        @default(0)
   lessonsCount             Int                        @default(0)
@@ -149,18 +151,18 @@ model OfflineCourse {
   currency                 Currency
   whatYouWillLearn         String[]
   benefits                 Json                       @db.Json
+  comments                 OnlineCourseComment[]
   createdAt                DateTime                   @default(now()) @db.Timestamp(0)
   updatedAt                DateTime                   @updatedAt @db.Timestamp(0)
   OfflineCourseInstructors OfflineCourseInstructors[]
-  OnlineCourseComment      OnlineCourseComment[]
 }
 
 model OfflineCourseInstructors {
   id              Int           @id @default(autoincrement())
   offlineCourseId Int
   instructorId    Int
-  instructor      Instructor    @relation(fields: [instructorId], references: [id], onDelete: Cascade)
   course          OfflineCourse @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
+  instructor      Instructor    @relation(fields: [instructorId], references: [id], onDelete: Cascade)
 
   @@unique([offlineCourseId, instructorId], name: "offlineCourseInstructorId")
 }
@@ -175,18 +177,6 @@ enum Language {
   ARM
 }
 
-enum SkillLevel {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
-  MASTER
-}
-
-enum Currency {
-  AMD
-  USD
-}
-
 enum Topic {
   GRAPHIC_DESIGN
   UI_UX_DESIGN
@@ -197,4 +187,16 @@ enum Topic {
   BUSINESS_LAW
   BUSINESS_ENGLISH
   HRM
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  MASTER
+}
+
+enum Currency {
+  AMD
+  USD
 }

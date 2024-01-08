@@ -18,5 +18,5 @@ export class CreateEditInstructorValidation {
 
   @IsString()
   @IsNotEmpty({ message: "Missing query params" })
-  avatarId: string;
+  mediaId: string;
 }

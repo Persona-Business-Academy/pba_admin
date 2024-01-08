@@ -47,14 +47,14 @@ export class Instructors {
   }
 
   static async create(data: CreateEditInstructorValidation) {
-    const { firstName, lastName, about, avatar, avatarId } = data;
+    const { firstName, lastName, about, avatar, mediaId } = data;
     const instructor = await prisma.instructor.create({
       data: {
         firstName,
         lastName,
         about,
         avatar,
-        avatarId,
+        mediaId,
         profession: "",
       },
     });
@@ -62,7 +62,7 @@ export class Instructors {
   }
 
   static async edit(data: CreateEditInstructorValidation, id: number) {
-    const { firstName, lastName, about, avatar, avatarId } = data;
+    const { firstName, lastName, about, avatar, mediaId } = data;
     const updatedInstructor = await prisma.instructor.update({
       where: { id: +id },
       data: {
@@ -70,7 +70,7 @@ export class Instructors {
         lastName,
         about,
         avatar,
-        avatarId,
+        mediaId,
       },
     });
 

@@ -41,7 +41,7 @@ export class CreateEditOfflineCourseValidation {
 
   @IsString()
   @IsNotEmpty({ message: "Level is required" })
-  level: SkillLevelType;
+  courseLevel: SkillLevelType;
 
   @IsNumber()
   @IsNotEmpty({ message: "Graduated students count is required" })
@@ -68,7 +68,7 @@ export class CreateEditOfflineCourseValidation {
 
   @IsString()
   @IsNotEmpty({ message: "Missing query params" })
-  coverPhotoId: string;
+  mediaId: string;
 
   @IsArray()
   whatYouWillLearn: WhatYouWillLearnType[];

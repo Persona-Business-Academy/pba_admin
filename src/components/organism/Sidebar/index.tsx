@@ -1,12 +1,10 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo, PropsWithChildren } from "react";
 import { Box, Drawer, DrawerContent, useDisclosure } from "@chakra-ui/react";
 import { FiHome, FiTrendingUp } from "react-icons/fi";
 import {
   INSTRUCTORS,
   OFFLINE_COURSES_ROUTE,
   ONLINE_COURSES_ROUTE,
-  USERS_ACTIVITY_ROUTE,
-  USERS_ANALYTICS_ROUTE,
   USERS_LIST_ROUTE,
 } from "@/utils/constants/routes";
 import { LinkItemProps } from "@/utils/models/sidebar";
@@ -17,67 +15,25 @@ const linkItems: LinkItemProps[] = [
   {
     name: "Users",
     icon: FiHome,
-    children: [
-      {
-        title: "All Users",
-        href: USERS_LIST_ROUTE,
-      },
-      {
-        title: "Analytics",
-        href: USERS_ANALYTICS_ROUTE,
-      },
-      {
-        title: "Activity",
-        href: USERS_ACTIVITY_ROUTE,
-      },
-    ],
+    children: [{ title: "All Users", href: USERS_LIST_ROUTE }],
   },
   {
     name: "Courses",
     icon: FiTrendingUp,
     children: [
-      {
-        title: "Development",
-        href: "/development",
-      },
-      {
-        title: "Graphic Design",
-        href: "/graphic-design",
-      },
-      {
-        title: "Project Management",
-        href: "/project-management",
-      },
       { title: "Online", href: ONLINE_COURSES_ROUTE },
       { title: "Offline", href: OFFLINE_COURSES_ROUTE },
       { title: "Instructors", href: INSTRUCTORS },
     ],
   },
-  {
-    name: "Submit Form",
-    icon: FiTrendingUp,
-    children: [
-      {
-        title: "Contact Us",
-        href: "/development",
-      },
-      {
-        title: "Job",
-        href: "/job-applicants",
-      },
-    ],
-  },
 ];
 
-interface SidebarProps {
-  children: React.ReactNode;
-}
-const Sidebar: FC<SidebarProps> = ({ children }) => {
+const Sidebar: FC<PropsWithChildren> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg="#ffffff">
       <SidebarContent
-        onClose={() => onClose}
+        onClose={onClose}
         linkItems={linkItems}
         display={{ base: "none", md: "block" }}
       />
