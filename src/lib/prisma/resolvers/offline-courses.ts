@@ -32,20 +32,18 @@ export class OfflineCourses {
   }
 
   static async getOne(courseId: number) {
-    const offlineCourse = await prisma.offlineCourse.findUnique({
+    return prisma.offlineCourse.findUnique({
       where: {
         id: courseId,
       },
       include: { OfflineCourseInstructors: { select: { id: true, instructor: true } } },
     });
-
-    return offlineCourse;
   }
 
   static async create(data: CreateEditOfflineCourseValidation) {
     const { whatYouWillLearn, ..._data } = data;
 
-    const newCourse = await prisma.offlineCourse.create({
+    return prisma.offlineCourse.create({
       data: {
         ..._data,
         video: "",
@@ -53,7 +51,6 @@ export class OfflineCourses {
         benefits: [],
       },
     });
-    return newCourse.id;
   }
 
   static async edit(data: CreateEditOfflineCourseValidation, id: string) {
@@ -62,15 +59,13 @@ export class OfflineCourses {
     }
     const { whatYouWillLearn, ..._data } = data;
 
-    const updatedCourse = await prisma.offlineCourse.update({
+    return prisma.offlineCourse.update({
       where: { id: +id },
       data: {
         ..._data,
         whatYouWillLearn: whatYouWillLearn.map(item => item.value),
       },
     });
-
-    return updatedCourse.id;
   }
 
   static async delete(id: string) {
@@ -78,19 +73,15 @@ export class OfflineCourses {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
-    const deletedCourse = await prisma.offlineCourse.delete({
+    return prisma.offlineCourse.delete({
       where: { id: +id },
     });
-
-    return deletedCourse.id;
   }
 
   static async addInstructors({ instructorId, offlineCourseId }: AddOfflineInstructorsValidation) {
-    const addedInstructor = await prisma.offlineCourseInstructors.create({
+    return prisma.offlineCourseInstructors.create({
       data: { instructorId, offlineCourseId },
     });
-
-    return addedInstructor.id;
   }
 
   static async removeInstructors(id: string) {
@@ -98,10 +89,8 @@ export class OfflineCourses {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
-    const removedInstructor = await prisma.offlineCourseInstructors.delete({
+    return prisma.offlineCourseInstructors.delete({
       where: { id: +id },
     });
-
-    return removedInstructor.id;
   }
 }

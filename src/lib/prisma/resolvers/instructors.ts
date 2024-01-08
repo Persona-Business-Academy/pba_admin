@@ -37,44 +37,24 @@ export class Instructors {
   }
 
   static async getById(instructorId: number) {
-    const instructor = await prisma.instructor.findUnique({
+    return prisma.instructor.findUnique({
       where: {
         id: instructorId,
       },
     });
-
-    return instructor;
   }
 
   static async create(data: CreateEditInstructorValidation) {
-    const { firstName, lastName, about, avatar, mediaId } = data;
-    const instructor = await prisma.instructor.create({
-      data: {
-        firstName,
-        lastName,
-        about,
-        avatar,
-        mediaId,
-        profession: "",
-      },
+    return prisma.instructor.create({
+      data,
     });
-    return instructor.id;
   }
 
   static async edit(data: CreateEditInstructorValidation, id: number) {
-    const { firstName, lastName, about, avatar, mediaId } = data;
-    const updatedInstructor = await prisma.instructor.update({
+    return prisma.instructor.update({
       where: { id: +id },
-      data: {
-        firstName,
-        lastName,
-        about,
-        avatar,
-        mediaId,
-      },
+      data,
     });
-
-    return updatedInstructor.id;
   }
 
   static async delete(id: number) {

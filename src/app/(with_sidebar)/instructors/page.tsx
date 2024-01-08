@@ -95,6 +95,11 @@ export default function Instructors() {
         cell: info => info.getValue(),
         header: "First Name",
       }),
+      columnHelper.accessor("profession", {
+        id: uuidv4(),
+        cell: info => info.getValue(),
+        header: "Profession",
+      }),
       columnHelper.accessor("createdAt", {
         id: uuidv4(),
         cell: info => dayjs(info.getValue()).format("YYYY-MM-DD HH:mm:ss"),

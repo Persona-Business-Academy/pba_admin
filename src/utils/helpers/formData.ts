@@ -44,5 +44,6 @@ export const generateInstructorDefaultValues = (instructor: InstructorType) => (
   lastName: !!instructor ? instructor.lastName : "",
   about: !!instructor ? instructor.about : "",
   avatar: !!instructor ? instructor.avatar : "",
-  avatarId: !!instructor ? instructor.mediaId : uuidv4(),
+  profession: !!instructor ? instructor.profession : "",
+  mediaId: !!instructor ? instructor.mediaId : uuidv4(),
 });

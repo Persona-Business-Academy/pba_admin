@@ -48,8 +48,6 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
   });
   const { append, remove } = useFieldArray({ control, name: "whatYouWillLearn" });
 
-  console.log(errors);
-
   const onSuccess = useCallback(() => {
     onSave();
     onClose();

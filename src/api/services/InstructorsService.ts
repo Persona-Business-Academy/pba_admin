@@ -10,10 +10,10 @@ export class InstructorService {
   static getById(id: number): Promise<InstructorType> {
     return $apiClient.get(`/instructors/${id}`);
   }
-  static createInstructor(data: CreateEditInstructorValidation): Promise<number> {
+  static createInstructor(data: CreateEditInstructorValidation): Promise<InstructorType> {
     return $apiClient.post("/instructors/create", data);
   }
-  static editInstructor(id: number, data: CreateEditInstructorValidation): Promise<number> {
+  static editInstructor(id: number, data: CreateEditInstructorValidation): Promise<InstructorType> {
     return $apiClient.put(`/instructors/edit/${id}`, data);
   }
   static deleteInstructor(id: number): Promise<number> {

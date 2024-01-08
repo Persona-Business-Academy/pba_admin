@@ -14,6 +14,10 @@ export class CreateEditInstructorValidation {
   about: string;
 
   @IsString()
+  @IsNotEmpty({ message: "Profession is required" })
+  profession: string;
+
+  @IsString()
   avatar: string;
 
   @IsString()
