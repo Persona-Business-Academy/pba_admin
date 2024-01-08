@@ -1,5 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
+import OfflineCourseVideo from "./OfflineCourseVideo";
 import OnlineCourseVideos from "./OnlineCourseVideos";
 import SearchTable from "./SearchTable";
 
@@ -36,6 +37,7 @@ const ChangeInstructorsModal = dynamic(
 export {
   SearchTable,
   OnlineCourseVideos,
+  OfflineCourseVideo,
   CreateEditOnlineCourseModal,
   DeleteOnlineCourseModal,
   SharedModal,

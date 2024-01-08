@@ -3,8 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import { InstructorType } from "../models/instructors";
 import { OfflineCourse } from "../models/offlineCourses";
 import { OnlineCourse } from "../models/onlineCourses";
+import { CreateEditInstructorValidation } from "../validation/instructors";
+import { CreateEditOfflineCourseValidation } from "../validation/offline-courses";
 
-export const generateOfflineCourseDefaultValues = (offlineCourse: OfflineCourse) => ({
+export const generateOfflineCourseDefaultValues = (
+  offlineCourse: OfflineCourse,
+): CreateEditOfflineCourseValidation => ({
   title: !!offlineCourse ? offlineCourse.title : "",
   topic: !!offlineCourse ? offlineCourse.topic : Topic.FRONT_END,
   subTitle: !!offlineCourse ? offlineCourse.subTitle : "",
@@ -12,13 +16,14 @@ export const generateOfflineCourseDefaultValues = (offlineCourse: OfflineCourse)
   language: !!offlineCourse ? offlineCourse.language : "ARM",
   ageLimit: !!offlineCourse ? offlineCourse.ageLimit : "",
   totalDuration: !!offlineCourse ? offlineCourse.totalDuration : 0,
-  level: !!offlineCourse ? offlineCourse.courseLevel : "BEGINNER",
+  courseLevel: !!offlineCourse ? offlineCourse.courseLevel : "BEGINNER",
   graduatedStudentsCount: !!offlineCourse ? offlineCourse.graduatedStudentsCount : 0,
   enrolledStudentsCount: !!offlineCourse ? offlineCourse.enrolledStudentsCount : 0,
   price: !!offlineCourse ? offlineCourse.price : 0,
   currency: !!offlineCourse ? offlineCourse.currency : "AMD",
   lessonsCount: !!offlineCourse ? offlineCourse.lessonsCount : 0,
   coverPhoto: !!offlineCourse ? offlineCourse.coverPhoto : "",
+  video: !!offlineCourse ? offlineCourse.video : "",
   mediaId: !!offlineCourse ? offlineCourse.mediaId : uuidv4(),
   whatYouWillLearn: !!offlineCourse
     ? offlineCourse.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item }))
@@ -39,7 +44,9 @@ export const generateOnlineCourseDefaultValues = (onlineCourse: OnlineCourse) =>
     : [],
 });
 
-export const generateInstructorDefaultValues = (instructor: InstructorType) => ({
+export const generateInstructorDefaultValues = (
+  instructor: InstructorType,
+): CreateEditInstructorValidation => ({
   firstName: !!instructor ? instructor.firstName : "",
   lastName: !!instructor ? instructor.lastName : "",
   about: !!instructor ? instructor.about : "",

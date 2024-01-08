@@ -11,9 +11,15 @@ import {
 import ReactPlayer from "react-player/lazy";
 import { generateAWSUrl } from "@/utils/helpers/common";
 
-type Props = { isOpen: boolean; title: string; videoKey: string; onClose: () => void };
+type Props = {
+  isOpen: boolean;
+  title: string;
+  videoKey: string;
+  localKey?: string;
+  onClose: () => void;
+};
 
-const VideoPreview: FC<Props> = ({ isOpen, title, videoKey, onClose }) => (
+const VideoPreview: FC<Props> = ({ isOpen, title, videoKey, localKey, onClose }) => (
   <Modal isOpen={isOpen} onClose={onClose} size="3xl">
     <ModalOverlay />
     <ModalContent>
@@ -21,7 +27,7 @@ const VideoPreview: FC<Props> = ({ isOpen, title, videoKey, onClose }) => (
       <ModalCloseButton />
       <ModalBody>
         <Center>
-          <ReactPlayer playing controls url={generateAWSUrl(videoKey)} />
+          <ReactPlayer playing controls url={localKey || generateAWSUrl(videoKey)} />
         </Center>
       </ModalBody>
     </ModalContent>

@@ -46,7 +46,6 @@ export class OfflineCourses {
     return prisma.offlineCourse.create({
       data: {
         ..._data,
-        video: "",
         whatYouWillLearn: whatYouWillLearn.map(item => item.value),
         benefits: [],
       },

@@ -67,6 +67,9 @@ export class CreateEditOfflineCourseValidation {
   coverPhoto: string;
 
   @IsString()
+  video: string;
+
+  @IsString()
   @IsNotEmpty({ message: "Missing query params" })
   mediaId: string;
 

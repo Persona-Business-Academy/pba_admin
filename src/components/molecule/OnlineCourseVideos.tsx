@@ -4,7 +4,7 @@ import { OnlineCourseVideo } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { OnlineCourseService } from "@/api/services/OnlineCourseService";
 import { refetchOnlineCourseById } from "@/utils/helpers/queryClient";
-import { generateOnlineCourseFileName, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
+import { generateOnlineCourseVideoName, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
 import { Maybe } from "@/utils/models/common";
 import { CreateOnlineCourseVideoValidation } from "@/utils/validation/online-courses";
 import { UploadFile, Video } from "../atom";
@@ -42,7 +42,7 @@ const OnlineCourseVideos: FC<Props> = ({ videos, onlineCourseId, levelId, dayId 
     async (files?: Maybe<FileList>) => {
       if (!files?.length || !levelId || !dayId) return;
       const localFileName = files[0].name;
-      const nameForAWS = generateOnlineCourseFileName(onlineCourseId, levelId, dayId);
+      const nameForAWS = generateOnlineCourseVideoName(onlineCourseId, levelId, dayId);
 
       setLocalVideos(prevData => [
         ...prevData,

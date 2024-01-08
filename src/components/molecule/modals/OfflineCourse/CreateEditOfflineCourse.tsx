@@ -14,11 +14,13 @@ import { generateAWSUrl, validateAgeLimit } from "@/utils/helpers/common";
 import { generateOfflineCourseDefaultValues } from "@/utils/helpers/formData";
 import {
   generateOfflineCourseCoverPhotoName,
+  generateOfflineCourseVideoName,
   uploadDocumentToAWS,
 } from "@/utils/helpers/uploadFile";
 import { Maybe } from "@/utils/models/common";
-import { OfflineCourse } from "@/utils/models/offlineCourses";
+import { LocalVideo, OfflineCourse } from "@/utils/models/offlineCourses";
 import { CreateEditOfflineCourseValidation } from "@/utils/validation/offline-courses";
+import OfflineCourseVideo from "../../OfflineCourseVideo";
 import WhatYouWillLearn from "../../WhatYouWillLearn";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
@@ -33,7 +35,9 @@ type Props = {
 const resolver = classValidatorResolver(CreateEditOfflineCourseValidation);
 
 const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClose, onSave }) => {
-  const [localImage, setLocalImage] = useState<{ file: File; localUrl: string } | null>(null);
+  const [localImage, setLocalImage] = useState<Maybe<{ file: File; localUrl: string }>>(null);
+  const [localVideo, setLocalVideo] = useState<Maybe<LocalVideo>>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [fileLoading, setFileLoading] = useState<boolean>(false);
   const toast = useToast();
 
@@ -41,7 +45,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
     control,
     handleSubmit,
     setError,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isSubmitting },
   } = useForm<CreateEditOfflineCourseValidation>({
     defaultValues: generateOfflineCourseDefaultValues(offlineCourse),
     resolver,
@@ -78,7 +82,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
         if (!validateAgeLimit(data.ageLimit)) {
           return setError("ageLimit", { message: "Invalid age limit" });
         }
-
+        let reqData = data;
         if (localImage?.file) {
           if (localImage.file.size > 3 * 1024 * 1024) {
             return toast({
@@ -91,15 +95,25 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
             file: localImage.file,
             fileName: generateOfflineCourseCoverPhotoName(data.mediaId),
           });
-          mutate({ ...data, coverPhoto: res.key });
-        } else {
-          mutate(data);
+
+          reqData.coverPhoto = res.key;
         }
+
+        if (!!localVideo) {
+          const videoRes = await uploadDocumentToAWS({
+            file: localVideo.file,
+            fileName: generateOfflineCourseVideoName(data.mediaId),
+            handleUploadProgress: ({ progress }) => setUploadProgress(progress),
+          });
+
+          reqData.video = videoRes.key;
+        }
+        mutate(reqData);
       } catch (e) {
         setFileLoading(false);
       }
     },
-    [localImage?.file, mutate, setError, toast],
+    [localImage?.file, localVideo, mutate, setError, toast],
   );
 
   return (
@@ -111,7 +125,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
       actionButtonText={!!offlineCourse ? "Save" : "Create"}
       onClose={onClose}
       isLoading={isLoading || fileLoading}
-      actionButtonDisabled={!isDirty && !localImage}>
+      actionButtonDisabled={!isDirty && !localImage && !localVideo}>
       <Controller
         name="coverPhoto"
         control={control}
@@ -158,6 +172,19 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
               />
             </Fade>
           </HStack>
+        )}
+      />
+      <Controller
+        name="video"
+        control={control}
+        render={({ field: { value } }) => (
+          <OfflineCourseVideo
+            videoKey={value}
+            progress={uploadProgress}
+            uploading={isSubmitting}
+            localVideo={localVideo}
+            setLocalVideo={setLocalVideo}
+          />
         )}
       />
       <Controller

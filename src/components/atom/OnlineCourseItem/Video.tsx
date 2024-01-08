@@ -7,12 +7,13 @@ const VideoPreview = dynamic(() => import("@/components/atom/VideoPreview"));
 
 type Props = {
   videoKey: string;
+  localKey?: string;
   name: string;
   uploadProgress?: number;
   uploading: boolean;
 };
 
-const Video: FC<Props> = ({ name, videoKey, uploading, uploadProgress }) => {
+const Video: FC<Props> = ({ name, videoKey, localKey, uploading, uploadProgress }) => {
   const [previewVideo, setPreviewVideo] = useBoolean(false);
 
   const percent = useMemo(() => {
@@ -36,6 +37,7 @@ const Video: FC<Props> = ({ name, videoKey, uploading, uploadProgress }) => {
       )}
       <VideoPreview
         title={name}
+        localKey={localKey}
         videoKey={videoKey}
         isOpen={previewVideo}
         onClose={setPreviewVideo.off}
