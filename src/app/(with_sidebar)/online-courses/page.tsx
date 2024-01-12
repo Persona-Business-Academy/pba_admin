@@ -92,6 +92,18 @@ export default function OnlineCourses() {
         cell: info => info.getValue(),
         header: "Title",
       }),
+      columnHelper.accessor("id", {
+        id: uuidv4(),
+        cell: info => {
+          const id = info.getValue();
+          return (
+            <Button variant="link" as={Link} href={`/online-courses/${id}/comments`}>
+              {`Comments >`}
+            </Button>
+          );
+        },
+        header: "Comments",
+      }),
       columnHelper.accessor("createdAt", {
         id: uuidv4(),
         cell: info => dayjs(info.getValue()).format("YYYY-MM-DD HH:mm:ss"),

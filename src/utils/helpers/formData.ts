@@ -5,6 +5,7 @@ import { OfflineCourse } from "../models/offlineCourses";
 import { OnlineCourse } from "../models/onlineCourses";
 import { CreateEditInstructorValidation } from "../validation/instructors";
 import { CreateEditOfflineCourseValidation } from "../validation/offline-courses";
+import { CreateEditOnlineCourseValidation } from "../validation/online-courses";
 
 export const generateOfflineCourseDefaultValues = (
   offlineCourse: OfflineCourse,
@@ -30,15 +31,17 @@ export const generateOfflineCourseDefaultValues = (
     : [],
 });
 
-export const generateOnlineCourseDefaultValues = (onlineCourse: OnlineCourse) => ({
+export const generateOnlineCourseDefaultValues = (
+  onlineCourse: OnlineCourse,
+): CreateEditOnlineCourseValidation => ({
   title: !!onlineCourse ? onlineCourse.title : "",
   description: !!onlineCourse ? onlineCourse.description : "",
   courseLevel: !!onlineCourse ? onlineCourse.courseLevel : "BEGINNER",
   topic: !!onlineCourse ? onlineCourse.topic : "FRONT_END",
   language: !!onlineCourse ? onlineCourse.language : "ARM",
-  instructorId: !!onlineCourse ? onlineCourse.instructorId : undefined,
+  instructorId: !!onlineCourse ? onlineCourse.instructorId : undefined!,
   coverPhoto: !!onlineCourse ? onlineCourse.coverPhoto : "",
-  coverPhotoId: !!onlineCourse ? onlineCourse.mediaId : uuidv4(),
+  mediaId: !!onlineCourse ? onlineCourse.mediaId : uuidv4(),
   whatYouWillLearn: !!onlineCourse
     ? onlineCourse.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item }))
     : [],

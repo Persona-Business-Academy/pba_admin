@@ -34,10 +34,13 @@ const ChangeInstructorsModal = dynamic(
   () => import("./modals/OfflineCourse/ChangeInstructorsModal"),
 );
 
+const EditCommentsModal = dynamic(() => import("./modals/Comments/EditCommentsModal"));
+
 export {
   SearchTable,
   OnlineCourseVideos,
   OfflineCourseVideo,
+  EditCommentsModal,
   CreateEditOnlineCourseModal,
   DeleteOnlineCourseModal,
   SharedModal,

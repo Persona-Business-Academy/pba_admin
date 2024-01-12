@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FormInput } from "@/components/atom";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
-import { DASHBOARD_ROUTE } from "@/utils/constants/routes";
+import { USERS_LIST_ROUTE } from "@/utils/constants/routes";
 import { SignInFormData } from "@/utils/models/auth";
 
 function Signin() {
@@ -28,7 +28,7 @@ function Signin() {
         const res = await signIn("credentials", {
           email,
           password,
-          callbackUrl: DASHBOARD_ROUTE,
+          callbackUrl: USERS_LIST_ROUTE,
           redirect: false,
         });
 

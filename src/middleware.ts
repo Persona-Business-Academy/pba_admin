@@ -15,7 +15,6 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/dashboard",
     "/users-list",
     "/online-courses",
     "/online-courses/(.*)",

@@ -29,7 +29,7 @@ type Props = {
 };
 
 const ChangeInstructorsModal: FC<Props> = ({ offlineCourseId, isOpen, onClose }) => {
-  const { data, isFetching } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["all-instructors"],
     queryFn: () =>
       InstructorService.getAllInstructors({ offset: 0, limit: 100000, sorting: [], search: "" }),
@@ -91,7 +91,7 @@ const ChangeInstructorsModal: FC<Props> = ({ offlineCourseId, isOpen, onClose })
       isLoading={addLoading || removeLoading}>
       <Box minH={300} w={"100%"}>
         {!data?.instructors.length ? (
-          isFetching ? (
+          isLoading ? (
             <Spinner />
           ) : (
             <Text>
