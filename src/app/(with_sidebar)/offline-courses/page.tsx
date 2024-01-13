@@ -15,6 +15,7 @@ import {
 } from "@/components/molecule";
 import { useDebounce } from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/utils/constants/common";
+import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { Maybe } from "@/utils/models/common";
 import { OfflineCourse } from "@/utils/models/offlineCourses";
 
@@ -51,10 +52,7 @@ export default function OfflineCourses() {
   });
 
   const { data, isLoading, isPreviousData, refetch } = useQuery({
-    queryKey: [
-      debouncedSearch ? `all-offline-courses/${debouncedSearch}` : "all-offline-courses",
-      page,
-    ],
+    queryKey: QUERY_KEY.allOfflineCourses(debouncedSearch, page),
     queryFn: () =>
       OfflineCourseService.getAllOfflineCourses({
         offset: page === 1 ? 0 : (page - 1) * ITEMS_PER_PAGE,

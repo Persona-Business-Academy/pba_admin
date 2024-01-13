@@ -14,6 +14,7 @@ import {
 } from "@/components/molecule";
 import { useDebounce } from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/utils/constants/common";
+import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { Maybe } from "@/utils/models/common";
 import { OnlineCourse } from "@/utils/models/onlineCourses";
 
@@ -41,10 +42,7 @@ export default function OnlineCourses() {
   });
 
   const { data, isLoading, isPreviousData, refetch } = useQuery({
-    queryKey: [
-      debouncedSearch ? `all-online-courses/${debouncedSearch}` : "all-online-courses",
-      page,
-    ],
+    queryKey: QUERY_KEY.allOnlineCourses(debouncedSearch, page),
     queryFn: () =>
       OnlineCourseService.getAllOnlineCourses({
         offset: page === 1 ? 0 : (page - 1) * ITEMS_PER_PAGE,

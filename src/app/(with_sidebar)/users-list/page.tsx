@@ -8,6 +8,7 @@ import { UserService } from "@/api/services/UserService";
 import { SearchTable } from "@/components/molecule";
 import { useDebounce } from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/utils/constants/common";
+import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { UserModel } from "@/utils/models/user";
 
 export default function UsersList() {
@@ -17,7 +18,7 @@ export default function UsersList() {
   const debouncedSearch = useDebounce(search);
 
   const { data, isLoading, isPreviousData } = useQuery({
-    queryKey: [debouncedSearch ? `all-users/${debouncedSearch}` : "all-users", page],
+    queryKey: QUERY_KEY.allUsers(debouncedSearch, page),
     queryFn: () =>
       UserService.getAllUsers({
         offset: page === 1 ? 0 : (page - 1) * ITEMS_PER_PAGE,
@@ -69,16 +70,6 @@ export default function UsersList() {
           return currentDate.format("YYYY-MM-DD HH:mm:ss");
         },
         header: "Created At",
-      }),
-      columnHelper.accessor("createdAt", {
-        id: uuidv4(),
-        cell: () => (
-          <div style={{ display: "flex", gap: 20 }}>
-            <span>Delete</span>
-            <span>Block</span>
-          </div>
-        ),
-        header: "Action Buttons",
       }),
     ],
     [columnHelper],

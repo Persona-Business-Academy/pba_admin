@@ -15,6 +15,7 @@ import {
 import { useDebounce } from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/utils/constants/common";
 import { INSTRUCTORS } from "@/utils/constants/routes";
+import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { Maybe } from "@/utils/models/common";
 import { InstructorType } from "@/utils/models/instructors";
 
@@ -42,7 +43,7 @@ export default function Instructors() {
   });
 
   const { data, isLoading, isPreviousData, refetch } = useQuery({
-    queryKey: [debouncedSearch ? `all-instructors/${debouncedSearch}` : "all-instructors", page],
+    queryKey: QUERY_KEY.allInstructors(debouncedSearch, page),
     queryFn: () =>
       InstructorService.getAllInstructors({
         offset: page === 1 ? 0 : (page - 1) * ITEMS_PER_PAGE,

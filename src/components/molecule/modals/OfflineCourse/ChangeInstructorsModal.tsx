@@ -18,6 +18,7 @@ import { InstructorService } from "@/api/services/InstructorsService";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import { INSTRUCTORS } from "@/utils/constants/routes";
 import { generateAWSUrl } from "@/utils/helpers/common";
+import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { AddOfflineInstructorsValidation } from "@/utils/validation/offline-courses";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
@@ -30,14 +31,14 @@ type Props = {
 
 const ChangeInstructorsModal: FC<Props> = ({ offlineCourseId, isOpen, onClose }) => {
   const { data, isLoading } = useQuery({
-    queryKey: ["all-instructors"],
+    queryKey: QUERY_KEY.allInstructors("", 0),
     queryFn: () =>
       InstructorService.getAllInstructors({ offset: 0, limit: 100000, sorting: [], search: "" }),
     keepPreviousData: true,
   });
 
   const { data: offlineCourse, refetch } = useQuery({
-    queryKey: ["offline-course", offlineCourseId],
+    queryKey: QUERY_KEY.offlineCourse(offlineCourseId),
     queryFn: () => OfflineCourseService.getOfflineCourse(offlineCourseId),
   });
 

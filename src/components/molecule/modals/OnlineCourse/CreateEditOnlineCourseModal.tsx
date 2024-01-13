@@ -17,6 +17,7 @@ import { LANGUAGES, SKILL_LEVELS, TOPICS } from "@/utils/constants/courses";
 import { INSTRUCTORS } from "@/utils/constants/routes";
 import { generateAWSUrl } from "@/utils/helpers/common";
 import { generateOnlineCourseDefaultValues } from "@/utils/helpers/formData";
+import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import {
   generateOnlineCourseCoverPhotoName,
   uploadDocumentToAWS,
@@ -44,7 +45,7 @@ const CreateEditOnlineCourseModal: FC<Props> = ({ onlineCourse, isOpen, onClose,
   const toast = useToast();
 
   const { data } = useQuery({
-    queryKey: ["all-instructors"],
+    queryKey: QUERY_KEY.allInstructors("", 0),
     queryFn: () =>
       InstructorService.getAllInstructors({ offset: 0, limit: 100000, sorting: [], search: "" }),
     keepPreviousData: true,
