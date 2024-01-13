@@ -91,7 +91,7 @@ function SearchTable<Data>({
         <Text as="h2" fontSize={24} textAlign="center">
           {title}
         </Text>
-        <Button onClick={addNew}>Add New</Button>
+        {addNew && <Button onClick={addNew}>Add New</Button>}
       </Flex>
       <FormControl py={4} px={4}>
         <Input

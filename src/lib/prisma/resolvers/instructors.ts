@@ -51,6 +51,7 @@ export class Instructors {
   }
 
   static async edit(data: CreateEditInstructorValidation, id: number) {
+    //aws
     return prisma.instructor.update({
       where: { id: +id },
       data,

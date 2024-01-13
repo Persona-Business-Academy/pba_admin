@@ -57,7 +57,7 @@ export class OfflineCourses {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
     const { whatYouWillLearn, ..._data } = data;
-
+    //aws
     return prisma.offlineCourse.update({
       where: { id: +id },
       data: {

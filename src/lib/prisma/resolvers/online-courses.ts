@@ -1,4 +1,4 @@
-import { BadRequestException } from "next-api-decorators";
+import { BadRequestException, NotFoundException } from "next-api-decorators";
 import { SortingType } from "@/api/types";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
 import {
@@ -77,14 +77,16 @@ export class OnlineCourses {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
-    const { whatYouWillLearn, ..._data } = data;
+    const course = await prisma.onlineCourse.findUnique({ where: { id: +id } });
+    if (!course) {
+      throw new NotFoundException("Course not found");
+    }
+
+    // await AwsService.deleteFromStorage(course.coverPhoto, data.coverPhoto);
 
     const updatedCourse = await prisma.onlineCourse.update({
       where: { id: +id },
-      data: {
-        ..._data,
-        whatYouWillLearn: whatYouWillLearn.map(item => item.value),
-      },
+      data: { ...data, whatYouWillLearn: data.whatYouWillLearn.map(item => item.value) },
     });
 
     return updatedCourse.id;
