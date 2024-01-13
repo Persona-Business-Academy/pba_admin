@@ -1,11 +1,12 @@
 import { CommentFormData, CommentModel, CommentsListModel } from "@/utils/models/comments";
+import { CourseType } from "@/utils/models/common";
 import { CreateEditCommentsValidation } from "@/utils/validation/comments";
 import $apiClient from "..";
 
 export class CommentService {
   static getCourseComments(params: {
     courseId: number;
-    type: "online" | "offline";
+    type: CourseType;
   }): Promise<CommentsListModel> {
     return $apiClient.get("/comments/list", { params });
   }

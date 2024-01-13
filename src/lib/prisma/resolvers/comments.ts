@@ -1,10 +1,11 @@
 import { User } from "next-auth";
 import type { CommentFormData } from "@/utils/models/comments";
+import type { CourseType } from "@/utils/models/common";
 import { CreateEditCommentsValidation } from "@/utils/validation/comments";
 import prisma from "..";
 
 export class Comment {
-  static list(id: number, type: "online" | "offline") {
+  static list(id: number, type: CourseType) {
     const where = { online: { onlineCourseId: id }, offline: { offlineCourseId: id } };
 
     return prisma.courseComment.findMany({

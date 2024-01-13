@@ -18,13 +18,14 @@ import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
 import { Comment } from "@/lib/prisma/resolvers";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
 import type { CommentFormData } from "@/utils/models/comments";
+import type { CourseType } from "@/utils/models/common";
 import { CreateEditCommentsValidation } from "@/utils/validation/comments";
 
 @Catch(exceptionHandler)
 @AuthMiddleware()
 export class CommentHandler {
   @Get("/list")
-  list(@Query("courseId") courseId: string, @Query("type") type: "online" | "offline") {
+  list(@Query("courseId") courseId: string, @Query("type") type: CourseType) {
     const id = +courseId;
     if (isNaN(id) || id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);

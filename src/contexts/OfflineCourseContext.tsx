@@ -2,25 +2,25 @@
 import React, { createContext, FC, memo, PropsWithChildren, useContext } from "react";
 import { Center, Flex, Grid, GridItem, Heading, Spinner } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { OnlineCourseService } from "@/api/services/OnlineCourseService";
+import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
-import { OnlineCourse } from "@/utils/models/onlineCourses";
+import { OfflineCourse } from "@/utils/models/offlineCourses";
 
-interface OnlineCourseState {
-  data: NonNullable<OnlineCourse>;
+interface OfflineCourseState {
+  data: NonNullable<OfflineCourse>;
 }
 
 interface Props {
   id: string;
 }
 
-const OnlineCourseContext = createContext<OnlineCourseState>({} as OnlineCourseState);
+const OfflineCourseContext = createContext<OfflineCourseState>({} as OfflineCourseState);
 
-const OnlineCourseProvider: FC<PropsWithChildren<Props>> = ({ children, id }) => {
+const OfflineCourseProvider: FC<PropsWithChildren<Props>> = ({ children, id }) => {
   const { data, isLoading, isSuccess } = useQuery({
-    queryKey: QUERY_KEY.onlineCourse(+id),
-    queryFn: () => OnlineCourseService.getOnlineCourse(+id),
+    queryKey: QUERY_KEY.offlineCourse(+id),
+    queryFn: () => OfflineCourseService.getOfflineCourse(+id),
     enabled: !isNaN(+id),
   });
 
@@ -41,7 +41,7 @@ const OnlineCourseProvider: FC<PropsWithChildren<Props>> = ({ children, id }) =>
   }
 
   return (
-    <OnlineCourseContext.Provider value={{ data }}>
+    <OfflineCourseContext.Provider value={{ data }}>
       <Grid>
         <GridItem w="100%" padding={5}>
           <Heading textAlign="center">{data.title}</Heading>
@@ -50,10 +50,10 @@ const OnlineCourseProvider: FC<PropsWithChildren<Props>> = ({ children, id }) =>
           </Flex>
         </GridItem>
       </Grid>
-    </OnlineCourseContext.Provider>
+    </OfflineCourseContext.Provider>
   );
 };
 
-export const useOnlineCourse = () => useContext(OnlineCourseContext);
+export const useOfflineCourse = () => useContext(OfflineCourseContext);
 
-export default memo(OnlineCourseProvider);
+export default memo(OfflineCourseProvider);
