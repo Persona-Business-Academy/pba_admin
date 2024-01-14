@@ -6,27 +6,22 @@ import {
   CreateEditOfflineCourseValidation,
 } from "@/utils/validation/offline-courses";
 import prisma from "..";
+import { orderBy } from "../utils/common";
 
 export class OfflineCourses {
   static async list(skip: number, take: number, search: string, sorting: SortingType[]) {
-    let orderBy: Record<string, "asc" | "desc"> = {}; // Initialize an empty object for orderBy
-    if (sorting && sorting.length > 0) {
-      const sortingField = sorting[0].id; // Get the sorting field from the first item in the array
-      const sortingDirection = sorting[0].desc ? "desc" : "asc"; // Check if it's descending or ascending
-      orderBy[sortingField] = sortingDirection; // Set the orderBy object
-    }
-
-    const count = await prisma.offlineCourse.count({
-      where: { OR: [{ title: { contains: search, mode: "insensitive" } }] },
-    });
-
-    const offlineCourses = await prisma.offlineCourse.findMany({
-      skip,
-      take,
-      orderBy,
-      where: { OR: [{ title: { contains: search, mode: "insensitive" } }] },
-      include: { OfflineCourseInstructors: { select: { id: true, instructor: true } } },
-    });
+    const [count, offlineCourses] = await Promise.all([
+      prisma.offlineCourse.count({
+        where: { OR: [{ title: { contains: search, mode: "insensitive" } }] },
+      }),
+      prisma.offlineCourse.findMany({
+        skip,
+        take,
+        orderBy: orderBy(sorting),
+        where: { OR: [{ title: { contains: search, mode: "insensitive" } }] },
+        include: { OfflineCourseInstructors: { select: { id: true, instructor: true } } },
+      }),
+    ]);
 
     return { count, offlineCourses };
   }

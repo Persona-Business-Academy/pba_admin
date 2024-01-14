@@ -57,7 +57,7 @@ model OnlineCourse {
   whatYouWillLearn       String[]
   createdAt              DateTime            @default(now()) @db.Timestamp(0)
   updatedAt              DateTime            @updatedAt @db.Timestamp(0)
-  Instructor             Instructor          @relation(fields: [instructorId], references: [id])
+  Instructor             Instructor          @relation(fields: [instructorId], references: [id], onDelete: Cascade)
   comments               CourseComment[]
   days                   OnlineCourseDay[]
   levels                 OnlineCourseLevel[]
@@ -108,13 +108,13 @@ model CourseComment {
   authorId        Int?
   authorAdminId   Int?
   onlineCourseId  Int?
+  offlineCourseId Int?
   createdAt       DateTime       @default(now()) @db.Timestamp(0)
   updatedAt       DateTime       @updatedAt @db.Timestamp(0)
-  author          User?          @relation(fields: [authorId], references: [id])
-  authorAdmin     Admin?         @relation(fields: [authorAdminId], references: [id])
+  author          User?          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorAdmin     Admin?         @relation(fields: [authorAdminId], references: [id], onDelete: Cascade)
   OnlineCourse    OnlineCourse?  @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
-  offlineCourseId Int?
-  OfflineCourse   OfflineCourse? @relation(fields: [offlineCourseId], references: [id])
+  OfflineCourse   OfflineCourse? @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
 }
 
 model Instructor {
@@ -158,6 +158,17 @@ model OfflineCourse {
   createdAt                DateTime                   @default(now()) @db.Timestamp(0)
   updatedAt                DateTime                   @updatedAt @db.Timestamp(0)
   OfflineCourseInstructors OfflineCourseInstructors[]
+  OfflineCourseVideo       OfflineCourseVideo[]
+}
+
+model OfflineCourseVideo {
+  id              Int           @id @default(autoincrement())
+  key             String
+  name            String
+  createdAt       DateTime      @default(now()) @db.Timestamp(0)
+  updatedAt       DateTime      @updatedAt @db.Timestamp(0)
+  offlineCourseId Int
+  OfflineCourse   OfflineCourse @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
 }
 
 model OfflineCourseInstructors {
