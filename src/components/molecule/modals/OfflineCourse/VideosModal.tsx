@@ -40,7 +40,7 @@ const VideosModal: FC<Props> = ({ onClose, offlineCourseId, videos, refetch }) =
     OfflineCourseVideoModel,
     { message: string },
     { id: number }
-  >(() => OfflineCourseService.removeVideo({ id: 1 }), { onSuccess: () => refetch() });
+  >(OfflineCourseService.removeVideo, { onSuccess: () => refetch() });
 
   const submitHandler = useCallback(
     async (files?: Maybe<FileList>) => {

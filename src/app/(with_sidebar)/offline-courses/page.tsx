@@ -53,6 +53,13 @@ export default function OfflineCourses() {
     keepPreviousData: true,
   });
 
+  const videos = useMemo(
+    () =>
+      data?.offlineCourses.find(({ id }) => id === editableOfflineCourse?.id)?.OfflineCourseVideo ||
+      [],
+    [data?.offlineCourses, editableOfflineCourse?.id],
+  );
+
   const pageCount = useMemo(() => {
     if (data?.count) {
       return Math.ceil(data.count / ITEMS_PER_PAGE);
@@ -202,9 +209,9 @@ export default function OfflineCourses() {
       {videosModal.isOpen && editableOfflineCourse && (
         <VideosModal
           offlineCourseId={editableOfflineCourse.id}
-          onClose={deleteModal.onClose}
+          onClose={videosModal.onClose}
           refetch={refetch}
-          videos={editableOfflineCourse.OfflineCourseVideo}
+          videos={videos}
         />
       )}
     </>
