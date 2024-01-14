@@ -1,5 +1,10 @@
-import { OfflineCourse, OfflineCoursesListModel } from "@/utils/models/offlineCourses";
 import {
+  OfflineCourse,
+  OfflineCoursesListModel,
+  OfflineCourseVideoModel,
+} from "@/utils/models/offlineCourses";
+import {
+  AddOfflineCourseVideosValidation,
   AddOfflineInstructorsValidation,
   CreateEditOfflineCourseValidation,
 } from "@/utils/validation/offline-courses";
@@ -28,5 +33,12 @@ export class OfflineCourseService {
   }
   static removeInstructor(data: { id: number }): Promise<number> {
     return $apiClient.delete(`/offline-courses/remove-instructor/${data.id}`);
+  }
+  // videos
+  static addVideo(data: AddOfflineCourseVideosValidation): Promise<OfflineCourseVideoModel> {
+    return $apiClient.post("/offline-courses/add-video", data);
+  }
+  static removeVideo(data: { id: number }): Promise<OfflineCourseVideoModel> {
+    return $apiClient.delete(`/offline-courses/remove-video/${data.id}`);
   }
 }

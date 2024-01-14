@@ -24,7 +24,6 @@ export const generateOfflineCourseDefaultValues = (
   currency: !!offlineCourse ? offlineCourse.currency : "AMD",
   lessonsCount: !!offlineCourse ? offlineCourse.lessonsCount : 0,
   coverPhoto: !!offlineCourse ? offlineCourse.coverPhoto : "",
-  video: !!offlineCourse ? offlineCourse.video : "",
   mediaId: !!offlineCourse ? offlineCourse.mediaId : uuidv4(),
   whatYouWillLearn: !!offlineCourse
     ? offlineCourse.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item }))

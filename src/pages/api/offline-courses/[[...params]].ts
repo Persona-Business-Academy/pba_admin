@@ -17,6 +17,7 @@ import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
 import { OfflineCourses } from "@/lib/prisma/resolvers";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
 import {
+  AddOfflineCourseVideosValidation,
   AddOfflineInstructorsValidation,
   CreateEditOfflineCourseValidation,
 } from "@/utils/validation/offline-courses";
@@ -66,6 +67,16 @@ export class OfflineCourseHandler {
   @Delete("/remove-instructor/:id")
   removeInstructor(@Param("id") id: string) {
     return OfflineCourses.removeInstructors(id);
+  }
+
+  @Post("/add-video")
+  addVideo(@Body(ValidationPipe) body: AddOfflineCourseVideosValidation) {
+    return OfflineCourses.addVideo(body);
+  }
+
+  @Delete("/remove-video/:id")
+  removeVideo(@Param("id") id: string) {
+    return OfflineCourses.removeVideo(id);
   }
 }
 

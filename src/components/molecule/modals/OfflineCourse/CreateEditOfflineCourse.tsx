@@ -14,13 +14,11 @@ import { generateAWSUrl, validateAgeLimit } from "@/utils/helpers/common";
 import { generateOfflineCourseDefaultValues } from "@/utils/helpers/formData";
 import {
   generateOfflineCourseCoverPhotoName,
-  generateOfflineCourseVideoName,
   uploadDocumentToAWS,
 } from "@/utils/helpers/uploadFile";
 import { Maybe } from "@/utils/models/common";
-import { LocalVideo, OfflineCourse } from "@/utils/models/offlineCourses";
+import { OfflineCourse } from "@/utils/models/offlineCourses";
 import { CreateEditOfflineCourseValidation } from "@/utils/validation/offline-courses";
-import OfflineCourseVideo from "../../OfflineCourseVideo";
 import WhatYouWillLearn from "../../WhatYouWillLearn";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
@@ -36,8 +34,6 @@ const resolver = classValidatorResolver(CreateEditOfflineCourseValidation);
 
 const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClose, onSave }) => {
   const [localImage, setLocalImage] = useState<Maybe<{ file: File; localUrl: string }>>(null);
-  const [localVideo, setLocalVideo] = useState<Maybe<LocalVideo>>(null);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [fileLoading, setFileLoading] = useState<boolean>(false);
   const toast = useToast();
 
@@ -45,7 +41,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
     control,
     handleSubmit,
     setError,
-    formState: { errors, isDirty, isSubmitting },
+    formState: { errors, isDirty },
   } = useForm<CreateEditOfflineCourseValidation>({
     defaultValues: generateOfflineCourseDefaultValues(offlineCourse),
     resolver,
@@ -99,21 +95,12 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
           reqData.coverPhoto = res.key;
         }
 
-        if (!!localVideo) {
-          const videoRes = await uploadDocumentToAWS({
-            file: localVideo.file,
-            fileName: generateOfflineCourseVideoName(data.mediaId),
-            handleUploadProgress: ({ progress }) => setUploadProgress(progress),
-          });
-
-          reqData.video = videoRes.key;
-        }
         mutate(reqData);
       } catch (e) {
         setFileLoading(false);
       }
     },
-    [localImage?.file, localVideo, mutate, setError, toast],
+    [localImage?.file, mutate, setError, toast],
   );
 
   return (
@@ -125,7 +112,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
       actionButtonText={!!offlineCourse ? "Save" : "Create"}
       onClose={onClose}
       isLoading={isLoading || fileLoading}
-      actionButtonDisabled={!isDirty && !localImage && !localVideo}>
+      actionButtonDisabled={!isDirty && !localImage}>
       <Controller
         name="coverPhoto"
         control={control}
@@ -172,19 +159,6 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
               />
             </Fade>
           </HStack>
-        )}
-      />
-      <Controller
-        name="video"
-        control={control}
-        render={({ field: { value } }) => (
-          <OfflineCourseVideo
-            videoKey={value}
-            progress={uploadProgress}
-            uploading={isSubmitting}
-            localVideo={localVideo}
-            setLocalVideo={setLocalVideo}
-          />
         )}
       />
       <Controller

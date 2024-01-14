@@ -12,6 +12,7 @@ import {
   CreateEditOfflineCourseModal,
   DeleteOfflineCourseModal,
   SearchTable,
+  VideosModal,
 } from "@/components/molecule";
 import { useDebounce } from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/utils/constants/common";
@@ -26,26 +27,15 @@ export default function OfflineCourses() {
   const debouncedSearch = useDebounce(search);
   const [editableOfflineCourse, setEditableOfflineCourse] = useState<Maybe<OfflineCourse>>(null);
   const [deletableOfflineCourse, setDeletableOfflineCourse] = useState<Maybe<OfflineCourse>>(null);
+
+  const instructorsModal = useDisclosure();
+  const videosModal = useDisclosure();
   const { isOpen, onOpen, onClose } = useDisclosure({
     onClose() {
       if (!!editableOfflineCourse) setEditableOfflineCourse(null);
     },
   });
-  const {
-    isOpen: isOpenInstructorsModal,
-    onOpen: onOpenInstructorsModal,
-    onClose: onCloseInstructorsModal,
-  } = useDisclosure({
-    onClose() {
-      if (!!editableOfflineCourse) setEditableOfflineCourse(null);
-    },
-  });
-
-  const {
-    isOpen: isOpenDeleteOfflineCourse,
-    onOpen: onOpenDeleteOfflineCourse,
-    onClose: onCloseDeleteOfflineCourse,
-  } = useDisclosure({
+  const deleteModal = useDisclosure({
     onClose() {
       if (!!deletableOfflineCourse) setDeletableOfflineCourse(null);
     },
@@ -135,15 +125,24 @@ export default function OfflineCourses() {
               variant="outline"
               onClick={() => {
                 setEditableOfflineCourse(row.original);
-                onOpenInstructorsModal();
+                instructorsModal.onOpen();
               }}>
               Add Instructors
+            </Button>
+            <Button
+              colorScheme="blue"
+              variant="outline"
+              onClick={() => {
+                setEditableOfflineCourse(row.original);
+                videosModal.onOpen();
+              }}>
+              Add Videos
             </Button>
             <Button
               colorScheme="red"
               onClick={() => {
                 setDeletableOfflineCourse(row.original);
-                onOpenDeleteOfflineCourse();
+                deleteModal.onOpen();
               }}>
               Delete
             </Button>
@@ -152,7 +151,7 @@ export default function OfflineCourses() {
         header: "Actions",
       }),
     ],
-    [columnHelper, onOpen, onOpenDeleteOfflineCourse, onOpenInstructorsModal],
+    [columnHelper, deleteModal, instructorsModal, onOpen, videosModal],
   );
 
   return (
@@ -185,19 +184,27 @@ export default function OfflineCourses() {
           onSave={refetch}
         />
       )}
-      {isOpenInstructorsModal && !!editableOfflineCourse && (
+      {instructorsModal.isOpen && !!editableOfflineCourse && (
         <ChangeInstructorsModal
           isOpen
           offlineCourseId={editableOfflineCourse.id}
-          onClose={onCloseInstructorsModal}
+          onClose={instructorsModal.onClose}
         />
       )}
-      {isOpenDeleteOfflineCourse && !!deletableOfflineCourse && (
+      {deleteModal.isOpen && !!deletableOfflineCourse && (
         <DeleteOfflineCourseModal
           isOpen
           offlineCourse={deletableOfflineCourse}
-          onClose={onCloseDeleteOfflineCourse}
+          onClose={deleteModal.onClose}
           onSave={refetch}
+        />
+      )}
+      {videosModal.isOpen && editableOfflineCourse && (
+        <VideosModal
+          offlineCourseId={editableOfflineCourse.id}
+          onClose={deleteModal.onClose}
+          refetch={refetch}
+          videos={editableOfflineCourse.OfflineCourseVideo}
         />
       )}
     </>

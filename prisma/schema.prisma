@@ -139,7 +139,6 @@ model OfflineCourse {
   subTitle                 String                     @db.Text
   topic                    Topic
   coverPhoto               String
-  video                    String
   mediaId                  String                     @unique
   rating                   Float                      @default(0)
   description              String                     @db.Text

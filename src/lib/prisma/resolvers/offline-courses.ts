@@ -2,6 +2,7 @@ import { BadRequestException } from "next-api-decorators";
 import { SortingType } from "@/api/types";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
 import {
+  AddOfflineCourseVideosValidation,
   AddOfflineInstructorsValidation,
   CreateEditOfflineCourseValidation,
 } from "@/utils/validation/offline-courses";
@@ -19,23 +20,29 @@ export class OfflineCourses {
         take,
         orderBy: orderBy(sorting),
         where: { OR: [{ title: { contains: search, mode: "insensitive" } }] },
-        include: { OfflineCourseInstructors: { select: { id: true, instructor: true } } },
+        include: {
+          OfflineCourseInstructors: { select: { id: true, instructor: true } },
+          OfflineCourseVideo: true,
+        },
       }),
     ]);
 
     return { count, offlineCourses };
   }
 
-  static async getOne(courseId: number) {
+  static getOne(courseId: number) {
     return prisma.offlineCourse.findUnique({
       where: {
         id: courseId,
       },
-      include: { OfflineCourseInstructors: { select: { id: true, instructor: true } } },
+      include: {
+        OfflineCourseInstructors: { select: { id: true, instructor: true } },
+        OfflineCourseVideo: true,
+      },
     });
   }
 
-  static async create(data: CreateEditOfflineCourseValidation) {
+  static create(data: CreateEditOfflineCourseValidation) {
     const { whatYouWillLearn, ..._data } = data;
 
     return prisma.offlineCourse.create({
@@ -47,7 +54,7 @@ export class OfflineCourses {
     });
   }
 
-  static async edit(data: CreateEditOfflineCourseValidation, id: string) {
+  static edit(data: CreateEditOfflineCourseValidation, id: string) {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
@@ -62,7 +69,7 @@ export class OfflineCourses {
     });
   }
 
-  static async delete(id: string) {
+  static delete(id: string) {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
@@ -72,18 +79,34 @@ export class OfflineCourses {
     });
   }
 
-  static async addInstructors({ instructorId, offlineCourseId }: AddOfflineInstructorsValidation) {
+  static addInstructors({ instructorId, offlineCourseId }: AddOfflineInstructorsValidation) {
     return prisma.offlineCourseInstructors.create({
       data: { instructorId, offlineCourseId },
     });
   }
 
-  static async removeInstructors(id: string) {
+  static removeInstructors(id: string) {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
     return prisma.offlineCourseInstructors.delete({
+      where: { id: +id },
+    });
+  }
+
+  static addVideo({ name, key, offlineCourseId }: AddOfflineCourseVideosValidation) {
+    return prisma.offlineCourseVideo.create({
+      data: { name, key, offlineCourseId },
+    });
+  }
+
+  static removeVideo(id: string) {
+    if (isNaN(Number(id)) || +id === 0) {
+      throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
+    }
+
+    return prisma.offlineCourseVideo.delete({
       where: { id: +id },
     });
   }

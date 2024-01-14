@@ -67,9 +67,6 @@ export class CreateEditOfflineCourseValidation {
   coverPhoto: string;
 
   @IsString()
-  video: string;
-
-  @IsString()
   @IsNotEmpty({ message: "Missing query params" })
   mediaId: string;
 
@@ -84,5 +81,19 @@ export class AddOfflineInstructorsValidation {
 
   @IsNumber()
   @IsNotEmpty({ message: "Id is required" })
+  offlineCourseId: number;
+}
+
+export class AddOfflineCourseVideosValidation {
+  @IsString()
+  @IsNotEmpty({ message: "Key is required" })
+  key: string;
+
+  @IsString()
+  @IsNotEmpty({ message: "Name is required" })
+  name: string;
+
+  @IsNotEmpty({ message: "Offline Course is required" })
+  @IsNumber()
   offlineCourseId: number;
 }
