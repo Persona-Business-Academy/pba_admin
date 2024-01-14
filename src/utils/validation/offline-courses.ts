@@ -1,10 +1,9 @@
 import { Topic } from "@prisma/client";
-import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsString, Matches } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsString, Matches } from "class-validator";
 import type {
   CurrencyType,
   LanguageType,
   SkillLevelType,
-  TopicType,
   WhatYouWillLearnType,
 } from "@/utils/models/common";
 
@@ -22,9 +21,8 @@ export class CreateEditOfflineCourseValidation {
   description: string;
 
   @IsString()
-  @IsEnum(Topic, { message: "Invalid topic type" })
   @IsNotEmpty({ message: "Topic is required" })
-  topic: TopicType;
+  topic: Topic;
 
   @IsString()
   @IsNotEmpty({ message: "Language is required" })

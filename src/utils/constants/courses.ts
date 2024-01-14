@@ -1,5 +1,5 @@
 import { Topic } from "@prisma/client";
-import { CurrencyType, LanguageType, SkillLevelType, TopicType } from "../models/common";
+import { CurrencyType, LanguageType, SkillLevelType } from "../models/common";
 
 const SKILL_LEVELS: Array<{ name: SkillLevelType; value: SkillLevelType }> = [
   { name: "ADVANCED", value: "ADVANCED" },
@@ -8,13 +8,10 @@ const SKILL_LEVELS: Array<{ name: SkillLevelType; value: SkillLevelType }> = [
   { name: "MASTER", value: "MASTER" },
 ];
 
-const TOPICS: Array<{ name: string; value: TopicType }> = [
-  { name: "Front End", value: Topic.FRONT_END },
-  { name: "Back End", value: Topic.BACK_END },
-  { name: "SMM", value: Topic.SMM },
+const TOPICS: Array<{ name: string; value: Topic }> = [
+  { name: "Development", value: Topic.DEVELOPMENT },
   { name: "Digital Marketing", value: Topic.DIGITAL_MARKETING },
-  { name: "Graphic Design", value: Topic.GRAPHIC_DESIGN },
-  { name: "UI UX Design", value: Topic.UI_UX_DESIGN },
+  { name: "Design", value: Topic.DESIGN },
   { name: "Business Law", value: Topic.BUSINESS_LAW },
   { name: "Business English", value: Topic.BUSINESS_ENGLISH },
 ];

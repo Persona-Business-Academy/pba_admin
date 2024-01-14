@@ -11,7 +11,7 @@ export const generateOfflineCourseDefaultValues = (
   offlineCourse: OfflineCourse,
 ): CreateEditOfflineCourseValidation => ({
   title: !!offlineCourse ? offlineCourse.title : "",
-  topic: !!offlineCourse ? offlineCourse.topic : Topic.FRONT_END,
+  topic: !!offlineCourse ? offlineCourse.topic : Topic.DEVELOPMENT,
   subTitle: !!offlineCourse ? offlineCourse.subTitle : "",
   description: !!offlineCourse ? offlineCourse.description : "",
   language: !!offlineCourse ? offlineCourse.language : "ARM",
@@ -36,7 +36,7 @@ export const generateOnlineCourseDefaultValues = (
   title: !!onlineCourse ? onlineCourse.title : "",
   description: !!onlineCourse ? onlineCourse.description : "",
   courseLevel: !!onlineCourse ? onlineCourse.courseLevel : "BEGINNER",
-  topic: !!onlineCourse ? onlineCourse.topic : "FRONT_END",
+  topic: !!onlineCourse ? onlineCourse.topic : Topic.DEVELOPMENT,
   language: !!onlineCourse ? onlineCourse.language : "ARM",
   instructorId: !!onlineCourse ? onlineCourse.instructorId : undefined!,
   coverPhoto: !!onlineCourse ? onlineCourse.coverPhoto : "",
