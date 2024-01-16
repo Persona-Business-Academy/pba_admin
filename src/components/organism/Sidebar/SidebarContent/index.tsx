@@ -25,7 +25,6 @@ const SidebarContent = ({ onClose, linkItems, ...rest }: SidebarContentProps) =>
 
   const defaultIndex = useMemo(() => {
     let idx = 0;
-    console.log(linkItems);
 
     linkItems.some((item, index) => {
       const isExist = item.children.some(el => pathname === el.href);
