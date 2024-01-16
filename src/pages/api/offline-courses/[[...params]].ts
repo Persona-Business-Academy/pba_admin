@@ -31,8 +31,9 @@ export class OfflineCourseHandler {
     @Query("limit") take: string,
     @Query("search") search: string,
     @Query("sorting") sorting: SortingType[],
+    @Query("forKids") forKids?: string,
   ) {
-    return OfflineCourses.list(+skip, +take, search, sorting);
+    return OfflineCourses.list(+skip, +take, search, sorting, forKids);
   }
 
   @Get("/:id")

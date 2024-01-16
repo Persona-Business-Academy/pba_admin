@@ -25,8 +25,10 @@ const SidebarContent = ({ onClose, linkItems, ...rest }: SidebarContentProps) =>
 
   const defaultIndex = useMemo(() => {
     let idx = 0;
+    console.log(linkItems);
+
     linkItems.some((item, index) => {
-      const isExist = item.children.some(el => pathname?.includes(el.href));
+      const isExist = item.children.some(el => pathname === el.href);
       if (isExist) {
         idx = index;
         return true;
@@ -73,10 +75,10 @@ const SidebarContent = ({ onClose, linkItems, ...rest }: SidebarContentProps) =>
                   textDecoration="none"
                   role="group"
                   cursor="pointer"
-                  bg={pathname?.includes(subLink.href) ? "cyan.400" : "unset"}
-                  color={pathname?.includes(subLink.href) ? "white" : "unset"}
+                  bg={pathname === subLink.href ? "cyan.400" : "unset"}
+                  color={pathname === subLink.href ? "white" : "unset"}
                   _hover={
-                    !pathname?.includes(subLink.href)
+                    pathname !== subLink.href
                       ? {
                           bg: "cyan.300",
                           color: "white",

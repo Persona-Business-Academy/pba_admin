@@ -1,58 +1,70 @@
 "use client";
-import { useCallback, useMemo, useState } from "react";
+import { FC, memo, useCallback, useMemo, useState } from "react";
 import { Button, HStack, useDisclosure } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
-import { OnlineCourseService } from "@/api/services/OnlineCourseService";
+import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import {
-  CreateEditOnlineCourseModal,
-  DeleteOnlineCourseModal,
+  ChangeInstructorsModal,
+  CreateEditOfflineCourseModal,
+  DeleteOfflineCourseModal,
   SearchTable,
+  VideosModal,
 } from "@/components/molecule";
 import { useDebounce } from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/utils/constants/common";
-import { ONLINE_COURSES_ROUTE } from "@/utils/constants/routes";
+import { OFFLINE_COURSES_FOR_KIDS_ROUTE, OFFLINE_COURSES_ROUTE } from "@/utils/constants/routes";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { Maybe } from "@/utils/models/common";
-import { OnlineCourse } from "@/utils/models/onlineCourses";
+import { OfflineCourse } from "@/utils/models/offlineCourses";
 
-export default function OnlineCourses() {
+interface Props {
+  forKids: boolean;
+}
+
+const OfflineCoursePage: FC<Props> = ({ forKids }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(search);
-  const [editableOnlineCourse, setEditableOnlineCourse] = useState<Maybe<OnlineCourse>>(null);
-  const [deletableOnlineCourse, setDeletableOnlineCourse] = useState<Maybe<OnlineCourse>>(null);
+  const [editableOfflineCourse, setEditableOfflineCourse] = useState<Maybe<OfflineCourse>>(null);
+  const [deletableOfflineCourse, setDeletableOfflineCourse] = useState<Maybe<OfflineCourse>>(null);
+
+  const instructorsModal = useDisclosure();
+  const videosModal = useDisclosure();
   const { isOpen, onOpen, onClose } = useDisclosure({
     onClose() {
-      if (!!editableOnlineCourse) setEditableOnlineCourse(null);
+      if (!!editableOfflineCourse) setEditableOfflineCourse(null);
     },
   });
-
-  const {
-    isOpen: isOpenDeleteOnlineCourse,
-    onOpen: onOpenDeleteOnlineCourse,
-    onClose: onCloseDeleteOnlineCourse,
-  } = useDisclosure({
+  const deleteModal = useDisclosure({
     onClose() {
-      if (!!deletableOnlineCourse) setDeletableOnlineCourse(null);
+      if (!!deletableOfflineCourse) setDeletableOfflineCourse(null);
     },
   });
 
   const { data, isLoading, isPreviousData, refetch } = useQuery({
-    queryKey: QUERY_KEY.allOnlineCourses(debouncedSearch, page),
+    queryKey: QUERY_KEY.allOfflineCourses(debouncedSearch, page, forKids),
     queryFn: () =>
-      OnlineCourseService.getAllOnlineCourses({
+      OfflineCourseService.getAllOfflineCourses({
         offset: page === 1 ? 0 : (page - 1) * ITEMS_PER_PAGE,
         limit: ITEMS_PER_PAGE,
         sorting: sorting,
         search: debouncedSearch,
+        forKids,
       }),
     keepPreviousData: true,
   });
+
+  const videos = useMemo(
+    () =>
+      data?.offlineCourses.find(({ id }) => id === editableOfflineCourse?.id)?.OfflineCourseVideo ||
+      [],
+    [data?.offlineCourses, editableOfflineCourse?.id],
+  );
 
   const pageCount = useMemo(() => {
     if (data?.count) {
@@ -70,7 +82,7 @@ export default function OnlineCourses() {
     [page],
   );
 
-  const columnHelper = useMemo(() => createColumnHelper<OnlineCourse>(), []);
+  const columnHelper = useMemo(() => createColumnHelper<OfflineCourse>(), []);
 
   const columns = useMemo(
     () => [
@@ -78,11 +90,7 @@ export default function OnlineCourses() {
         id: uuidv4(),
         cell: info => {
           const id = info.getValue();
-          return (
-            <Button as={Link} href={`${ONLINE_COURSES_ROUTE}/${id}`}>
-              {id}
-            </Button>
-          );
+          return <Button>{id}</Button>;
         },
         header: "ID",
       }),
@@ -96,7 +104,12 @@ export default function OnlineCourses() {
         cell: info => {
           const id = info.getValue();
           return (
-            <Button variant="link" as={Link} href={`${ONLINE_COURSES_ROUTE}/${id}/comments`}>
+            <Button
+              variant="link"
+              as={Link}
+              href={`${
+                forKids ? OFFLINE_COURSES_FOR_KIDS_ROUTE : OFFLINE_COURSES_ROUTE
+              }/${id}/comments`}>
               {`Comments >`}
             </Button>
           );
@@ -120,16 +133,34 @@ export default function OnlineCourses() {
             <Button
               colorScheme="blue"
               onClick={() => {
-                setEditableOnlineCourse(row.original);
+                setEditableOfflineCourse(row.original);
                 onOpen();
               }}>
               Edit
             </Button>
             <Button
+              colorScheme="blue"
+              variant="outline"
+              onClick={() => {
+                setEditableOfflineCourse(row.original);
+                instructorsModal.onOpen();
+              }}>
+              Add Instructors
+            </Button>
+            <Button
+              colorScheme="blue"
+              variant="outline"
+              onClick={() => {
+                setEditableOfflineCourse(row.original);
+                videosModal.onOpen();
+              }}>
+              Add Videos
+            </Button>
+            <Button
               colorScheme="red"
               onClick={() => {
-                setDeletableOnlineCourse(row.original);
-                onOpenDeleteOnlineCourse();
+                setDeletableOfflineCourse(row.original);
+                deleteModal.onOpen();
               }}>
               Delete
             </Button>
@@ -138,15 +169,15 @@ export default function OnlineCourses() {
         header: "Actions",
       }),
     ],
-    [columnHelper, onOpen, onOpenDeleteOnlineCourse],
+    [columnHelper, deleteModal, forKids, instructorsModal, onOpen, videosModal],
   );
 
   return (
     <>
       <SearchTable
-        title="Online Courses"
+        title={forKids ? "Offline courses for kids" : "Offline courses"}
         isLoading={isLoading}
-        data={data?.onlineCourses || []}
+        data={data?.offlineCourses || []}
         count={data?.count || 0}
         // @ts-ignore
         columns={columns}
@@ -164,21 +195,39 @@ export default function OnlineCourses() {
         addNew={onOpen}
       />
       {isOpen && (
-        <CreateEditOnlineCourseModal
+        <CreateEditOfflineCourseModal
           isOpen
-          onlineCourse={editableOnlineCourse}
+          forKids={forKids}
+          offlineCourse={editableOfflineCourse}
           onClose={onClose}
           onSave={refetch}
         />
       )}
-      {isOpenDeleteOnlineCourse && !!deletableOnlineCourse && (
-        <DeleteOnlineCourseModal
+      {instructorsModal.isOpen && !!editableOfflineCourse && (
+        <ChangeInstructorsModal
           isOpen
-          onlineCourse={deletableOnlineCourse}
-          onClose={onCloseDeleteOnlineCourse}
+          offlineCourseId={editableOfflineCourse.id}
+          onClose={instructorsModal.onClose}
+        />
+      )}
+      {deleteModal.isOpen && !!deletableOfflineCourse && (
+        <DeleteOfflineCourseModal
+          isOpen
+          offlineCourse={deletableOfflineCourse}
+          onClose={deleteModal.onClose}
           onSave={refetch}
+        />
+      )}
+      {videosModal.isOpen && editableOfflineCourse && (
+        <VideosModal
+          offlineCourseId={editableOfflineCourse.id}
+          onClose={videosModal.onClose}
+          refetch={refetch}
+          videos={videos}
         />
       )}
     </>
   );
-}
+};
+
+export default memo(OfflineCoursePage);

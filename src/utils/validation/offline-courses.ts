@@ -1,5 +1,5 @@
 import { Topic } from "@prisma/client";
-import { IsArray, IsNotEmpty, IsNumber, IsString, Matches } from "class-validator";
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsString, Matches } from "class-validator";
 import type {
   CurrencyType,
   LanguageType,
@@ -70,6 +70,9 @@ export class CreateEditOfflineCourseValidation {
 
   @IsArray()
   whatYouWillLearn: WhatYouWillLearnType[];
+
+  @IsBoolean()
+  forKids: boolean;
 }
 
 export class AddOfflineInstructorsValidation {

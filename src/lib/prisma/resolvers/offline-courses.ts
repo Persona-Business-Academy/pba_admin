@@ -10,16 +10,22 @@ import prisma from "..";
 import { orderBy } from "../utils/common";
 
 export class OfflineCourses {
-  static async list(skip: number, take: number, search: string, sorting: SortingType[]) {
+  static async list(
+    skip: number,
+    take: number,
+    search: string,
+    sorting: SortingType[],
+    forKids?: string,
+  ) {
     const [count, offlineCourses] = await Promise.all([
       prisma.offlineCourse.count({
-        where: { OR: [{ title: { contains: search, mode: "insensitive" } }] },
+        where: { OR: [{ title: { contains: search, mode: "insensitive" } }], forKids: !!forKids },
       }),
       prisma.offlineCourse.findMany({
         skip,
         take,
         orderBy: orderBy(sorting),
-        where: { OR: [{ title: { contains: search, mode: "insensitive" } }] },
+        where: { OR: [{ title: { contains: search, mode: "insensitive" } }], forKids: !!forKids },
         include: {
           OfflineCourseInstructors: { select: { id: true, instructor: true } },
           OfflineCourseVideo: true,

@@ -9,9 +9,10 @@ export const QUERY_KEY = {
     search ? `all-instructors/${search}` : "all-instructors",
     page,
   ],
-  allOfflineCourses: (search: string, page: number) => [
+  allOfflineCourses: (search: string, page: number, forKids: boolean) => [
     search ? `all-offline-courses/${search}` : "all-offline-courses",
     page,
+    `${forKids}`,
   ],
   allOnlineCourses: (search: string, page: number) => [
     search ? `all-online-courses/${search}` : "all-online-courses",

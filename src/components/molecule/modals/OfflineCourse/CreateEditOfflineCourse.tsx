@@ -24,6 +24,7 @@ import WhatYouWillLearn from "../../WhatYouWillLearn";
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
 
 type Props = {
+  forKids: boolean;
   isOpen: boolean;
   onClose: () => void;
   onSave: () => void;
@@ -32,7 +33,13 @@ type Props = {
 
 const resolver = classValidatorResolver(CreateEditOfflineCourseValidation);
 
-const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClose, onSave }) => {
+const CreateEditOfflineCourseModal: FC<Props> = ({
+  forKids,
+  offlineCourse,
+  isOpen,
+  onClose,
+  onSave,
+}) => {
   const [localImage, setLocalImage] = useState<Maybe<{ file: File; localUrl: string }>>(null);
   const [fileLoading, setFileLoading] = useState<boolean>(false);
   const toast = useToast();
@@ -43,7 +50,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({ offlineCourse, isOpen, onClos
     setError,
     formState: { errors, isDirty },
   } = useForm<CreateEditOfflineCourseValidation>({
-    defaultValues: generateOfflineCourseDefaultValues(offlineCourse),
+    defaultValues: generateOfflineCourseDefaultValues(offlineCourse, forKids),
     resolver,
   });
   const { append, remove } = useFieldArray({ control, name: "whatYouWillLearn" });

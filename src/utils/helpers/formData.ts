@@ -9,6 +9,7 @@ import { CreateEditOnlineCourseValidation } from "../validation/online-courses";
 
 export const generateOfflineCourseDefaultValues = (
   offlineCourse: OfflineCourse,
+  forKids: boolean,
 ): CreateEditOfflineCourseValidation => ({
   title: !!offlineCourse ? offlineCourse.title : "",
   topic: !!offlineCourse ? offlineCourse.topic : Topic.DEVELOPMENT,
@@ -28,6 +29,7 @@ export const generateOfflineCourseDefaultValues = (
   whatYouWillLearn: !!offlineCourse
     ? offlineCourse.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item }))
     : [],
+  forKids: offlineCourse?.forKids || forKids,
 });
 
 export const generateOnlineCourseDefaultValues = (

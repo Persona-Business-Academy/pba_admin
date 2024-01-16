@@ -12,8 +12,12 @@ import $apiClient from "..";
 import { QueryParams } from "../types";
 
 export class OfflineCourseService {
-  static getAllOfflineCourses(params: QueryParams): Promise<OfflineCoursesListModel> {
-    return $apiClient.get("/offline-courses/list", { params });
+  static getAllOfflineCourses(
+    params: QueryParams & { forKids: boolean },
+  ): Promise<OfflineCoursesListModel> {
+    return $apiClient.get("/offline-courses/list", {
+      params: { ...params, forKids: params.forKids || "" },
+    });
   }
   static getOfflineCourse(id: number): Promise<OfflineCourse> {
     return $apiClient.get(`/offline-courses/${id}`);
