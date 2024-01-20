@@ -4,19 +4,16 @@ import { CreateEditCommentsValidation } from "@/utils/validation/comments";
 import $apiClient from "..";
 
 export class CommentService {
-  static getCourseComments(params: {
-    courseId: number;
-    type: CourseType;
-  }): Promise<CommentsListModel> {
-    return $apiClient.get("/comments/list", { params });
+  static getCourseComments(params: { courseId: number; type: CourseType }) {
+    return $apiClient.get<CommentsListModel>(`/comments/list`, { params });
   }
-  static create(data: CreateEditCommentsValidation): Promise<CommentModel> {
-    return $apiClient.post("/comments/create", data);
+  static create(data: CreateEditCommentsValidation) {
+    return $apiClient.post<CommentModel>("/comments/create", data);
   }
-  static edit(id: number, data: CommentFormData): Promise<CommentModel> {
-    return $apiClient.put(`/comments/edit/${id}`, data);
+  static edit(id: number, data: CommentFormData) {
+    return $apiClient.put<CommentModel>(`/comments/edit/${id}`, data);
   }
-  static delete(id: number): Promise<CommentModel> {
-    return $apiClient.delete(`/comments/delete/${id}`);
+  static delete(id: number) {
+    return $apiClient.delete<CommentModel>(`/comments/delete/${id}`);
   }
 }

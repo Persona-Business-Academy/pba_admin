@@ -22,5 +22,7 @@ export const config = {
     "/instructors/(.*)",
     "/offline-courses",
     "/offline-courses/(.*)",
+    "/offline-courses-for-kids",
+    "/offline-courses-for-kids/(.*)",
   ],
 };
