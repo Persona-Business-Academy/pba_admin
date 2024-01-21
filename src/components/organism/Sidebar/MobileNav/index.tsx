@@ -1,6 +1,7 @@
 import { memo } from "react";
-import { Flex, FlexProps, IconButton, Text } from "@chakra-ui/react";
+import { Flex, FlexProps, HStack, IconButton } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
+import Logo from "/public/icons/persona_logo.svg";
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -17,11 +18,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       borderBottomColor={"gray.100"}
       justifyContent="flex-start"
       {...rest}>
-      <IconButton variant="outline" onClick={onOpen} aria-label="open menu" icon={<FiMenu />} />
-
-      <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Logo
-      </Text>
+      <HStack>
+        <IconButton variant="outline" onClick={onOpen} aria-label="open menu" icon={<FiMenu />} />
+        <Logo />
+      </HStack>
     </Flex>
   );
 };
