@@ -24,16 +24,9 @@ const SidebarContent = ({ onClose, linkItems, ...rest }: SidebarContentProps) =>
   const pathname = usePathname();
 
   const defaultIndex = useMemo(() => {
-    let idx = 0;
-
-    linkItems.some((item, index) => {
-      const isExist = item.children.some(el => pathname === el.href);
-      if (isExist) {
-        idx = index;
-        return true;
-      }
-      return false;
-    });
+    const idx = linkItems.findIndex(item =>
+      item.children.some(el => pathname?.startsWith(el.href)),
+    );
     return [idx];
   }, [linkItems, pathname]);
 
@@ -41,9 +34,10 @@ const SidebarContent = ({ onClose, linkItems, ...rest }: SidebarContentProps) =>
     <Box
       bg="#fff"
       borderRight="1px"
-      borderRightColor={"gray.200"}
+      borderRightColor="gray.200"
       w={{ base: "full", md: 60 }}
       pos="fixed"
+      overflow="auto"
       h="100%"
       {...rest}>
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
@@ -74,10 +68,10 @@ const SidebarContent = ({ onClose, linkItems, ...rest }: SidebarContentProps) =>
                   textDecoration="none"
                   role="group"
                   cursor="pointer"
-                  bg={pathname === subLink.href ? "cyan.400" : "unset"}
-                  color={pathname === subLink.href ? "white" : "unset"}
+                  bg={pathname?.startsWith(subLink.href) ? "cyan.400" : "unset"}
+                  color={pathname?.startsWith(subLink.href) ? "white" : "unset"}
                   _hover={
-                    pathname !== subLink.href
+                    !pathname?.startsWith(subLink.href)
                       ? {
                           bg: "cyan.300",
                           color: "white",

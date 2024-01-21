@@ -5,5 +5,5 @@ export const USERS_ACTIVITY_ROUTE = "/users-activity";
 export const USERS_ANALYTICS_ROUTE = "/users-analytics";
 export const ONLINE_COURSES_ROUTE = "/online-courses";
 export const OFFLINE_COURSES_ROUTE = "/offline-courses";
-export const OFFLINE_COURSES_FOR_KIDS_ROUTE = "/offline-courses-for-kids";
+export const OFFLINE_COURSES_FOR_KIDS_ROUTE = "/kids-offline-courses";
 export const INSTRUCTORS = "/instructors";
