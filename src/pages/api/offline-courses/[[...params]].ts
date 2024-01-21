@@ -79,6 +79,16 @@ export class OfflineCourseHandler {
   removeVideo(@Param("id") id: string) {
     return OfflineCourses.removeVideo(id);
   }
+
+  @Post("/add-timeline")
+  addTimeline(@Body(ValidationPipe) body: any) {
+    return OfflineCourses.addTimeline(body);
+  }
+
+  @Put("/edit-timeline/:id")
+  editTimeline(@Body(ValidationPipe) body: any, @Param("id") id: string) {
+    return OfflineCourses.editTimeline(body, id);
+  }
 }
 
 export default createHandler(OfflineCourseHandler);

@@ -34,10 +34,12 @@ const ChangeInstructorsModal = dynamic(
 );
 const EditCommentsModal = dynamic(() => import("./modals/Comments/EditCommentsModal"));
 const VideosModal = dynamic(() => import("./modals/OfflineCourse/VideosModal"));
+const TimelineModal = dynamic(() => import("./modals/OfflineCourse/TimelineModal"));
 
 export {
   SearchTable,
   OnlineCourseVideos,
+  TimelineModal,
   VideosModal,
   EditCommentsModal,
   CreateEditOnlineCourseModal,

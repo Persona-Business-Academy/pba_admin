@@ -116,4 +116,21 @@ export class OfflineCourses {
       where: { id: +id },
     });
   }
+
+  static addTimeline(data: any) {
+    return prisma.offlineCourseTimeline.create({
+      data,
+    });
+  }
+
+  static editTimeline(data: any, id: string) {
+    if (isNaN(Number(id)) || +id === 0) {
+      throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
+    }
+
+    return prisma.offlineCourseTimeline.update({
+      where: { id: +id },
+      data,
+    });
+  }
 }

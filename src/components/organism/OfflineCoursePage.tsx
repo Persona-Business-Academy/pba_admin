@@ -1,10 +1,19 @@
 "use client";
 import { FC, memo, useCallback, useMemo, useState } from "react";
-import { Button, HStack, useDisclosure } from "@chakra-ui/react";
+import {
+  Button,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { BsThreeDots } from "react-icons/bs";
 import { v4 as uuidv4 } from "uuid";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import {
@@ -20,6 +29,7 @@ import { OFFLINE_COURSES_FOR_KIDS_ROUTE, OFFLINE_COURSES_ROUTE } from "@/utils/c
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { Maybe } from "@/utils/models/common";
 import { OfflineCourse } from "@/utils/models/offlineCourses";
+import TimelineModal from "../molecule/modals/OfflineCourse/TimelineModal";
 
 interface Props {
   forKids: boolean;
@@ -43,6 +53,11 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
   const deleteModal = useDisclosure({
     onClose() {
       if (!!deletableOfflineCourse) setDeletableOfflineCourse(null);
+    },
+  });
+  const timeLineModal = useDisclosure({
+    onClose() {
+      if (!!editableOfflineCourse) setEditableOfflineCourse(null);
     },
   });
 
@@ -129,47 +144,52 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
       columnHelper.accessor("id", {
         id: uuidv4(),
         cell: ({ row }) => (
-          <HStack spacing={2}>
-            <Button
-              colorScheme="blue"
-              onClick={() => {
-                setEditableOfflineCourse(row.original);
-                onOpen();
-              }}>
-              Edit
-            </Button>
-            <Button
-              colorScheme="blue"
-              variant="outline"
-              onClick={() => {
-                setEditableOfflineCourse(row.original);
-                instructorsModal.onOpen();
-              }}>
-              Add Instructors
-            </Button>
-            <Button
-              colorScheme="blue"
-              variant="outline"
-              onClick={() => {
-                setEditableOfflineCourse(row.original);
-                videosModal.onOpen();
-              }}>
-              Add Videos
-            </Button>
-            <Button
-              colorScheme="red"
-              onClick={() => {
-                setDeletableOfflineCourse(row.original);
-                deleteModal.onOpen();
-              }}>
-              Delete
-            </Button>
-          </HStack>
+          <Menu>
+            <MenuButton as={IconButton} icon={<BsThreeDots />} />
+            <MenuList>
+              <MenuItem
+                onClick={() => {
+                  setEditableOfflineCourse(row.original);
+                  onOpen();
+                }}>
+                Edit
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setEditableOfflineCourse(row.original);
+                  instructorsModal.onOpen();
+                }}>
+                Add Instructors
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setEditableOfflineCourse(row.original);
+                  videosModal.onOpen();
+                }}>
+                Add Videos
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setEditableOfflineCourse(row.original);
+                  timeLineModal.onOpen();
+                }}>
+                Add Timeline
+              </MenuItem>
+              <MenuItem
+                color="red"
+                onClick={() => {
+                  setDeletableOfflineCourse(row.original);
+                  deleteModal.onOpen();
+                }}>
+                Delete
+              </MenuItem>
+            </MenuList>
+          </Menu>
         ),
         header: "Actions",
       }),
     ],
-    [columnHelper, deleteModal, forKids, instructorsModal, onOpen, videosModal],
+    [columnHelper, deleteModal, forKids, instructorsModal, onOpen, timeLineModal, videosModal],
   );
 
   return (
@@ -225,6 +245,9 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
           refetch={refetch}
           videos={videos}
         />
+      )}
+      {timeLineModal.isOpen && editableOfflineCourse && (
+        <TimelineModal offlineCourseId={editableOfflineCourse.id} onClose={timeLineModal.onClose} />
       )}
     </>
   );

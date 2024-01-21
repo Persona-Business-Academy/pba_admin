@@ -43,4 +43,11 @@ export class OfflineCourseService {
   static removeVideo(data: { id: number }) {
     return $apiClient.delete<OfflineCourseVideoModel>(`/offline-courses/remove-video/${data.id}`);
   }
+  // timeline
+  static addTimeline(data: any) {
+    return $apiClient.post<any>("/offline-courses/add-timeline", data);
+  }
+  static editTimeline(id: number, data: any) {
+    return $apiClient.put<any>(`/offline-courses/edit-timeline/${id}`, data);
+  }
 }
