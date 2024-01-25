@@ -53,7 +53,6 @@ const GraduationPhotoModal: FC<Props> = ({ offlineCourseId, onClose }) => {
   });
 
   const onSubmit = useCallback(async () => {
-    console.log("object");
     if (localImage?.file && offlineCourse) {
       if (localImage.file.size > 3 * 1024 * 1024) {
         return toast({
