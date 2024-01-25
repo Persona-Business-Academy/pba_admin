@@ -12,7 +12,7 @@ import {
   DeleteOnlineCourseModal,
   SearchTable,
 } from "@/components/molecule";
-import { useDebounce } from "@/hooks/useDebounce";
+import useDebounce from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/utils/constants/common";
 import { ONLINE_COURSES_ROUTE } from "@/utils/constants/routes";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";

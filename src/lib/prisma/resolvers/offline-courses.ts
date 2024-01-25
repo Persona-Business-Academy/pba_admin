@@ -4,7 +4,8 @@ import { ERROR_MESSAGES } from "@/utils/constants/common";
 import {
   AddOfflineCourseVideosValidation,
   AddOfflineInstructorsValidation,
-  CreateEditOfflineCourseValidation,
+  CreateOfflineCourseValidation,
+  EditOfflineCourseValidation,
 } from "@/utils/validation/offline-courses";
 import prisma from "..";
 import { orderBy } from "../utils/common";
@@ -48,7 +49,7 @@ export class OfflineCourses {
     });
   }
 
-  static create(data: CreateEditOfflineCourseValidation) {
+  static create(data: CreateOfflineCourseValidation) {
     const { whatYouWillLearn, ..._data } = data;
 
     return prisma.offlineCourse.create({
@@ -60,17 +61,18 @@ export class OfflineCourses {
     });
   }
 
-  static edit(data: CreateEditOfflineCourseValidation, id: string) {
+  static edit(data: EditOfflineCourseValidation, id: string) {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
     const { whatYouWillLearn, ..._data } = data;
+
     //aws
     return prisma.offlineCourse.update({
       where: { id: +id },
       data: {
         ..._data,
-        whatYouWillLearn: whatYouWillLearn.map(item => item.value),
+        ...(whatYouWillLearn ? { whatYouWillLearn: whatYouWillLearn.map(item => item.value) } : {}),
       },
     });
   }

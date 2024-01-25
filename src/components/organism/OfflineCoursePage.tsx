@@ -20,10 +20,11 @@ import {
   ChangeInstructorsModal,
   CreateEditOfflineCourseModal,
   DeleteOfflineCourseModal,
+  GraduationPhotoModal,
   SearchTable,
   VideosModal,
 } from "@/components/molecule";
-import { useDebounce } from "@/hooks/useDebounce";
+import useDebounce from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/utils/constants/common";
 import { OFFLINE_COURSES_FOR_KIDS_ROUTE, OFFLINE_COURSES_ROUTE } from "@/utils/constants/routes";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
@@ -56,6 +57,11 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
     },
   });
   const timeLineModal = useDisclosure({
+    onClose() {
+      if (!!editableOfflineCourse) setEditableOfflineCourse(null);
+    },
+  });
+  const graduationPhotoModal = useDisclosure({
     onClose() {
       if (!!editableOfflineCourse) setEditableOfflineCourse(null);
     },
@@ -143,7 +149,7 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
       }),
       columnHelper.accessor("id", {
         id: uuidv4(),
-        cell: ({ row }) => (
+        cell: ({ row, getValue }) => (
           <Menu>
             <MenuButton as={IconButton} icon={<BsThreeDots />} />
             <MenuList>
@@ -176,6 +182,21 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
                 Add Timeline
               </MenuItem>
               <MenuItem
+                as={Link}
+                href={`${
+                  forKids ? OFFLINE_COURSES_FOR_KIDS_ROUTE : OFFLINE_COURSES_ROUTE
+                }/${getValue()}/pdf`}>
+                Attach Pdf
+              </MenuItem>
+              <MenuItem
+                color="green"
+                onClick={() => {
+                  setEditableOfflineCourse(row.original);
+                  graduationPhotoModal.onOpen();
+                }}>
+                Add graduation photo
+              </MenuItem>
+              <MenuItem
                 color="red"
                 onClick={() => {
                   setDeletableOfflineCourse(row.original);
@@ -189,7 +210,16 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
         header: "Actions",
       }),
     ],
-    [columnHelper, deleteModal, forKids, instructorsModal, onOpen, timeLineModal, videosModal],
+    [
+      columnHelper,
+      deleteModal,
+      forKids,
+      graduationPhotoModal,
+      instructorsModal,
+      onOpen,
+      timeLineModal,
+      videosModal,
+    ],
   );
 
   return (
@@ -248,6 +278,12 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
       )}
       {timeLineModal.isOpen && editableOfflineCourse && (
         <TimelineModal offlineCourseId={editableOfflineCourse.id} onClose={timeLineModal.onClose} />
+      )}
+      {graduationPhotoModal.isOpen && editableOfflineCourse && (
+        <GraduationPhotoModal
+          offlineCourseId={editableOfflineCourse.id}
+          onClose={graduationPhotoModal.onClose}
+        />
       )}
     </>
   );

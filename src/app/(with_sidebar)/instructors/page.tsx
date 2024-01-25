@@ -12,7 +12,7 @@ import {
   DeleteInstructorModal,
   SearchTable,
 } from "@/components/molecule";
-import { useDebounce } from "@/hooks/useDebounce";
+import useDebounce from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/utils/constants/common";
 import { INSTRUCTORS } from "@/utils/constants/routes";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";

@@ -4,13 +4,13 @@ import { InstructorType } from "../models/instructors";
 import { OfflineCourse } from "../models/offlineCourses";
 import { OnlineCourse } from "../models/onlineCourses";
 import { CreateEditInstructorValidation } from "../validation/instructors";
-import { CreateEditOfflineCourseValidation } from "../validation/offline-courses";
+import { CreateOfflineCourseValidation } from "../validation/offline-courses";
 import { CreateEditOnlineCourseValidation } from "../validation/online-courses";
 
 export const generateOfflineCourseDefaultValues = (
   offlineCourse: OfflineCourse,
   forKids: boolean,
-): CreateEditOfflineCourseValidation => ({
+): CreateOfflineCourseValidation => ({
   title: !!offlineCourse ? offlineCourse.title : "",
   topic: !!offlineCourse ? offlineCourse.topic : Topic.DEVELOPMENT,
   subTitle: !!offlineCourse ? offlineCourse.subTitle : "",

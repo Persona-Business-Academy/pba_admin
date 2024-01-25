@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useDebounce = (text: string, delay: number = 300) => {
+const useDebounce = (text: string, delay: number = 300) => {
   const [debounceText, setDebounceText] = useState<string>(text);
 
   useEffect(() => {
@@ -13,3 +13,5 @@ export const useDebounce = (text: string, delay: number = 300) => {
 
   return debounceText;
 };
+
+export default useDebounce;

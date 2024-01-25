@@ -18,7 +18,7 @@ import {
 } from "@/utils/helpers/uploadFile";
 import { Maybe } from "@/utils/models/common";
 import { OfflineCourse } from "@/utils/models/offlineCourses";
-import { CreateEditOfflineCourseValidation } from "@/utils/validation/offline-courses";
+import { CreateOfflineCourseValidation } from "@/utils/validation/offline-courses";
 import WhatYouWillLearn from "../../WhatYouWillLearn";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
@@ -31,7 +31,7 @@ type Props = {
   offlineCourse: Maybe<OfflineCourse>;
 };
 
-const resolver = classValidatorResolver(CreateEditOfflineCourseValidation);
+const resolver = classValidatorResolver(CreateOfflineCourseValidation);
 
 const CreateEditOfflineCourseModal: FC<Props> = ({
   forKids,
@@ -49,7 +49,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({
     handleSubmit,
     setError,
     formState: { errors, isDirty },
-  } = useForm<CreateEditOfflineCourseValidation>({
+  } = useForm<CreateOfflineCourseValidation>({
     defaultValues: generateOfflineCourseDefaultValues(offlineCourse, forKids),
     resolver,
   });
@@ -63,7 +63,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({
   const { mutate, isLoading } = useMutation<
     number,
     { message: string },
-    CreateEditOfflineCourseValidation
+    CreateOfflineCourseValidation
   >(
     !!offlineCourse
       ? data => OfflineCourseService.editOfflineCourse(offlineCourse.id, data)
@@ -79,7 +79,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({
 
   const removeCoverPhoto = useCallback(() => setLocalImage(null), []);
 
-  const onSubmit: SubmitHandler<CreateEditOfflineCourseValidation> = useCallback(
+  const onSubmit: SubmitHandler<CreateOfflineCourseValidation> = useCallback(
     async data => {
       try {
         if (!validateAgeLimit(data.ageLimit)) {

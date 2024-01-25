@@ -19,7 +19,8 @@ import { ERROR_MESSAGES } from "@/utils/constants/common";
 import {
   AddOfflineCourseVideosValidation,
   AddOfflineInstructorsValidation,
-  CreateEditOfflineCourseValidation,
+  CreateOfflineCourseValidation,
+  EditOfflineCourseValidation,
 } from "@/utils/validation/offline-courses";
 
 @Catch(exceptionHandler)
@@ -46,12 +47,12 @@ export class OfflineCourseHandler {
   }
 
   @Post("/create")
-  create(@Body(ValidationPipe) body: CreateEditOfflineCourseValidation) {
+  create(@Body(ValidationPipe) body: CreateOfflineCourseValidation) {
     return OfflineCourses.create(body);
   }
 
   @Put("/edit/:id")
-  edit(@Body(ValidationPipe) body: CreateEditOfflineCourseValidation, @Param("id") id: string) {
+  edit(@Body(ValidationPipe) body: EditOfflineCourseValidation, @Param("id") id: string) {
     return OfflineCourses.edit(body, id);
   }
 

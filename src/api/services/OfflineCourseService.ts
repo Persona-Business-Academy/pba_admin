@@ -6,7 +6,8 @@ import {
 import {
   AddOfflineCourseVideosValidation,
   AddOfflineInstructorsValidation,
-  CreateEditOfflineCourseValidation,
+  CreateOfflineCourseValidation,
+  EditOfflineCourseValidation,
 } from "@/utils/validation/offline-courses";
 import $apiClient from "..";
 import { QueryParams } from "../types";
@@ -20,10 +21,10 @@ export class OfflineCourseService {
   static getOfflineCourse(id: number) {
     return $apiClient.get<OfflineCourse>(`/offline-courses/${id}`);
   }
-  static createOfflineCourse(data: CreateEditOfflineCourseValidation) {
+  static createOfflineCourse(data: CreateOfflineCourseValidation) {
     return $apiClient.post<number>("/offline-courses/create", data);
   }
-  static editOfflineCourse(id: number, data: CreateEditOfflineCourseValidation) {
+  static editOfflineCourse(id: number, data: EditOfflineCourseValidation) {
     return $apiClient.put<number>(`/offline-courses/edit/${id}`, data);
   }
   static deleteOfflineCourse(id: number) {

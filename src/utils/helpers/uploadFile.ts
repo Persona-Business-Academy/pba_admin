@@ -10,9 +10,6 @@ const uploadDocumentWithSignerToAWS = async (options: UploadFileToAwsReq) => {
     const extension = file.name.split(".").pop();
     let contentType = "application/" + file.type.split("/").slice(-1)[0];
 
-    if (contentType === "application/pdf") {
-      contentType = "octet-stream";
-    }
     if (contentType === "application/svg+xml") {
       contentType = "image/svg+xml";
     }
@@ -78,13 +75,19 @@ export const generateOnlineCourseVideoName = (id: number, levelId: number, dayId
   `OnlineCourses/OnlineCourse-${id}/Level-${levelId}/Day-${dayId}/Video-${Date.now()}`;
 
 export const generateOfflineCourseVideoName = (id: number) =>
-  `OfflineCourses/OfflineCourse-${id}/About-${Date.now()}`;
+  `OfflineCourses/OfflineCourse-${id}/About/${Date.now()}`;
 
 export const generateOnlineCourseCoverPhotoName = (id: string) =>
-  `OnlineCourses/OnlineCourse-${id}/CoverPhoto-${Date.now()}`;
+  `OnlineCourses/OnlineCourse-${id}/CoverPhoto/${Date.now()}`;
 
 export const generateInstructorAvatarName = (id: string) =>
-  `Instructors/Instructor-${id}/CoverPhoto-${Date.now()}`;
+  `Instructors/Instructor-${id}/CoverPhoto/${Date.now()}`;
 
 export const generateOfflineCourseCoverPhotoName = (id: string) =>
-  `OfflineCourses/OfflineCourse-${id}/CoverPhoto-${Date.now()}`;
+  `OfflineCourses/OfflineCourse-${id}/CoverPhoto/${Date.now()}`;
+
+export const generateOfflineCourseGraduationPhotoName = (id: string) =>
+  `OfflineCourses/OfflineCourse-${id}/GraduationPhoto/${Date.now()}`;
+
+export const generateOfflineCoursePdfName = (id: string) =>
+  `OfflineCourses/OfflineCourse-${id}/pdf/${Date.now()}`;

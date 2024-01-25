@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { UserService } from "@/api/services/UserService";
 import { SearchTable } from "@/components/molecule";
-import { useDebounce } from "@/hooks/useDebounce";
+import useDebounce from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/utils/constants/common";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { UserModel } from "@/utils/models/user";

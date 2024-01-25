@@ -1,5 +1,13 @@
 import { Topic } from "@prisma/client";
-import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsString, Matches } from "class-validator";
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Matches,
+} from "class-validator";
 import type {
   CurrencyType,
   LanguageType,
@@ -7,7 +15,7 @@ import type {
   WhatYouWillLearnType,
 } from "@/utils/models/common";
 
-export class CreateEditOfflineCourseValidation {
+export class CreateOfflineCourseValidation {
   @IsString()
   @IsNotEmpty({ message: "Title is required" })
   title: string;
@@ -73,6 +81,85 @@ export class CreateEditOfflineCourseValidation {
 
   @IsBoolean()
   forKids: boolean;
+}
+
+export class EditOfflineCourseValidation {
+  @IsString()
+  @IsOptional()
+  title?: string;
+
+  @IsString()
+  @IsOptional()
+  subTitle?: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  @IsString()
+  @IsOptional()
+  topic?: Topic;
+
+  @IsString()
+  @IsOptional()
+  language?: LanguageType;
+
+  @IsString()
+  @Matches(/[0-9]+-[0-9]+/i, { message: "Invalid age limit" })
+  @IsOptional()
+  ageLimit?: string;
+
+  @IsNumber()
+  @IsOptional()
+  totalDuration?: number;
+
+  @IsString()
+  @IsOptional()
+  courseLevel?: SkillLevelType;
+
+  @IsNumber()
+  @IsOptional()
+  graduatedStudentsCount?: number;
+
+  @IsNumber()
+  @IsOptional()
+  enrolledStudentsCount?: number;
+
+  @IsNumber()
+  @IsOptional()
+  lessonsCount?: number;
+
+  @IsNumber()
+  @IsOptional()
+  price?: number;
+
+  @IsString()
+  @IsOptional()
+  currency?: CurrencyType;
+
+  @IsString()
+  @IsOptional()
+  coverPhoto?: string;
+
+  @IsString()
+  @IsOptional()
+  mediaId?: string;
+
+  @IsArray()
+  @IsOptional()
+  whatYouWillLearn?: WhatYouWillLearnType[];
+
+  @IsBoolean()
+  @IsOptional()
+  forKids?: boolean;
+
+  @IsString()
+  @IsOptional()
+  graduationPhoto?: string;
+
+  @IsString()
+  @IsOptional()
+  pdf?: string;
 }
 
 export class AddOfflineInstructorsValidation {
