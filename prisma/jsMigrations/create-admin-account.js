@@ -18,7 +18,7 @@ const migration = async () => {
 };
 migration().then(
   () => {
-    console.log("success");
+    console.log("Success");
     process.exit(1);
   },
   e => {
@@ -27,4 +27,4 @@ migration().then(
   },
 );
 
-// @updatedAt @db.Timestamp(0)
+
