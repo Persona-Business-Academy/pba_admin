@@ -2,6 +2,7 @@ import { BadRequestException } from "next-api-decorators";
 import { SortingType } from "@/api/types";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
 import {
+  AddEditOfflineCourseTimelineValidation,
   AddOfflineCourseVideosValidation,
   AddOfflineInstructorsValidation,
   CreateOfflineCourseValidation,
@@ -45,6 +46,7 @@ export class OfflineCourses {
       include: {
         OfflineCourseInstructors: { select: { id: true, instructor: true } },
         OfflineCourseVideo: true,
+        timeline: true,
       },
     });
   }
@@ -119,20 +121,25 @@ export class OfflineCourses {
     });
   }
 
-  static addTimeline(data: any) {
+  static addTimeline(body: AddEditOfflineCourseTimelineValidation) {
+    const data = {
+      offlineCourseId: body.offlineCourseId,
+      startDates: body.startDates.map(({ value }) => value),
+    };
+
     return prisma.offlineCourseTimeline.create({
       data,
     });
   }
 
-  static editTimeline(data: any, id: string) {
+  static editTimeline(body: AddEditOfflineCourseTimelineValidation, id: string) {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
     return prisma.offlineCourseTimeline.update({
-      where: { id: +id },
-      data,
+      where: { id: +id, offlineCourseId: body.offlineCourseId },
+      data: { startDates: body.startDates.map(({ value }) => value) },
     });
   }
 }

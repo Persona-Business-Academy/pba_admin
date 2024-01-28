@@ -24,5 +24,6 @@ export type CurrencyType = Currency;
 export type SkillLevelType = SkillLevel;
 
 export type WhatYouWillLearnType = { id: string; value: string };
+export type TimelineType = { id: string; value: Date };
 
 export type CourseType = "offline" | "online";

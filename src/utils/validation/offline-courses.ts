@@ -12,6 +12,7 @@ import type {
   CurrencyType,
   LanguageType,
   SkillLevelType,
+  TimelineType,
   WhatYouWillLearnType,
 } from "@/utils/models/common";
 
@@ -192,4 +193,13 @@ export class AddOfflineCourseVideosValidation {
   @IsNotEmpty({ message: "Offline Course is required" })
   @IsNumber()
   offlineCourseId: number;
+}
+
+export class AddEditOfflineCourseTimelineValidation {
+  @IsNotEmpty({ message: "Offline Course is required" })
+  @IsNumber()
+  offlineCourseId: number;
+
+  @IsArray()
+  startDates: TimelineType[];
 }

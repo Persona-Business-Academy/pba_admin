@@ -4,6 +4,7 @@ import {
   OfflineCourseVideoModel,
 } from "@/utils/models/offlineCourses";
 import {
+  AddEditOfflineCourseTimelineValidation,
   AddOfflineCourseVideosValidation,
   AddOfflineInstructorsValidation,
   CreateOfflineCourseValidation,
@@ -45,10 +46,10 @@ export class OfflineCourseService {
     return $apiClient.delete<OfflineCourseVideoModel>(`/offline-courses/remove-video/${data.id}`);
   }
   // timeline
-  static addTimeline(data: any) {
+  static addTimeline(data: AddEditOfflineCourseTimelineValidation) {
     return $apiClient.post<any>("/offline-courses/add-timeline", data);
   }
-  static editTimeline(id: number, data: any) {
+  static editTimeline(id: number, data: AddEditOfflineCourseTimelineValidation) {
     return $apiClient.put<any>(`/offline-courses/edit-timeline/${id}`, data);
   }
 }

@@ -109,7 +109,7 @@ const Comments: FC<Props> = ({ courseId, courseType }) => {
             {data.map(item => {
               const { id, headline, text, author, authorAdmin, userPicture } = item;
               const creator = author || authorAdmin;
-              const avatar = userPicture || author?.avatar;
+              const avatar = author?.avatar || userPicture;
               return (
                 <ListItem
                   key={id}

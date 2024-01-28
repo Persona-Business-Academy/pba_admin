@@ -163,7 +163,7 @@ model OfflineCourse {
   updatedAt                DateTime                   @updatedAt @db.Timestamp(0)
   OfflineCourseInstructors OfflineCourseInstructors[]
   OfflineCourseVideo       OfflineCourseVideo[]
-  timeline                 OfflineCourseTimeline[]
+  timeline                 OfflineCourseTimeline?
   Applicant                Applicant[]
 }
 
@@ -189,7 +189,7 @@ model OfflineCourseInstructors {
 
 model OfflineCourseTimeline {
   id              Int           @id @default(autoincrement())
-  offlineCourseId Int
+  offlineCourseId Int           @unique
   startDates      DateTime[]
   offlineCourse   OfflineCourse @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
 }

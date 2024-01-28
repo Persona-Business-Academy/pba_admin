@@ -17,6 +17,7 @@ import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
 import { OfflineCourses } from "@/lib/prisma/resolvers";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
 import {
+  AddEditOfflineCourseTimelineValidation,
   AddOfflineCourseVideosValidation,
   AddOfflineInstructorsValidation,
   CreateOfflineCourseValidation,
@@ -82,12 +83,15 @@ export class OfflineCourseHandler {
   }
 
   @Post("/add-timeline")
-  addTimeline(@Body(ValidationPipe) body: any) {
+  addTimeline(@Body(ValidationPipe) body: AddEditOfflineCourseTimelineValidation) {
     return OfflineCourses.addTimeline(body);
   }
 
   @Put("/edit-timeline/:id")
-  editTimeline(@Body(ValidationPipe) body: any, @Param("id") id: string) {
+  editTimeline(
+    @Body(ValidationPipe) body: AddEditOfflineCourseTimelineValidation,
+    @Param("id") id: string,
+  ) {
     return OfflineCourses.editTimeline(body, id);
   }
 }
