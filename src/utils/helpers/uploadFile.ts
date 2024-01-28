@@ -72,22 +72,41 @@ export const uploadDocumentToAWS = async (
 };
 
 export const generateOnlineCourseVideoName = (id: number, levelId: number, dayId: number) =>
-  `OnlineCourses/OnlineCourse-${id}/Level-${levelId}/Day-${dayId}/Video-${Date.now()}`;
-
-export const generateOfflineCourseVideoName = (id: number) =>
-  `OfflineCourses/OfflineCourse-${id}/About/${Date.now()}`;
+  `OnlineCourses/OnlineCourse-${id}/Level-${levelId}/Day-${dayId}/Video/${Date.now()}`;
 
 export const generateOnlineCourseCoverPhotoName = (id: string) =>
   `OnlineCourses/OnlineCourse-${id}/CoverPhoto/${Date.now()}`;
 
-export const generateInstructorAvatarName = (id: string) =>
-  `Instructors/Instructor-${id}/CoverPhoto/${Date.now()}`;
+export const generateFileNames = (
+  id: string,
+  type:
+    | "OfflineCourseAbout"
+    | "InstructorAvatar"
+    | "OfflineCourseCoverPhoto"
+    | "OfflineCourseWhatYouWillLearnPhotoName"
+    | "OfflineCourseGraduationPhoto"
+    | "OfflineCoursePdf"
+    | "Comments",
+) => {
+  const offlineCoursePrefix = `OfflineCourses/OfflineCourse-${id}`;
+  const instructorPrefix = `Instructors/Instructor-${id}`;
 
-export const generateOfflineCourseCoverPhotoName = (id: string) =>
-  `OfflineCourses/OfflineCourse-${id}/CoverPhoto/${Date.now()}`;
-
-export const generateOfflineCourseGraduationPhotoName = (id: string) =>
-  `OfflineCourses/OfflineCourse-${id}/GraduationPhoto/${Date.now()}`;
-
-export const generateOfflineCoursePdfName = (id: string) =>
-  `OfflineCourses/OfflineCourse-${id}/pdf/${Date.now()}`;
+  switch (type) {
+    case "OfflineCourseAbout":
+      return `${offlineCoursePrefix}/About/${Date.now()}`;
+    case "InstructorAvatar":
+      return `${instructorPrefix}/Avatar/${Date.now()}`;
+    case "OfflineCourseCoverPhoto":
+      return `${offlineCoursePrefix}/CoverPhoto/${Date.now()}`;
+    case "OfflineCourseWhatYouWillLearnPhotoName":
+      return `${offlineCoursePrefix}/WhatYouWillLearnPhoto/${Date.now()}`;
+    case "OfflineCourseGraduationPhoto":
+      return `${offlineCoursePrefix}/GraduationPhoto/${Date.now()}`;
+    case "OfflineCoursePdf":
+      return `${offlineCoursePrefix}/pdf/${Date.now()}`;
+    case "Comments":
+      return `Comments/Comment-${id}/${Date.now()}`;
+    default:
+      return "";
+  }
+};

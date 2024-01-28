@@ -7,7 +7,7 @@ import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import { UploadFile } from "@/components/atom";
 import { useOfflineCourse } from "@/contexts/OfflineCourseContext";
 import { generateAWSUrl } from "@/utils/helpers/common";
-import { generateOfflineCoursePdfName, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
+import { generateFileNames, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
 import { Maybe, UploadFileToAwsRes } from "@/utils/models/common";
 import { EditOfflineCourseValidation } from "@/utils/validation/offline-courses";
 
@@ -26,7 +26,7 @@ export default function OfflineCoursePdf() {
       try {
         setUploading(true);
         if (!files?.length) return;
-        const nameForAWS = generateOfflineCoursePdfName(offlineCourse.mediaId);
+        const nameForAWS = generateFileNames(offlineCourse.mediaId, "OfflineCoursePdf");
 
         const res = await uploadDocumentToAWS({
           file: files[0],

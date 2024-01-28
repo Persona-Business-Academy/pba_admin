@@ -8,6 +8,7 @@ import FormTextarea from "./FormTextarea";
 import Day from "./OnlineCourseItem/Day";
 import Level from "./OnlineCourseItem/Level";
 import Video from "./OnlineCourseItem/Video";
+import StarRating from "./StarRating";
 import UploadFile from "./UploadFile";
 
 const VideoPreview = dynamic(() => import("./VideoPreview"));
@@ -23,4 +24,5 @@ export {
   VideoPreview,
   CustomSelect,
   FormTextarea,
+  StarRating
 };

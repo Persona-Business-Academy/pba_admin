@@ -11,7 +11,7 @@ import { FormInput, FormTextarea, UploadFile } from "@/components/atom";
 import { colors } from "@/utils/constants/chakra";
 import { generateAWSUrl } from "@/utils/helpers/common";
 import { generateInstructorDefaultValues } from "@/utils/helpers/formData";
-import { generateInstructorAvatarName, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
+import { generateFileNames, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
 import { Maybe } from "@/utils/models/common";
 import { InstructorType } from "@/utils/models/instructors";
 import { CreateEditInstructorValidation } from "@/utils/validation/instructors";
@@ -79,7 +79,7 @@ const CreateEditInstructorModal: FC<Props> = ({ instructor, isOpen, onClose, onS
           setFileLoading(true);
           const res = await uploadDocumentToAWS({
             file: localImage.file,
-            fileName: generateInstructorAvatarName(data.mediaId),
+            fileName: generateFileNames(data.mediaId, "InstructorAvatar"),
           });
           mutate({ ...data, avatar: res.key });
         } else {

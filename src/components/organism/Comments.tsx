@@ -10,6 +10,7 @@ import {
   ListItem,
   Spinner,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -17,10 +18,11 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { CommentService } from "@/api/services/CommentService";
 import { generateAWSUrl } from "@/utils/helpers/common";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
+import { generateFileNames, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
 import { CommentFormData, CommentModel } from "@/utils/models/comments";
 import { CourseType, Maybe } from "@/utils/models/common";
-import { CreateEditCommentsValidation } from "@/utils/validation/comments";
-import { Button, FormInput, FormTextarea } from "../atom";
+import { CreateCommentsValidation, EditCommentsValidation } from "@/utils/validation/comments";
+import { Button, FormInput, FormTextarea, UploadFile } from "../atom";
 import EditCommentsModal from "../molecule/modals/Comments/EditCommentsModal";
 
 interface Props {
@@ -30,6 +32,7 @@ interface Props {
 
 const Comments: FC<Props> = ({ courseId, courseType }) => {
   const [selectedComment, setSelectedComment] = useState<Maybe<CommentModel>>(null);
+  const toast = useToast();
 
   const { data, refetch, isLoading } = useQuery({
     queryKey: QUERY_KEY.comments(courseId, courseType),
@@ -39,8 +42,14 @@ const Comments: FC<Props> = ({ courseId, courseType }) => {
   const { mutate: createComment } = useMutation<
     CommentModel,
     { message: string },
-    CreateEditCommentsValidation
+    CreateCommentsValidation
   >(CommentService.create, { onSuccess: () => refetch() });
+
+  const { mutate: editComment } = useMutation<
+    CommentModel,
+    { message: string },
+    { id: number; data: EditCommentsValidation }
+  >(CommentService.edit, { onSuccess: () => refetch() });
 
   const { mutate: deleteComment } = useMutation<CommentModel, { message: string }, number>(
     CommentService.delete,
@@ -62,6 +71,28 @@ const Comments: FC<Props> = ({ courseId, courseType }) => {
     [courseId, courseType, createComment, reset],
   );
 
+  const uploadPhoto = useCallback(
+    async (files: Maybe<FileList>, commentId: number) => {
+      try {
+        const file = files?.item(0);
+        if (file) {
+          if (file.size > 3 * 1024 * 1024) {
+            return toast({
+              title: "File size too large. Maximum size allowed is 3mb",
+              status: "warning",
+            });
+          }
+          const res = await uploadDocumentToAWS({
+            file,
+            fileName: generateFileNames(commentId.toString(), "Comments"),
+          });
+          editComment({ id: commentId, data: { userPicture: res.key } });
+        }
+      } catch {}
+    },
+    [editComment, toast],
+  );
+
   return (
     <Center>
       <VStack w={500}>
@@ -76,9 +107,9 @@ const Comments: FC<Props> = ({ courseId, courseType }) => {
         ) : (
           <List spacing={3}>
             {data.map(item => {
-              const { id, headline, text, author, authorAdmin } = item;
+              const { id, headline, text, author, authorAdmin, userPicture } = item;
               const creator = author || authorAdmin;
-              const avatar = author?.avatar;
+              const avatar = userPicture || author?.avatar;
               return (
                 <ListItem
                   key={id}
@@ -110,6 +141,11 @@ const Comments: FC<Props> = ({ courseId, courseType }) => {
                       onClick={() => deleteComment(id)}
                     />
                   </HStack>
+                  <UploadFile
+                    content={<Text>Update profile pic</Text>}
+                    changeHandler={files => uploadPhoto(files, id)}
+                    accept="image/*"
+                  />
                 </ListItem>
               );
             })}

@@ -20,7 +20,7 @@ type Props = {
   onClose: () => void;
 };
 
-const GraduationPhotoModal: FC<Props> = ({ offlineCourseId, onClose }) => {
+const WhatYouWillLearnPhotoModal: FC<Props> = ({ offlineCourseId, onClose }) => {
   const [localImage, setLocalImage] = useState<Maybe<{ file: File; localUrl: string }>>(null);
   const [photo, setPhoto] = useState<string>();
   const [fileLoading, setFileLoading] = useState<boolean>(false);
@@ -60,23 +60,26 @@ const GraduationPhotoModal: FC<Props> = ({ offlineCourseId, onClose }) => {
       setFileLoading(true);
       const res = await uploadDocumentToAWS({
         file: localImage.file,
-        fileName: generateFileNames(offlineCourse.mediaId, "OfflineCourseGraduationPhoto"),
+        fileName: generateFileNames(
+          offlineCourse.mediaId,
+          "OfflineCourseWhatYouWillLearnPhotoName",
+        ),
       });
-      mutate({ graduationPhoto: res.key });
+      mutate({ whatYouWillLearnPhoto: res.key });
     }
   }, [localImage?.file, mutate, offlineCourse, toast]);
 
   useEffect(() => {
-    if (offlineCourse?.graduationPhoto) {
-      setPhoto(offlineCourse.graduationPhoto);
+    if (offlineCourse?.whatYouWillLearnPhoto) {
+      setPhoto(offlineCourse.whatYouWillLearnPhoto);
     }
-  }, [offlineCourse?.graduationPhoto]);
+  }, [offlineCourse?.whatYouWillLearnPhoto]);
 
   return (
     <SharedModal
       isOpen
       size="2xl"
-      title={"Add graduation photo"}
+      title={"Add photo"}
       action={onSubmit}
       actionButtonText={"Save"}
       onClose={onClose}
@@ -125,4 +128,4 @@ const GraduationPhotoModal: FC<Props> = ({ offlineCourseId, onClose }) => {
   );
 };
 
-export default memo(GraduationPhotoModal);
+export default memo(WhatYouWillLearnPhotoModal);

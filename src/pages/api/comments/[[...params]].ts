@@ -17,9 +17,8 @@ import { exceptionHandler } from "@/lib/prisma/error";
 import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
 import { Comment } from "@/lib/prisma/resolvers";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
-import type { CommentFormData } from "@/utils/models/comments";
 import type { CourseType } from "@/utils/models/common";
-import { CreateEditCommentsValidation } from "@/utils/validation/comments";
+import { CreateCommentsValidation, EditCommentsValidation } from "@/utils/validation/comments";
 
 @Catch(exceptionHandler)
 @AuthMiddleware()
@@ -39,14 +38,14 @@ export class CommentHandler {
 
   @Post("/create")
   create(
-    @Body(ValidationPipe) body: CreateEditCommentsValidation,
+    @Body(ValidationPipe) body: CreateCommentsValidation,
     @CurrentUser() user: NonNullable<User>,
   ) {
     return Comment.create(body, user);
   }
 
   @Put("/edit/:id")
-  edit(@Body(ValidationPipe) body: CommentFormData, @Param("id") id: string) {
+  edit(@Body(ValidationPipe) body: EditCommentsValidation, @Param("id") id: string) {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }

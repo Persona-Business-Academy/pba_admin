@@ -25,7 +25,7 @@ const EditCommentsModal: FC<Props> = ({ isOpen, comment, onClose, onSave }) => {
   });
 
   const { mutate, isLoading } = useMutation<CommentModel, { message: string }, CommentFormData>(
-    data => CommentService.edit(comment.id, data),
+    data => CommentService.edit({ id: comment.id, data }),
     { onSuccess: () => onSave() },
   );
 

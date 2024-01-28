@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import type { CourseType } from "../models/common";
 
-export class CreateEditCommentsValidation {
+export class CreateCommentsValidation {
   @IsString()
   @IsNotEmpty({ message: "Headline is required" })
   headline: string;
@@ -17,4 +17,26 @@ export class CreateEditCommentsValidation {
   @IsString()
   @IsNotEmpty({ message: "Course is required" })
   courseType: CourseType;
+}
+
+export class EditCommentsValidation {
+  @IsString()
+  @IsOptional()
+  headline?: string;
+
+  @IsString()
+  @IsOptional()
+  text?: string;
+
+  @IsString()
+  @IsOptional()
+  courseId?: number;
+
+  @IsString()
+  @IsOptional()
+  courseType?: CourseType;
+
+  @IsString()
+  @IsOptional()
+  userPicture?: string;
 }

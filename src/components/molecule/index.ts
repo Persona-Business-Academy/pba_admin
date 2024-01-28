@@ -36,10 +36,14 @@ const EditCommentsModal = dynamic(() => import("./modals/Comments/EditCommentsMo
 const VideosModal = dynamic(() => import("./modals/OfflineCourse/VideosModal"));
 const TimelineModal = dynamic(() => import("./modals/OfflineCourse/TimelineModal"));
 const GraduationPhotoModal = dynamic(() => import("./modals/OfflineCourse/GraduationPhotoModal"));
+const WhatYouWillLearnPhotoModal = dynamic(
+  () => import("./modals/OfflineCourse/WhatYouWillLearnPhotoModal"),
+);
 
 export {
   SearchTable,
   OnlineCourseVideos,
+  WhatYouWillLearnPhotoModal,
   GraduationPhotoModal,
   TimelineModal,
   VideosModal,

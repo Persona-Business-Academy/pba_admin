@@ -7,15 +7,12 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Controller, SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
-import { CustomSelect, FormInput, FormTextarea, UploadFile } from "@/components/atom";
+import { CustomSelect, FormInput, FormTextarea, StarRating, UploadFile } from "@/components/atom";
 import { colors } from "@/utils/constants/chakra";
 import { CURRENCIES, LANGUAGES, SKILL_LEVELS, TOPICS } from "@/utils/constants/courses";
 import { generateAWSUrl, validateAgeLimit } from "@/utils/helpers/common";
 import { generateOfflineCourseDefaultValues } from "@/utils/helpers/formData";
-import {
-  generateOfflineCourseCoverPhotoName,
-  uploadDocumentToAWS,
-} from "@/utils/helpers/uploadFile";
+import { generateFileNames, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
 import { Maybe } from "@/utils/models/common";
 import { OfflineCourse } from "@/utils/models/offlineCourses";
 import { CreateOfflineCourseValidation } from "@/utils/validation/offline-courses";
@@ -96,7 +93,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({
           setFileLoading(true);
           const res = await uploadDocumentToAWS({
             file: localImage.file,
-            fileName: generateOfflineCourseCoverPhotoName(data.mediaId),
+            fileName: generateFileNames(data.mediaId, "OfflineCourseCoverPhoto"),
           });
 
           reqData.coverPhoto = res.key;
@@ -112,7 +109,7 @@ const CreateEditOfflineCourseModal: FC<Props> = ({
 
   return (
     <SharedModal
-      size="2xl"
+      size="4xl"
       isOpen={isOpen}
       title={`${!!offlineCourse ? "Edit" : "Create"} Offline Course`}
       action={handleSubmit(onSubmit)}
@@ -373,7 +370,6 @@ const CreateEditOfflineCourseModal: FC<Props> = ({
             />
           )}
         />
-
         <Controller
           name="lessonsCount"
           control={control}
@@ -390,6 +386,13 @@ const CreateEditOfflineCourseModal: FC<Props> = ({
               formErrorMessage={errors[name]?.message}
               inputProps={{ min: 0 }}
             />
+          )}
+        />
+        <Controller
+          name="rating"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <StarRating name={name} formLabelName="Rating" rating={value} onChange={onChange} />
           )}
         />
       </HStack>

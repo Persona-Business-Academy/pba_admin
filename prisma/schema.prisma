@@ -105,6 +105,7 @@ model CourseComment {
   id              Int            @id @default(autoincrement())
   headline        String
   text            String
+  userPicture     String?
   authorId        Int?
   authorAdminId   Int?
   onlineCourseId  Int?
@@ -155,6 +156,7 @@ model OfflineCourse {
   price                    Float
   currency                 Currency
   whatYouWillLearn         String[]
+  whatYouWillLearnPhoto    String                     @default("")
   benefits                 Json                       @db.Json
   comments                 CourseComment[]
   createdAt                DateTime                   @default(now()) @db.Timestamp(0)
@@ -193,18 +195,39 @@ model OfflineCourseTimeline {
 }
 
 model Applicant {
-  id              Int            @id @default(autoincrement())
-  name            String
-  email           String
-  phoneNumber     String
-  for             ApplicantType
-  offlineCourseId Int?
-  offlineCourse   OfflineCourse? @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
+  id                       Int            @id @default(autoincrement())
+  name                     String
+  email                    String
+  phoneNumber              String
+  attachment               String?
+  company                  String?
+  message                  String?
+  motivationLetter         String?
+  hasAgreedToPrivacyPolicy Boolean        @default(true)
+  file                     String?        @default("")
+  for                      ApplicantType
+  offlineCourseId          Int?
+  OfflineCourse            OfflineCourse? @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
+  jobId                    Int?
+  Job                      Job?           @relation(fields: [jobId], references: [id])
+}
+
+model Job {
+  id               Int         @id @default(autoincrement())
+  title            String
+  salary           String
+  workingHours     String
+  contractType     String
+  description      String
+  responsibilities String
+  requirements     String
+  Applicant        Applicant[]
 }
 
 enum ApplicantType {
-  JOB
-  OFFLINE_COURSE
+  OFFLINE_COURSE_APPLICANT
+  CONTACT_US_APPLICANT
+  JOB_APPLICANT
 }
 
 enum AdminRole {

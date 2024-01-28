@@ -1,7 +1,6 @@
 import { User } from "next-auth";
-import type { CommentFormData } from "@/utils/models/comments";
 import type { CourseType } from "@/utils/models/common";
-import { CreateEditCommentsValidation } from "@/utils/validation/comments";
+import { CreateCommentsValidation, EditCommentsValidation } from "@/utils/validation/comments";
 import prisma from "..";
 
 export class Comment {
@@ -15,7 +14,7 @@ export class Comment {
     });
   }
 
-  static create(body: CreateEditCommentsValidation, user: NonNullable<User>) {
+  static create(body: CreateCommentsValidation, user: NonNullable<User>) {
     const courseId = {
       online: { onlineCourseId: body.courseId },
       offline: { offlineCourseId: body.courseId },
@@ -31,12 +30,13 @@ export class Comment {
     });
   }
 
-  static edit(body: CommentFormData, id: number) {
+  static edit(body: EditCommentsValidation, id: number) {
     return prisma.courseComment.update({
       where: { id },
       data: {
         headline: body.headline,
         text: body.text,
+        userPicture: body.userPicture,
       },
     });
   }

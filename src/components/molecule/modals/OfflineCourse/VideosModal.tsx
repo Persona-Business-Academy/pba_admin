@@ -4,7 +4,7 @@ import { HStack, List, ListIcon, ListItem } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import { UploadFile, Video } from "@/components/atom";
-import { generateOfflineCourseVideoName, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
+import { generateFileNames, uploadDocumentToAWS } from "@/utils/helpers/uploadFile";
 import { Maybe } from "@/utils/models/common";
 import { OfflineCourseVideoModel } from "@/utils/models/offlineCourses";
 import { AddOfflineCourseVideosValidation } from "@/utils/validation/offline-courses";
@@ -13,11 +13,12 @@ import SharedModal from "../../SharedModal";
 type Props = {
   onClose: () => void;
   offlineCourseId: number;
+  mediaId: string;
   videos: OfflineCourseVideoModel[];
   refetch: () => void;
 };
 
-const VideosModal: FC<Props> = ({ onClose, offlineCourseId, videos, refetch }) => {
+const VideosModal: FC<Props> = ({ onClose, offlineCourseId, mediaId, videos, refetch }) => {
   const memoizedData = useMemo(
     () => videos.map(item => ({ ...item, uploading: false, progress: 0 })),
     [videos],
@@ -47,7 +48,7 @@ const VideosModal: FC<Props> = ({ onClose, offlineCourseId, videos, refetch }) =
       if (!files?.length) return;
 
       const localFileName = files[0].name;
-      const nameForAWS = generateOfflineCourseVideoName(offlineCourseId);
+      const nameForAWS = generateFileNames(mediaId, "OfflineCourseAbout");
 
       setLocalVideos(prevData => [
         ...prevData,
@@ -78,7 +79,7 @@ const VideosModal: FC<Props> = ({ onClose, offlineCourseId, videos, refetch }) =
       });
       add({ key: res.key, name: localFileName, offlineCourseId });
     },
-    [add, offlineCourseId],
+    [add, mediaId, offlineCourseId],
   );
 
   useLayoutEffect(() => {

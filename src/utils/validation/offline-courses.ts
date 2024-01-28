@@ -81,6 +81,10 @@ export class CreateOfflineCourseValidation {
 
   @IsBoolean()
   forKids: boolean;
+
+  @IsNumber()
+  @IsNotEmpty({ message: "Currency is required" })
+  rating: number;
 }
 
 export class EditOfflineCourseValidation {
@@ -160,6 +164,10 @@ export class EditOfflineCourseValidation {
   @IsString()
   @IsOptional()
   pdf?: string;
+
+  @IsString()
+  @IsOptional()
+  whatYouWillLearnPhoto?: string;
 }
 
 export class AddOfflineInstructorsValidation {

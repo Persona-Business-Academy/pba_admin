@@ -23,6 +23,7 @@ import {
   GraduationPhotoModal,
   SearchTable,
   VideosModal,
+  WhatYouWillLearnPhotoModal,
 } from "@/components/molecule";
 import useDebounce from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/utils/constants/common";
@@ -62,6 +63,11 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
     },
   });
   const graduationPhotoModal = useDisclosure({
+    onClose() {
+      if (!!editableOfflineCourse) setEditableOfflineCourse(null);
+    },
+  });
+  const whatYouWillLearnPhotoModal = useDisclosure({
     onClose() {
       if (!!editableOfflineCourse) setEditableOfflineCourse(null);
     },
@@ -197,6 +203,14 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
                 Add graduation photo
               </MenuItem>
               <MenuItem
+                color="green"
+                onClick={() => {
+                  setEditableOfflineCourse(row.original);
+                  whatYouWillLearnPhotoModal.onOpen();
+                }}>
+                Add what you will learn photo
+              </MenuItem>
+              <MenuItem
                 color="red"
                 onClick={() => {
                   setDeletableOfflineCourse(row.original);
@@ -219,6 +233,7 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
       onOpen,
       timeLineModal,
       videosModal,
+      whatYouWillLearnPhotoModal,
     ],
   );
 
@@ -271,6 +286,7 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
       {videosModal.isOpen && editableOfflineCourse && (
         <VideosModal
           offlineCourseId={editableOfflineCourse.id}
+          mediaId={editableOfflineCourse.mediaId}
           onClose={videosModal.onClose}
           refetch={refetch}
           videos={videos}
@@ -283,6 +299,12 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
         <GraduationPhotoModal
           offlineCourseId={editableOfflineCourse.id}
           onClose={graduationPhotoModal.onClose}
+        />
+      )}
+      {whatYouWillLearnPhotoModal.isOpen && editableOfflineCourse && (
+        <WhatYouWillLearnPhotoModal
+          offlineCourseId={editableOfflineCourse.id}
+          onClose={whatYouWillLearnPhotoModal.onClose}
         />
       )}
     </>

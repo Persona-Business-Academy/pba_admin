@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, FC, memo, useCallback, useRef } from "react";
 import { Heading, HStack, IconButton, Input } from "@chakra-ui/react";
-import { BsPlusCircleFill } from "react-icons/bs";
+import { BsUpload } from "react-icons/bs";
 import { Maybe } from "@/utils/models/common";
 
 interface Props {
@@ -31,7 +31,7 @@ const UploadFile: FC<Props> = ({ content, changeHandler, accept }) => {
         <IconButton
           isRound
           aria-label="Upload file"
-          icon={<BsPlusCircleFill />}
+          icon={<BsUpload />}
           colorScheme="blue"
           fontSize="20px"
           onClick={uploadFileClick}
