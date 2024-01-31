@@ -210,6 +210,8 @@ model Applicant {
   OfflineCourse            OfflineCourse? @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
   jobId                    Int?
   Job                      Job?           @relation(fields: [jobId], references: [id])
+  createdAt                DateTime       @default(now()) @db.Timestamp(0)
+  updatedAt                DateTime       @updatedAt @db.Timestamp(0)
 }
 
 model Job {
@@ -221,6 +223,9 @@ model Job {
   description      String
   responsibilities String
   requirements     String
+  disabled         Boolean     @default(false)
+  createdAt        DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt        DateTime    @updatedAt @db.Timestamp(0)
   Applicant        Applicant[]
 }
 

@@ -3,6 +3,7 @@ import { Box, Drawer, DrawerContent, useDisclosure } from "@chakra-ui/react";
 import { FiHome, FiTrendingUp } from "react-icons/fi";
 import {
   INSTRUCTORS,
+  JOBS_ROUTE,
   OFFLINE_COURSES_FOR_KIDS_ROUTE,
   OFFLINE_COURSES_ROUTE,
   ONLINE_COURSES_ROUTE,
@@ -14,9 +15,12 @@ import SidebarContent from "./SidebarContent";
 
 const linkItems: LinkItemProps[] = [
   {
-    name: "Users",
+    name: "Common",
     icon: FiHome,
-    children: [{ title: "All Users", href: USERS_LIST_ROUTE }],
+    children: [
+      { title: "All Users", href: USERS_LIST_ROUTE },
+      { title: "Jobs", href: JOBS_ROUTE },
+    ],
   },
   {
     name: "Courses",

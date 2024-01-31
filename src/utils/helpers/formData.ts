@@ -1,9 +1,11 @@
 import { Topic } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { InstructorType } from "../models/instructors";
+import { JobModel } from "../models/job";
 import { OfflineCourse } from "../models/offlineCourses";
 import { OnlineCourse } from "../models/onlineCourses";
 import { CreateEditInstructorValidation } from "../validation/instructors";
+import { CreateEditJobValidation } from "../validation/jobs";
 import { CreateOfflineCourseValidation } from "../validation/offline-courses";
 import { CreateEditOnlineCourseValidation } from "../validation/online-courses";
 
@@ -58,4 +60,15 @@ export const generateInstructorDefaultValues = (
   avatar: !!instructor ? instructor.avatar : "",
   profession: !!instructor ? instructor.profession : "",
   mediaId: !!instructor ? instructor.mediaId : uuidv4(),
+});
+
+export const generateJobDefaultValues = (job: JobModel): CreateEditJobValidation => ({
+  title: job?.title || "",
+  description: job?.description || "",
+  salary: job?.salary || "",
+  workingHours: job?.workingHours || "",
+  contractType: job?.contractType || "",
+  responsibilities: job?.responsibilities || "",
+  requirements: job?.requirements || "",
+  disabled: job?.disabled || false,
 });

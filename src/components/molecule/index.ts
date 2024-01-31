@@ -40,9 +40,14 @@ const WhatYouWillLearnPhotoModal = dynamic(
   () => import("./modals/OfflineCourse/WhatYouWillLearnPhotoModal"),
 );
 
+const CreateEditJobModal = dynamic(() => import("./modals/Jobs/CreateEditJobModal"));
+const DeleteJobModal = dynamic(() => import("./modals/Jobs/DeleteJobModal"));
+
 export {
   SearchTable,
   OnlineCourseVideos,
+  DeleteJobModal,
+  CreateEditJobModal,
   WhatYouWillLearnPhotoModal,
   GraduationPhotoModal,
   TimelineModal,

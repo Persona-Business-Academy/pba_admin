@@ -19,6 +19,7 @@ export const QUERY_KEY = {
     page,
   ],
   allUsers: (search: string, page: number) => [search ? `all-users/${search}` : "all-users", page],
+  allJobs: (search: string, page: number) => [search ? `all-jobs/${search}` : "all-jobs", page],
 };
 
 export const refetchOnlineCourseById = async (queryClient: QueryClient, id: number) =>
