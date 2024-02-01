@@ -50,10 +50,4 @@ export class OnlineCourseService {
   static createOnlineCourseVideo(data: CreateOnlineCourseVideoValidation) {
     return $apiClient.post<number>("/online-courses/create-video", data);
   }
-  static editOnlineCourseVideo(data: any) {
-    return $apiClient.put<number>("/online-courses/edit-video", data);
-  }
-  static deleteOnlineCourseVideo(id: number) {
-    return $apiClient.delete<number>(`/online-courses/delete-video/${id}`);
-  }
 }

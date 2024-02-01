@@ -11,6 +11,7 @@ import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import { FormInput } from "@/components/atom";
 import { SKILL_LEVELS } from "@/utils/constants/courses";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
+import { Timeline } from "@/utils/models/offlineCourses";
 import { AddEditOfflineCourseTimelineValidation } from "@/utils/validation/offline-courses";
 
 const SharedModal = dynamic(() => import("@/components/molecule/SharedModal"));
@@ -72,7 +73,7 @@ const TimelineModal: FC<Props> = ({ offlineCourseId, onClose }) => {
   );
 
   const { mutate, isLoading } = useMutation<
-    any,
+    Timeline,
     { message: string },
     AddEditOfflineCourseTimelineValidation
   >(

@@ -2,6 +2,7 @@ import {
   OfflineCourse,
   OfflineCoursesListModel,
   OfflineCourseVideoModel,
+  Timeline,
 } from "@/utils/models/offlineCourses";
 import {
   AddEditOfflineCourseTimelineValidation,
@@ -47,9 +48,9 @@ export class OfflineCourseService {
   }
   // timeline
   static addTimeline(data: AddEditOfflineCourseTimelineValidation) {
-    return $apiClient.post<any>("/offline-courses/add-timeline", data);
+    return $apiClient.post<Timeline>("/offline-courses/add-timeline", data);
   }
   static editTimeline(id: number, data: AddEditOfflineCourseTimelineValidation) {
-    return $apiClient.put<any>(`/offline-courses/edit-timeline/${id}`, data);
+    return $apiClient.put<Timeline>(`/offline-courses/edit-timeline/${id}`, data);
   }
 }
