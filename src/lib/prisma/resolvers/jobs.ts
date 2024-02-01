@@ -1,4 +1,5 @@
 import { SortingType } from "@/api/types";
+import { CreateEditJobValidation } from "@/utils/validation/jobs";
 import prisma from "..";
 import { orderBy } from "../utils/common";
 
@@ -27,13 +28,13 @@ export class Jobs {
     });
   }
 
-  static async create(data: any) {
+  static async create(data: CreateEditJobValidation) {
     return prisma.job.create({
       data,
     });
   }
 
-  static edit(data: any, id: number) {
+  static edit(data: CreateEditJobValidation, id: number) {
     return prisma.job.update({
       where: { id: +id },
       data,

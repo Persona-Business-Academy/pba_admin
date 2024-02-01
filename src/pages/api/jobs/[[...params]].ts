@@ -16,6 +16,7 @@ import { exceptionHandler } from "@/lib/prisma/error";
 import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
 import { Jobs } from "@/lib/prisma/resolvers";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
+import { CreateEditJobValidation } from "@/utils/validation/jobs";
 
 @Catch(exceptionHandler)
 @AuthMiddleware()
@@ -42,12 +43,12 @@ class JobHandler {
   }
 
   @Post("/create")
-  create(@Body(ValidationPipe) body: any) {
+  create(@Body(ValidationPipe) body: CreateEditJobValidation) {
     return Jobs.create(body);
   }
 
   @Put("/edit/:id")
-  edit(@Body(ValidationPipe) body: any, @Param("id") id: string) {
+  edit(@Body(ValidationPipe) body: CreateEditJobValidation, @Param("id") id: string) {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
