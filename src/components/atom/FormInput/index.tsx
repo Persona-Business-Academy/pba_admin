@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, memo, useState } from "react";
+import React, { ChangeEvent, FC, memo, useCallback, useMemo, useState } from "react";
 import {
   FormControl,
   FormErrorMessage,
@@ -11,8 +11,7 @@ import {
   InputRightElement,
   Text,
 } from "@chakra-ui/react";
-import EyeClosed from "/public/icons/eye_closed.svg";
-import EyeOpen from "/public/icons/eye_open.svg";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 type Props = {
   isInvalid?: boolean;
@@ -46,6 +45,9 @@ const FormInput: FC<Props> = ({
   InputRight,
 }) => {
   const [isPasswordType, setIsPasswordType] = useState(false);
+
+  const EyeIcon = useMemo(() => (isPasswordType ? <FaEye /> : <FaEyeSlash />), [isPasswordType]);
+  const setPassType = useCallback(() => setIsPasswordType(prev => !prev), []);
 
   return (
     <FormControl isInvalid={isInvalid} id={name}>
@@ -90,17 +92,17 @@ const FormInput: FC<Props> = ({
           }}
           {...inputProps}
         />
-        {type === "password" && (
+        {type === "password" ? (
           <InputRightElement>
             <IconButton
               background="transparent"
               aria-label="eye"
-              icon={isPasswordType ? <EyeOpen /> : <EyeClosed />}
+              icon={EyeIcon}
               isDisabled={!value}
-              onClick={() => setIsPasswordType(prev => !prev)}
+              onClick={setPassType}
             />
           </InputRightElement>
-        )}
+        ) : null}
         {InputRight && <InputRightElement>{InputRight}</InputRightElement>}
       </InputGroup>
       {!isInvalid ? (
