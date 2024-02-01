@@ -7,13 +7,12 @@ import { JobModel } from "@/utils/models/job";
 const SharedAlertDialog = dynamic(() => import("../../SharedAlertDialog"));
 
 type Props = {
-  isOpen: boolean;
   onClose: () => void;
   onSave: () => void;
   job: NonNullable<JobModel>;
 };
 
-const DeleteJobModal: FC<Props> = ({ isOpen, onClose, onSave, job }) => {
+const DeleteJobModal: FC<Props> = ({ onClose, onSave, job }) => {
   const { mutate, isLoading } = useMutation<JobModel, { message: string }>(
     () => JobService.delete(job.id),
     {
@@ -35,7 +34,7 @@ const DeleteJobModal: FC<Props> = ({ isOpen, onClose, onSave, job }) => {
 
   return (
     <SharedAlertDialog
-      isOpen={isOpen}
+      isOpen
       title={Title}
       isLoading={isLoading}
       deleteFn={mutate}

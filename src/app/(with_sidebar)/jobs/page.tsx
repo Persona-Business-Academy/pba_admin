@@ -141,9 +141,9 @@ export default function Jobs() {
         fetchPreviousPage={useCallback(() => setPage(prev => --prev), [])}
         addNew={onOpen}
       />
-      {isOpen && <CreateEditJobModal isOpen job={editableJob} onClose={onClose} onSave={refetch} />}
+      {isOpen && <CreateEditJobModal job={editableJob} onClose={onClose} onSave={refetch} />}
       {isOpenDeleteJob && !!deletableJob && (
-        <DeleteJobModal isOpen job={deletableJob} onClose={onCloseDeleteJob} onSave={refetch} />
+        <DeleteJobModal job={deletableJob} onClose={onCloseDeleteJob} onSave={refetch} />
       )}
     </>
   );

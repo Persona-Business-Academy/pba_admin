@@ -23,7 +23,7 @@ export const QUERY_KEY = {
 };
 
 export const refetchOnlineCourseById = async (queryClient: QueryClient, id: number) =>
-  await queryClient.refetchQueries({
+  await queryClient.invalidateQueries({
     queryKey: QUERY_KEY.onlineCourse(id),
     type: "active",
     exact: true,
