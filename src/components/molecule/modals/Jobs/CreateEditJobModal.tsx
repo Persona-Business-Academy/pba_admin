@@ -1,5 +1,5 @@
 import { FC, memo, useCallback } from "react";
-import { HStack } from "@chakra-ui/react";
+import { FormLabel, HStack, Switch } from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { useMutation } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
@@ -58,24 +58,38 @@ const CreateEditJobModal: FC<Props> = ({ job, onClose, onSave }) => {
       onClose={onClose}
       isLoading={isLoading}
       actionButtonDisabled={!isDirty}>
-      <Controller
-        name="title"
-        rules={{ required: true }}
-        control={control}
-        render={({ field: { onChange, value, name } }) => (
-          <FormInput
-            isRequired
-            isInvalid={!!errors[name]?.message}
-            name={name}
-            type="text"
-            formLabelName="Title"
-            value={value}
-            placeholder="Title"
-            handleInputChange={onChange}
-            formErrorMessage={errors[name]?.message}
-          />
-        )}
-      />
+      <HStack alignItems="flex-start">
+        <Controller
+          name="title"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <FormInput
+              isRequired
+              isInvalid={!!errors[name]?.message}
+              name={name}
+              type="text"
+              formLabelName="Title"
+              value={value}
+              placeholder="Title"
+              handleInputChange={onChange}
+              formErrorMessage={errors[name]?.message}
+            />
+          )}
+        />
+        <Controller
+          name="disabled"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <>
+              <FormLabel htmlFor="isChecked">Disabled</FormLabel>
+              <Switch id="isChecked" name={name} isChecked={value} onChange={onChange} />
+            </>
+          )}
+        />
+      </HStack>
+
       <HStack>
         <Controller
           name="salary"

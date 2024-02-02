@@ -8,3 +8,4 @@ export const OFFLINE_COURSES_ROUTE = "/offline-courses";
 export const OFFLINE_COURSES_FOR_KIDS_ROUTE = "/kids-offline-courses";
 export const INSTRUCTORS = "/instructors";
 export const JOBS_ROUTE = "/jobs";
+export const APPLICANTS_ROUTE = "/applicants";

@@ -1,4 +1,5 @@
-import { Currency, Language, SkillLevel, Topic } from "@prisma/client";
+import { Currency, Language, Prisma, SkillLevel, Topic } from "@prisma/client";
+import { Applicants } from "@/lib/prisma/resolvers/applicants";
 
 export type Maybe<T> = T | null;
 
@@ -27,3 +28,6 @@ export type WhatYouWillLearnType = { id: string; value: string };
 export type TimelineType = { id: string; value: Date };
 
 export type CourseType = "offline" | "online";
+
+export type ApplicantsListModel = Prisma.PromiseReturnType<typeof Applicants.list>;
+export type ApplicantModel = Prisma.PromiseReturnType<typeof Applicants.getById>;

@@ -2,6 +2,7 @@ import React, { FC, memo, PropsWithChildren } from "react";
 import { Box, Drawer, DrawerContent, useDisclosure } from "@chakra-ui/react";
 import { FiHome, FiTrendingUp } from "react-icons/fi";
 import {
+  APPLICANTS_ROUTE,
   INSTRUCTORS,
   JOBS_ROUTE,
   OFFLINE_COURSES_FOR_KIDS_ROUTE,
@@ -31,6 +32,11 @@ const linkItems: LinkItemProps[] = [
       { title: "Offline for kids", href: OFFLINE_COURSES_FOR_KIDS_ROUTE },
       { title: "Instructors", href: INSTRUCTORS },
     ],
+  },
+  {
+    name: "Form",
+    icon: FiTrendingUp,
+    children: [{ title: "Applicants", href: APPLICANTS_ROUTE }],
   },
 ];
 
