@@ -4,6 +4,7 @@ import { Button } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
+import { useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { ApplicantService } from "@/api/services/ApplicantService";
 import { SearchTable } from "@/components/molecule";
@@ -17,6 +18,8 @@ export default function Applicants() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(search);
+  const searchParams = useSearchParams();
+  const searchParamFilter = useMemo(() => searchParams?.get("filter") || "", [searchParams]);
 
   const { data, isLoading, isPreviousData } = useQuery({
     queryKey: QUERY_KEY.allApplicants(debouncedSearch, page),
@@ -26,6 +29,7 @@ export default function Applicants() {
         limit: ITEMS_PER_PAGE,
         sorting: sorting,
         search: debouncedSearch,
+        filter: searchParamFilter,
       }),
     keepPreviousData: true,
   });

@@ -4,11 +4,13 @@ import { Button, HStack, useDisclosure } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
+import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
 import { JobService } from "@/api/services/JobService";
 import { CreateEditJobModal, DeleteJobModal, SearchTable } from "@/components/molecule";
 import useDebounce from "@/hooks/useDebounce";
-import { ITEMS_PER_PAGE } from "@/utils/constants/common";
+import { ApplicantEnum, ITEMS_PER_PAGE } from "@/utils/constants/common";
+import { APPLICANTS_ROUTE } from "@/utils/constants/routes";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { Maybe } from "@/utils/models/common";
 import { JobModel } from "@/utils/models/job";
@@ -75,6 +77,18 @@ export default function Jobs() {
           return <Button>{id}</Button>;
         },
         header: "ID",
+      }),
+      columnHelper.accessor("id", {
+        id: uuidv4(),
+        cell: () => (
+          <Button
+            variant="link"
+            as={Link}
+            href={`${APPLICANTS_ROUTE}?filter=${ApplicantEnum.JOB_APPLICANT}`}>
+            {`Applicants >`}
+          </Button>
+        ),
+        header: "Applicants",
       }),
       columnHelper.accessor("title", {
         id: uuidv4(),

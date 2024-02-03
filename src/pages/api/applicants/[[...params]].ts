@@ -1,3 +1,4 @@
+import { ApplicantType } from "@prisma/client";
 import { BadRequestException, Catch, createHandler, Get, Param, Query } from "next-api-decorators";
 import { SortingType } from "@/api/types";
 import { exceptionHandler } from "@/lib/prisma/error";
@@ -14,8 +15,9 @@ class ApplicantHandler {
     @Query("limit") take: string,
     @Query("search") search: string,
     @Query("sorting") sorting: SortingType[],
+    @Query("filter") filter: ApplicantType,
   ) {
-    return Applicants.list(+skip, +take, search, sorting);
+    return Applicants.list(+skip, +take, search, sorting, filter);
   }
 
   @Get("/:id")
