@@ -9,9 +9,15 @@ import { v4 as uuidv4 } from "uuid";
 import { ApplicantService } from "@/api/services/ApplicantService";
 import { SearchTable } from "@/components/molecule";
 import useDebounce from "@/hooks/useDebounce";
-import { ITEMS_PER_PAGE } from "@/utils/constants/common";
+import { ApplicantEnum, ITEMS_PER_PAGE } from "@/utils/constants/common";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
-import { ApplicantModel } from "@/utils/models/common";
+import { ApplicantEnumType, ApplicantModel } from "@/utils/models/common";
+
+const title: Record<ApplicantEnumType, string> = {
+  JOB_APPLICANT: "Job Applicants",
+  CONTACT_US_APPLICANT: "Contact us applicants",
+  OFFLINE_COURSE_APPLICANT: "Offline course applicants",
+};
 
 export default function Applicants() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -19,7 +25,10 @@ export default function Applicants() {
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(search);
   const searchParams = useSearchParams();
-  const searchParamFilter = useMemo(() => searchParams?.get("filter") || "", [searchParams]);
+  const searchParamFilter = useMemo(
+    () => ApplicantEnum[searchParams?.get("filter") as ApplicantEnumType] || undefined,
+    [searchParams],
+  );
 
   const { data, isLoading, isPreviousData } = useQuery({
     queryKey: QUERY_KEY.allApplicants(debouncedSearch, page),
@@ -88,7 +97,7 @@ export default function Applicants() {
 
   return (
     <SearchTable
-      title="Applicants"
+      title={title[searchParamFilter] || "Applicants"}
       isLoading={isLoading}
       data={data?.applicants || []}
       count={data?.count || 0}

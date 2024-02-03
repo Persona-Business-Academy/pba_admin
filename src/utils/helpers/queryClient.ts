@@ -20,6 +20,7 @@ export const QUERY_KEY = {
   ],
   allUsers: (search: string, page: number) => [search ? `all-users/${search}` : "all-users", page],
   allJobs: (search: string, page: number) => [search ? `all-jobs/${search}` : "all-jobs", page],
+  job: (id: number) => ["job", id],
   allApplicants: (search: string, page: number) => [
     search ? `all-applicants/${search}` : "all-applicants",
     page,

@@ -10,9 +10,9 @@ export class Applicants {
     take: number,
     search: string,
     sorting: SortingType[],
-    filter: ApplicantType,
+    filter?: ApplicantType,
   ) {
-    if (!Object.values(ApplicantEnum).includes(filter)) {
+    if (!!filter && !Object.values(ApplicantEnum).includes(filter)) {
       return { count: 0, applicants: [] };
     }
 

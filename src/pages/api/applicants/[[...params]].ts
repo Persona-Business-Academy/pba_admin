@@ -15,7 +15,7 @@ class ApplicantHandler {
     @Query("limit") take: string,
     @Query("search") search: string,
     @Query("sorting") sorting: SortingType[],
-    @Query("filter") filter: ApplicantType,
+    @Query("filter") filter?: ApplicantType,
   ) {
     return Applicants.list(+skip, +take, search, sorting, filter);
   }

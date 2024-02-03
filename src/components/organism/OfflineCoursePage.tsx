@@ -26,8 +26,12 @@ import {
   WhatYouWillLearnPhotoModal,
 } from "@/components/molecule";
 import useDebounce from "@/hooks/useDebounce";
-import { ITEMS_PER_PAGE } from "@/utils/constants/common";
-import { OFFLINE_COURSES_FOR_KIDS_ROUTE, OFFLINE_COURSES_ROUTE } from "@/utils/constants/routes";
+import { ApplicantEnum, ITEMS_PER_PAGE } from "@/utils/constants/common";
+import {
+  APPLICANTS_ROUTE,
+  OFFLINE_COURSES_FOR_KIDS_ROUTE,
+  OFFLINE_COURSES_ROUTE,
+} from "@/utils/constants/routes";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { Maybe } from "@/utils/models/common";
 import { OfflineCourse } from "@/utils/models/offlineCourses";
@@ -125,6 +129,18 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
         id: uuidv4(),
         cell: info => info.getValue(),
         header: "Title",
+      }),
+      columnHelper.accessor("id", {
+        id: uuidv4(),
+        cell: info => (
+          <Button
+            variant="link"
+            as={Link}
+            href={`${APPLICANTS_ROUTE}?filter=${ApplicantEnum.OFFLINE_COURSE_APPLICANT}&filterId=${info.getValue()}`}>
+            {`Applicants >`}
+          </Button>
+        ),
+        header: "Applicants",
       }),
       columnHelper.accessor("id", {
         id: uuidv4(),

@@ -10,7 +10,7 @@ import { JobService } from "@/api/services/JobService";
 import { CreateEditJobModal, DeleteJobModal, SearchTable } from "@/components/molecule";
 import useDebounce from "@/hooks/useDebounce";
 import { ApplicantEnum, ITEMS_PER_PAGE } from "@/utils/constants/common";
-import { APPLICANTS_ROUTE } from "@/utils/constants/routes";
+import { APPLICANTS_ROUTE, JOBS_ROUTE } from "@/utils/constants/routes";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { Maybe } from "@/utils/models/common";
 import { JobModel } from "@/utils/models/job";
@@ -74,17 +74,21 @@ export default function Jobs() {
         id: uuidv4(),
         cell: info => {
           const id = info.getValue();
-          return <Button>{id}</Button>;
+          return (
+            <Button as={Link} href={`${JOBS_ROUTE}/${id}`}>
+              {id}
+            </Button>
+          );
         },
         header: "ID",
       }),
       columnHelper.accessor("id", {
         id: uuidv4(),
-        cell: () => (
+        cell: info => (
           <Button
             variant="link"
             as={Link}
-            href={`${APPLICANTS_ROUTE}?filter=${ApplicantEnum.JOB_APPLICANT}`}>
+            href={`${APPLICANTS_ROUTE}?filter=${ApplicantEnum.JOB_APPLICANT}&filterId=${info.getValue()}`}>
             {`Applicants >`}
           </Button>
         ),
