@@ -9,7 +9,6 @@ import { BsPlusCircle } from "react-icons/bs";
 import { v4 as uuidv4 } from "uuid";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
 import { FormInput } from "@/components/atom";
-import { SKILL_LEVELS } from "@/utils/constants/courses";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { Timeline } from "@/utils/models/offlineCourses";
 import { AddEditOfflineCourseTimelineValidation } from "@/utils/validation/offline-courses";
@@ -32,28 +31,15 @@ const TimelineModal: FC<Props> = ({ offlineCourseId, onClose }) => {
     queryFn: () => OfflineCourseService.getOfflineCourse(offlineCourseId),
     enabled: !!offlineCourseId,
   });
-  const timelineId = offlineCourse?.timeline?.id;
-
-  const _skillLevels = useMemo(() => {
-    const myLevelOrderNumber = SKILL_LEVELS.find(
-      level => level.value === offlineCourse?.courseLevel,
-    )?.order;
-
-    if (myLevelOrderNumber) {
-      return SKILL_LEVELS.sort((a, b) => a.order - b.order).filter(
-        ({ order }) => order <= myLevelOrderNumber,
-      );
-    }
-    return [];
-  }, [offlineCourse?.courseLevel]);
+  const timelineId = offlineCourse?.TimeLine?.id;
 
   const defaultValues = useMemo(
     () => ({
       startDate: "",
       offlineCourseId: offlineCourse?.id,
-      startDates: offlineCourse?.timeline?.startDates.map(value => ({ id: uuidv4(), value })) || [],
+      startDates: offlineCourse?.TimeLine?.startDates.map(value => ({ id: uuidv4(), value })) || [],
     }),
-    [offlineCourse?.id, offlineCourse?.timeline?.startDates],
+    [offlineCourse?.id, offlineCourse?.TimeLine?.startDates],
   );
 
   const {

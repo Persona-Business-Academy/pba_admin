@@ -46,7 +46,7 @@ export class OfflineCourses {
       include: {
         OfflineCourseInstructors: { select: { id: true, instructor: true } },
         OfflineCourseVideo: true,
-        timeline: true,
+        TimeLine: true,
       },
     });
   }
