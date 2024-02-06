@@ -163,7 +163,7 @@ model OfflineCourse {
   Applicant                Applicant[]
   comments                 CourseComment[]
   OfflineCourseInstructors OfflineCourseInstructors[]
-  timeline                 OfflineCourseTimeline?
+  TimeLine                 OfflineCourseTimeline?
   OfflineCourseVideo       OfflineCourseVideo[]
 }
 
@@ -196,9 +196,9 @@ model OfflineCourseTimeline {
 
 model Applicant {
   id                       Int            @id @default(autoincrement())
-  name                     String
+  name                     String?
   email                    String
-  phoneNumber              String
+  phoneNumber              String?
   attachment               String?
   company                  String?
   message                  String?
@@ -208,6 +208,8 @@ model Applicant {
   for                      ApplicantType
   offlineCourseId          Int?
   jobId                    Int?
+  courseDesiredStartTime   String?
+  courseDesiredEndTime     String?
   createdAt                DateTime       @default(now()) @db.Timestamp(0)
   updatedAt                DateTime       @updatedAt @db.Timestamp(0)
   Job                      Job?           @relation(fields: [jobId], references: [id])
