@@ -30,8 +30,22 @@ export default function Applicants() {
     [searchParams],
   );
 
+  const filterId = useMemo(() => {
+    const obj: Record<string, "jobId" | "offlineCourseId"> = {
+      JOB_APPLICANT: "jobId",
+      OFFLINE_COURSE_APPLICANT: "offlineCourseId",
+    };
+    const id = searchParams?.get("filterId");
+    const key = obj[searchParamFilter];
+
+    if (key && id) {
+      return { [key]: id };
+    }
+    return {};
+  }, [searchParamFilter, searchParams]);
+
   const { data, isLoading, isPreviousData } = useQuery({
-    queryKey: QUERY_KEY.allApplicants(debouncedSearch, page),
+    queryKey: QUERY_KEY.allApplicants(debouncedSearch, page, filterId, searchParamFilter),
     queryFn: () =>
       ApplicantService.getAll({
         offset: page === 1 ? 0 : (page - 1) * ITEMS_PER_PAGE,
@@ -39,6 +53,7 @@ export default function Applicants() {
         sorting: sorting,
         search: debouncedSearch,
         filter: searchParamFilter,
+        ...filterId,
       }),
     keepPreviousData: true,
   });

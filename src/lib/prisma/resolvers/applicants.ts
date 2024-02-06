@@ -11,6 +11,8 @@ export class Applicants {
     search: string,
     sorting: SortingType[],
     filter?: ApplicantType,
+    jobId?: string,
+    offlineCourseId?: string,
   ) {
     if (!!filter && !Object.values(ApplicantEnum).includes(filter)) {
       return { count: 0, applicants: [] };
@@ -18,13 +20,23 @@ export class Applicants {
 
     const [count, applicants] = await Promise.all([
       prisma.applicant.count({
-        where: { for: filter, OR: [{ email: { contains: search, mode: "insensitive" } }] },
+        where: {
+          for: filter,
+          jobId: +(jobId || "") || undefined,
+          offlineCourseId: +(offlineCourseId || "") || undefined,
+          OR: [{ email: { contains: search, mode: "insensitive" } }],
+        },
       }),
       prisma.applicant.findMany({
         skip,
         take,
         orderBy: orderBy(sorting),
-        where: { for: filter, OR: [{ email: { contains: search, mode: "insensitive" } }] },
+        where: {
+          for: filter,
+          jobId: +(jobId || "") || undefined,
+          offlineCourseId: +(offlineCourseId || "") || undefined,
+          OR: [{ email: { contains: search, mode: "insensitive" } }],
+        },
       }),
     ]);
 

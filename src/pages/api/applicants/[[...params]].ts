@@ -16,8 +16,10 @@ class ApplicantHandler {
     @Query("search") search: string,
     @Query("sorting") sorting: SortingType[],
     @Query("filter") filter?: ApplicantType,
+    @Query("jobId") jobId?: string,
+    @Query("offlineCourseId") offlineCourseId?: string,
   ) {
-    return Applicants.list(+skip, +take, search, sorting, filter);
+    return Applicants.list(+skip, +take, search, sorting, filter, jobId, offlineCourseId);
   }
 
   @Get("/:id")
