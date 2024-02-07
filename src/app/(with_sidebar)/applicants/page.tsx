@@ -84,7 +84,7 @@ export default function Applicants() {
         id: uuidv4(),
         cell: info => (
           <Button variant="link" as={Link} href={`${APPLICANTS_ROUTE}/${info.getValue()}`}>
-            {`Applicants >`}
+            {info.getValue()}
           </Button>
         ),
         header: "ID",
