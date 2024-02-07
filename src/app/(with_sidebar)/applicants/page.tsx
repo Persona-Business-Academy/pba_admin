@@ -4,12 +4,14 @@ import { Button } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { ApplicantService } from "@/api/services/ApplicantService";
 import { SearchTable } from "@/components/molecule";
 import useDebounce from "@/hooks/useDebounce";
 import { ApplicantEnum, ITEMS_PER_PAGE } from "@/utils/constants/common";
+import { APPLICANTS_ROUTE } from "@/utils/constants/routes";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { ApplicantEnumType, ApplicantModel } from "@/utils/models/common";
 
@@ -80,11 +82,22 @@ export default function Applicants() {
     () => [
       columnHelper.accessor("id", {
         id: uuidv4(),
-        cell: info => {
-          const id = info.getValue();
-          return <Button>{id}</Button>;
-        },
+        cell: info => (
+          <Button variant="link" as={Link} href={`${APPLICANTS_ROUTE}/${info.getValue()}`}>
+            {`Applicants >`}
+          </Button>
+        ),
         header: "ID",
+      }),
+      columnHelper.accessor("name", {
+        id: uuidv4(),
+        cell: info => info.getValue(),
+        header: "Name",
+      }),
+      columnHelper.accessor("phoneNumber", {
+        id: uuidv4(),
+        cell: info => info.getValue(),
+        header: "Phone number",
       }),
       columnHelper.accessor("email", {
         id: uuidv4(),
@@ -100,11 +113,6 @@ export default function Applicants() {
         id: uuidv4(),
         cell: info => dayjs(info.getValue()).format("YYYY-MM-DD HH:mm:ss"),
         header: "Created At",
-      }),
-      columnHelper.accessor("updatedAt", {
-        id: uuidv4(),
-        cell: info => dayjs(info.getValue()).format("YYYY-MM-DD HH:mm:ss"),
-        header: "Updated At",
       }),
     ],
     [columnHelper],

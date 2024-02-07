@@ -70,13 +70,13 @@ export default function Applicant() {
             <Heading as="h3" size="md">
               {item[1]}
             </Heading>
-            {item[0] === "attachment" ? (
+            {item[0] === "attachment" && value ? (
               <Button as={Link} href={generateAWSUrl(value)} target="_blank">
                 {"File >"}
               </Button>
             ) : (
               <Text fontSize={18} pl={5} pt={2}>
-                {value}
+                {value || "-"}
               </Text>
             )}
           </Box>
