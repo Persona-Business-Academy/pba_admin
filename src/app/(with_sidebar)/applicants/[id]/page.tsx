@@ -26,7 +26,6 @@ const titleByValue: Record<keyof NonNullable<ApplicantModel>, string> = {
   offlineCourseId: "",
   id: "",
   updatedAt: "",
-  file: "",
 };
 
 export default function Applicant() {
@@ -61,22 +60,22 @@ export default function Applicant() {
   return (
     <Box p={10}>
       {Object.entries(titleByValue).map(item => {
-        if (!item[1]) {
+        const value = data?.[item[0] as keyof ApplicantModel];
+        if (!item[1] || !value) {
           return null;
         }
-        const value = data?.[item[0] as keyof ApplicantModel];
         return (
           <Box key={item[0]} pt={10}>
             <Heading as="h3" size="md">
               {item[1]}
             </Heading>
-            {item[0] === "attachment" && value ? (
+            {item[0] === "attachment" ? (
               <Button as={Link} href={generateAWSUrl(value)} target="_blank">
                 {"File >"}
               </Button>
             ) : (
               <Text fontSize={18} pl={5} pt={2}>
-                {value || "-"}
+                {value}
               </Text>
             )}
           </Box>
