@@ -40,12 +40,12 @@ model Admin {
 
 model OnlineCourse {
   id                     Int                 @id @default(autoincrement())
-  title                  String              @db.VarChar(45)
-  subTitle               String              @db.VarChar(45)
+  title                  String              @unique @db.Text
+  subTitle               String              @db.Text
   courseLevel            SkillLevel
   coverPhoto             String
   mediaId                String              @unique
-  description            String
+  description            String              @db.Text
   duration               Float               @default(0)
   lessonsCount           Int                 @default(0)
   graduatedStudentsCount Int                 @default(0)
@@ -104,7 +104,7 @@ model OnlineCourseVideo {
 model CourseComment {
   id              Int            @id @default(autoincrement())
   headline        String
-  text            String
+  text            String         @db.Text
   userPicture     String?
   authorId        Int?
   authorAdminId   Int?
@@ -125,7 +125,7 @@ model Instructor {
   lastName                 String                     @db.VarChar(45)
   graduatedStudentsCount   Int                        @default(0)
   enrolledStudentsCount    Int                        @default(0)
-  about                    String
+  about                    String                     @db.Text
   avatar                   String
   mediaId                  String                     @unique
   createdAt                DateTime                   @default(now()) @db.Timestamp(0)
@@ -136,15 +136,15 @@ model Instructor {
 
 model OfflineCourse {
   id                       Int                        @id @default(autoincrement())
-  title                    String                     @db.VarChar(45)
-  subTitle                 String
+  title                    String                     @unique @db.Text
+  subTitle                 String                     @db.Text
   topic                    Topic
   coverPhoto               String
   pdf                      String                     @default("")
   graduationPhoto          String                     @default("")
   mediaId                  String                     @unique
   rating                   Float                      @default(0)
-  description              String
+  description              String                     @db.Text
   language                 Language
   ageLimit                 String
   totalDuration            Float                      @default(0)
@@ -199,12 +199,11 @@ model Applicant {
   name                     String?
   email                    String
   phoneNumber              String?
-  attachment               String?
+  attachment               String?        @default("")
   company                  String?
-  message                  String?
+  message                  String?        @db.Text
   motivationLetter         String?
   hasAgreedToPrivacyPolicy Boolean        @default(true)
-  file                     String?        @default("")
   for                      ApplicantType
   offlineCourseId          Int?
   jobId                    Int?
@@ -218,13 +217,13 @@ model Applicant {
 
 model Job {
   id               Int         @id @default(autoincrement())
-  title            String
+  title            String      @db.Text
   salary           String
   workingHours     String
   contractType     String
-  description      String
-  responsibilities String
-  requirements     String
+  description      String      @db.Text
+  responsibilities String      @db.Text
+  requirements     String      @db.Text
   disabled         Boolean     @default(false)
   createdAt        DateTime    @default(now()) @db.Timestamp(0)
   updatedAt        DateTime    @updatedAt @db.Timestamp(0)
