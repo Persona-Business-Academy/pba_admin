@@ -31,15 +31,15 @@ const TimelineModal: FC<Props> = ({ offlineCourseId, onClose }) => {
     queryFn: () => OfflineCourseService.getOfflineCourse(offlineCourseId),
     enabled: !!offlineCourseId,
   });
-  const timelineId = offlineCourse?.TimeLine?.id;
+  const timelineId = offlineCourse?.timeLine?.id;
 
   const defaultValues = useMemo(
     () => ({
       startDate: "",
       offlineCourseId: offlineCourse?.id,
-      startDates: offlineCourse?.TimeLine?.startDates.map(value => ({ id: uuidv4(), value })) || [],
+      startDates: offlineCourse?.timeLine?.startDates.map(value => ({ id: uuidv4(), value })) || [],
     }),
-    [offlineCourse?.id, offlineCourse?.TimeLine?.startDates],
+    [offlineCourse?.id, offlineCourse?.timeLine?.startDates],
   );
 
   const {

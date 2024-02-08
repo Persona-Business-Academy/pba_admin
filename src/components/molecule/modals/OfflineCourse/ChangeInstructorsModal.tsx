@@ -43,8 +43,8 @@ const ChangeInstructorsModal: FC<Props> = ({ offlineCourseId, isOpen, onClose })
   });
 
   const instructorExist = useCallback(
-    (id: number) => offlineCourse?.OfflineCourseInstructors.find(item => item.instructor.id === id),
-    [offlineCourse?.OfflineCourseInstructors],
+    (id: number) => offlineCourse?.instructors.find(item => item.instructor.id === id),
+    [offlineCourse?.instructors],
   );
 
   const { mutate: add, isLoading: addLoading } = useMutation<

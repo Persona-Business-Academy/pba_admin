@@ -92,8 +92,8 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
 
   const videos = useMemo(
     () =>
-      data?.offlineCourses.find(({ id }) => id === editableOfflineCourse?.id)?.OfflineCourseVideo ||
-      [],
+      data?.offlineCourses.find(({ id }) => id === editableOfflineCourse?.id)
+        ?.offlineCourseVideos || [],
     [data?.offlineCourses, editableOfflineCourse?.id],
   );
 

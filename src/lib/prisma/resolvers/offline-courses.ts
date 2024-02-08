@@ -29,8 +29,8 @@ export class OfflineCourses {
         orderBy: orderBy(sorting),
         where: { OR: [{ title: { contains: search, mode: "insensitive" } }], forKids: !!forKids },
         include: {
-          OfflineCourseInstructors: { select: { id: true, instructor: true } },
-          OfflineCourseVideo: true,
+          instructors: { select: { id: true, instructor: true } },
+          offlineCourseVideos: true,
         },
       }),
     ]);
@@ -44,9 +44,9 @@ export class OfflineCourses {
         id: courseId,
       },
       include: {
-        OfflineCourseInstructors: { select: { id: true, instructor: true } },
-        OfflineCourseVideo: true,
-        TimeLine: true,
+        instructors: { select: { id: true, instructor: true } },
+        offlineCourseVideos: true,
+        timeLine: true,
       },
     });
   }

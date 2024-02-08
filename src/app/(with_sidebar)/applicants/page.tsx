@@ -19,6 +19,7 @@ const title: Record<ApplicantEnumType, string> = {
   JOB_APPLICANT: "Job Applicants",
   CONTACT_US_APPLICANT: "Contact us applicants",
   OFFLINE_COURSE_APPLICANT: "Offline course applicants",
+  ARTICLE_APPLICANT: "Article applicants",
 };
 
 export default function Applicants() {
