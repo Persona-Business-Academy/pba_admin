@@ -15,6 +15,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "d2cnsoh3yg3xet.cloudfront.net",
       },
+      {
+        protocol: "https",
+        hostname: "d2tzdw2g7yqtsl.cloudfront.net",
+      },
     ],
   },
   async redirects() {
