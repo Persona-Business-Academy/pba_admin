@@ -1,5 +1,6 @@
-import { BadRequestException } from "next-api-decorators";
+import { BadRequestException, NotFoundException } from "next-api-decorators";
 import { SortingType } from "@/api/types";
+import { AwsService } from "@/lib/aws";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
 import {
   AddEditOfflineCourseTimelineValidation,
@@ -63,30 +64,71 @@ export class OfflineCourses {
     });
   }
 
-  static edit(data: EditOfflineCourseValidation, id: string) {
+  static async edit(data: EditOfflineCourseValidation, id: string) {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
     const { whatYouWillLearn, ..._data } = data;
 
-    //aws
-    return prisma.offlineCourse.update({
+    const offlineCourse = await prisma.offlineCourse.findUnique({ where: { id: +id } });
+
+    if (!offlineCourse) {
+      throw new NotFoundException("Offline course not found");
+    }
+
+    const updatedOfflineCourse = await prisma.offlineCourse.update({
       where: { id: +id },
       data: {
         ..._data,
         ...(whatYouWillLearn ? { whatYouWillLearn: whatYouWillLearn.map(item => item.value) } : {}),
       },
     });
+
+    await Promise.all([
+      AwsService.deleteFromStorage("update", {
+        existingKey: offlineCourse.coverPhoto,
+        key: updatedOfflineCourse.coverPhoto,
+      }),
+      AwsService.deleteFromStorage("update", {
+        existingKey: offlineCourse.graduationPhoto,
+        key: updatedOfflineCourse.graduationPhoto,
+      }),
+      AwsService.deleteFromStorage("update", {
+        existingKey: offlineCourse.pdf,
+        key: updatedOfflineCourse.pdf,
+      }),
+      AwsService.deleteFromStorage("update", {
+        existingKey: offlineCourse.whatYouWillLearnPhoto,
+        key: updatedOfflineCourse.whatYouWillLearnPhoto,
+      }),
+    ]);
+
+    return updatedOfflineCourse;
   }
 
-  static delete(id: string) {
+  static async delete(id: string) {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
-    return prisma.offlineCourse.delete({
+    const offlineCourse = await prisma.offlineCourse.findUnique({ where: { id: +id } });
+
+    if (!offlineCourse) {
+      throw new NotFoundException("Offline course not found");
+    }
+
+    const deletedOfflineCourse = await prisma.offlineCourse.delete({
       where: { id: +id },
     });
+
+    await Promise.all([
+      AwsService.deleteFromStorage("delete", { existingKey: offlineCourse.coverPhoto }),
+      AwsService.deleteFromStorage("delete", { existingKey: offlineCourse.graduationPhoto }),
+      AwsService.deleteFromStorage("delete", { existingKey: offlineCourse.pdf }),
+      AwsService.deleteFromStorage("delete", { existingKey: offlineCourse.whatYouWillLearnPhoto }),
+    ]);
+
+    return deletedOfflineCourse;
   }
 
   static addInstructors({ instructorId, offlineCourseId }: AddOfflineInstructorsValidation) {
@@ -95,14 +137,24 @@ export class OfflineCourses {
     });
   }
 
-  static removeInstructors(id: string) {
+  static async removeInstructors(id: string) {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
-    return prisma.offlineCourseInstructors.delete({
+    const offlineCourseInstructor = await prisma.offlineCourseInstructors.findUnique({
       where: { id: +id },
     });
+
+    if (!offlineCourseInstructor) {
+      throw new NotFoundException("Instructor not found");
+    }
+
+    const deletedOfflineCourseInstructor = await prisma.offlineCourseInstructors.delete({
+      where: { id: +id },
+    });
+
+    return deletedOfflineCourseInstructor;
   }
 
   static addVideo({ name, key, offlineCourseId }: AddOfflineCourseVideosValidation) {
@@ -111,14 +163,24 @@ export class OfflineCourses {
     });
   }
 
-  static removeVideo(id: string) {
+  static async removeVideo(id: string) {
     if (isNaN(Number(id)) || +id === 0) {
       throw new BadRequestException(ERROR_MESSAGES.somethingWentWrong);
     }
 
-    return prisma.offlineCourseVideo.delete({
+    const offlineCourseVideo = await prisma.offlineCourseVideo.findUnique({ where: { id: +id } });
+
+    if (!offlineCourseVideo) {
+      throw new NotFoundException("Video not found");
+    }
+
+    const deletedOfflineCourseVideo = await prisma.offlineCourseVideo.delete({
       where: { id: +id },
     });
+
+    await AwsService.deleteFromStorage("delete", { existingKey: offlineCourseVideo.key });
+
+    return deletedOfflineCourseVideo;
   }
 
   static addTimeline(body: AddEditOfflineCourseTimelineValidation) {

@@ -52,30 +52,26 @@ const uploadDocumentWithSignerToAWS = async (options: UploadFileToAwsReq) => {
       },
     });
   } catch (e) {
-    throw e;
+    throw new Error(e as string);
   }
 };
 
-export const uploadDocumentToAWS = async (
+export const uploadDocumentToAWS = (
   options: Omit<UploadFileToAwsReq, "resolve">,
 ): Promise<UploadFileToAwsRes> => {
-  try {
-    return await new Promise(resolve => {
-      uploadDocumentWithSignerToAWS({
-        ...options,
-        resolve,
-      });
+  return new Promise(resolve => {
+    uploadDocumentWithSignerToAWS({
+      ...options,
+      resolve,
     });
-  } catch (e) {
-    throw e;
-  }
+  });
 };
 
 export const generateOnlineCourseVideoName = (id: number, levelId: number, dayId: number) =>
-  `OnlineCourses/OnlineCourse-${id}/Level-${levelId}/Day-${dayId}/Video/${Date.now()}`;
+  `OnlineCourses/${id}/Level-${levelId}/Day-${dayId}/Video/${Date.now()}`;
 
 export const generateOnlineCourseCoverPhotoName = (id: string) =>
-  `OnlineCourses/OnlineCourse-${id}/CoverPhoto/${Date.now()}`;
+  `OnlineCourses/${id}/CoverPhoto/${Date.now()}`;
 
 export const generateFileNames = (
   id: string,
@@ -88,8 +84,8 @@ export const generateFileNames = (
     | "OfflineCoursePdf"
     | "Comments",
 ) => {
-  const offlineCoursePrefix = `OfflineCourses/OfflineCourse-${id}`;
-  const instructorPrefix = `Instructors/Instructor-${id}`;
+  const offlineCoursePrefix = `OfflineCourses/${id}`;
+  const instructorPrefix = `Instructors/${id}`;
 
   switch (type) {
     case "OfflineCourseAbout":
@@ -105,7 +101,7 @@ export const generateFileNames = (
     case "OfflineCoursePdf":
       return `${offlineCoursePrefix}/pdf/${Date.now()}`;
     case "Comments":
-      return `Comments/Comment-${id}/${Date.now()}`;
+      return `Comments/${id}/${Date.now()}`;
     default:
       return "";
   }

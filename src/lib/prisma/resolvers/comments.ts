@@ -1,4 +1,6 @@
+import { NotFoundException } from "next-api-decorators";
 import { User } from "next-auth";
+import { AwsService } from "@/lib/aws";
 import type { CourseType } from "@/utils/models/common";
 import { CreateCommentsValidation, EditCommentsValidation } from "@/utils/validation/comments";
 import prisma from "..";
@@ -30,8 +32,13 @@ export class Comment {
     });
   }
 
-  static edit(body: EditCommentsValidation, id: number) {
-    return prisma.courseComment.update({
+  static async edit(body: EditCommentsValidation, id: number) {
+    const comment = await prisma.courseComment.findUnique({ where: { id } });
+    if (!comment) {
+      throw new NotFoundException("Comment not found");
+    }
+
+    const updatedComment = await prisma.courseComment.update({
       where: { id },
       data: {
         headline: body.headline,
@@ -39,9 +46,25 @@ export class Comment {
         userPicture: body.userPicture,
       },
     });
+
+    await AwsService.deleteFromStorage("update", {
+      existingKey: comment.userPicture || "",
+      key: updatedComment.userPicture || "",
+    });
+
+    return updatedComment;
   }
 
-  static delete(id: number) {
-    return prisma.courseComment.delete({ where: { id } });
+  static async delete(id: number) {
+    const comment = await prisma.courseComment.findUnique({ where: { id } });
+    if (!comment) {
+      throw new NotFoundException("Comment not found");
+    }
+
+    const deletedComment = await prisma.courseComment.delete({ where: { id } });
+
+    await AwsService.deleteFromStorage("delete", { existingKey: comment.userPicture || "" });
+
+    return deletedComment;
   }
 }

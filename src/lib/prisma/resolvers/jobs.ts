@@ -1,3 +1,4 @@
+import { NotFoundException } from "next-api-decorators";
 import { SortingType } from "@/api/types";
 import { CreateEditJobValidation } from "@/utils/validation/jobs";
 import prisma from "..";
@@ -34,14 +35,27 @@ export class Jobs {
     });
   }
 
-  static edit(data: CreateEditJobValidation, id: number) {
-    return prisma.job.update({
+  static async edit(data: CreateEditJobValidation, id: number) {
+    const job = await prisma.job.findUnique({ where: { id: +id } });
+    if (!job) {
+      throw new NotFoundException("Job not found");
+    }
+
+    const updatedJob = await prisma.job.update({
       where: { id: +id },
       data,
     });
+
+    return updatedJob;
   }
 
-  static delete(id: number) {
-    return prisma.job.delete({ where: { id } });
+  static async delete(id: number) {
+    const job = await prisma.job.findUnique({ where: { id: +id } });
+    if (!job) {
+      throw new NotFoundException("Job not found");
+    }
+    const deletedJob = await prisma.job.delete({ where: { id } });
+
+    return deletedJob;
   }
 }

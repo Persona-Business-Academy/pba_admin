@@ -3,7 +3,7 @@ import { BadRequestException, Catch, createHandler, Get, Param, Query } from "ne
 import { SortingType } from "@/api/types";
 import { exceptionHandler } from "@/lib/prisma/error";
 import { AuthMiddleware } from "@/lib/prisma/middlewares/auth-middleware";
-import { Applicants } from "@/lib/prisma/resolvers/applicants";
+import { Applicants } from "@/lib/prisma/resolvers";
 import { ERROR_MESSAGES } from "@/utils/constants/common";
 
 @Catch(exceptionHandler)

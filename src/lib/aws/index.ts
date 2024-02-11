@@ -1,6 +1,5 @@
 import { S3 } from "@aws-sdk/client-s3";
 import * as crypto from "crypto";
-import { NotFoundException } from "next-api-decorators";
 
 export class AwsService {
   private static awsS3 = new S3({
@@ -29,15 +28,20 @@ export class AwsService {
     return hmac(signingKey, toSign).toString("hex");
   }
 
-  static async deleteFromStorage(existingKey: string, key: string) {
-    if (!!existingKey && existingKey !== key) {
-      const params = { Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME, Key: existingKey };
-      const existingFileObject = await this.awsS3.headObject(params);
-      if (!existingFileObject) {
-        throw new NotFoundException("File not found");
-      }
+  static deleteFromStorage(
+    actionType: "delete" | "update",
+    keys: { existingKey: string; key?: string },
+  ) {
+    const params = {
+      Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME,
+      Key: keys.existingKey,
+    };
 
-      await this.awsS3.deleteObject(params);
+    if (actionType === "delete") {
+      return this.awsS3.deleteObject(params);
+    }
+    if (actionType === "update" && !!keys.existingKey && keys.existingKey !== keys.key) {
+      return this.awsS3.deleteObject(params);
     }
   }
 }
