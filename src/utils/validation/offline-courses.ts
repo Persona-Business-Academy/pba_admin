@@ -82,10 +82,6 @@ export class CreateOfflineCourseValidation {
 
   @IsBoolean()
   forKids: boolean;
-
-  @IsNumber()
-  @IsNotEmpty({ message: "Currency is required" })
-  rating: number;
 }
 
 export class EditOfflineCourseValidation {

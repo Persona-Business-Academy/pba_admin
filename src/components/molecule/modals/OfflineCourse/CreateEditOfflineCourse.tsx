@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Controller, SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { OfflineCourseService } from "@/api/services/OfflineCourseService";
-import { CustomSelect, FormInput, FormTextarea, StarRating, UploadFile } from "@/components/atom";
+import { CustomSelect, FormInput, FormTextarea, UploadFile } from "@/components/atom";
 import { colors } from "@/utils/constants/chakra";
 import { CURRENCIES, LANGUAGES, SKILL_LEVELS, TOPICS } from "@/utils/constants/courses";
 import { generateAWSUrl, validateAgeLimit } from "@/utils/helpers/common";
@@ -386,13 +386,6 @@ const CreateEditOfflineCourseModal: FC<Props> = ({
               formErrorMessage={errors[name]?.message}
               inputProps={{ min: 0 }}
             />
-          )}
-        />
-        <Controller
-          name="rating"
-          control={control}
-          render={({ field: { onChange, value, name } }) => (
-            <StarRating name={name} formLabelName="Rating" rating={value} onChange={onChange} />
           )}
         />
       </HStack>
