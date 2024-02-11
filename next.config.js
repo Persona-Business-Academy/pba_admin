@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
@@ -17,7 +18,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "d2tzdw2g7yqtsl.cloudfront.net",
+        hostname: "d17g72h6u0q1gt.cloudfront.net",
       },
     ],
   },
