@@ -1,5 +1,5 @@
 "use client";
-import { FC, memo, useCallback, useMemo, useState } from "react";
+import { FC, memo, useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   IconButton,
@@ -7,6 +7,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  useClipboard,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
@@ -32,6 +33,7 @@ import {
   OFFLINE_COURSES_FOR_KIDS_ROUTE,
   OFFLINE_COURSES_ROUTE,
 } from "@/utils/constants/routes";
+import { generateOfflineCourseUrl } from "@/utils/helpers/common";
 import { QUERY_KEY } from "@/utils/helpers/queryClient";
 import { Maybe } from "@/utils/models/common";
 import { OfflineCourse } from "@/utils/models/offlineCourses";
@@ -46,6 +48,7 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(search);
+  const { value: url, onCopy, setValue: setUrl } = useClipboard("");
   const [editableOfflineCourse, setEditableOfflineCourse] = useState<Maybe<OfflineCourse>>(null);
   const [deletableOfflineCourse, setDeletableOfflineCourse] = useState<Maybe<OfflineCourse>>(null);
 
@@ -183,6 +186,15 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
                 Edit
               </MenuItem>
               <MenuItem
+                disabled={!(row.original?.id && row.original?.title)}
+                onClick={() => {
+                  if (row.original?.id && row.original?.title) {
+                    setUrl(generateOfflineCourseUrl(row.original.id, row.original.title));
+                  }
+                }}>
+                Copy url
+              </MenuItem>
+              <MenuItem
                 onClick={() => {
                   setEditableOfflineCourse(row.original);
                   instructorsModal.onOpen();
@@ -247,17 +259,26 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
       graduationPhotoModal,
       instructorsModal,
       onOpen,
+      setUrl,
       timeLineModal,
       videosModal,
       whatYouWillLearnPhotoModal,
     ],
   );
 
+  useEffect(() => {
+    if (url) {
+      onCopy();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url]);
+
   return (
     <>
       <SearchTable
         title={forKids ? "Offline courses for kids" : "Offline courses"}
         isLoading={isLoading}
+        rowCondition={"disabled"}
         data={data?.offlineCourses || []}
         count={data?.count || 0}
         // @ts-ignore

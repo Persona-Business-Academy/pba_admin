@@ -32,6 +32,7 @@ import { ITEMS_PER_PAGE } from "@/utils/constants/common";
 
 export type DataTableProps<Data> = {
   title?: string;
+  rowCondition?: string;
   count: number;
   data: Data[];
   columns: ColumnDef<Data, any>[];
@@ -49,6 +50,7 @@ export type DataTableProps<Data> = {
 
 function SearchTable<Data>({
   title,
+  rowCondition,
   count,
   data,
   columns,
@@ -135,18 +137,29 @@ function SearchTable<Data>({
             ))}
           </Thead>
           <Tbody>
-            {getRowModel().rows.map(row => (
-              <Tr key={row.id}>
-                {row.getVisibleCells().map(cell => {
-                  const meta: any = cell.column.columnDef.meta;
-                  return (
-                    <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </Td>
-                  );
-                })}
-              </Tr>
-            ))}
+            {getRowModel().rows.map(row => {
+              console.log(row);
+              return (
+                <Tr
+                  key={row.id}
+                  {...(rowCondition
+                    ? {
+                        backgroundColor: (row.original as any)[rowCondition]
+                          ? "red.100"
+                          : "green.100",
+                      }
+                    : {})}>
+                  {row.getVisibleCells().map(cell => {
+                    const meta: any = cell.column.columnDef.meta;
+                    return (
+                      <Td key={cell.id} isNumeric={meta?.isNumeric}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </Td>
+                    );
+                  })}
+                </Tr>
+              );
+            })}
           </Tbody>
           <Tfoot>
             <Tr>

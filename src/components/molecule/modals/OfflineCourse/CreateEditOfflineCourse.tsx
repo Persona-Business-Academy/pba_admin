@@ -1,6 +1,15 @@
 import { FC, memo, useCallback, useState } from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { Center, Fade, HStack, IconButton, Text, useToast } from "@chakra-ui/react";
+import {
+  Center,
+  Fade,
+  FormLabel,
+  HStack,
+  IconButton,
+  Switch,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { classValidatorResolver } from "@hookform/resolvers/class-validator";
 import { useMutation } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
@@ -165,23 +174,38 @@ const CreateEditOfflineCourseModal: FC<Props> = ({
           </HStack>
         )}
       />
-      <Controller
-        name="title"
-        control={control}
-        render={({ field: { onChange, value, name } }) => (
-          <FormInput
-            isRequired
-            isInvalid={!!errors[name]?.message}
-            name={name}
-            type="text"
-            formLabelName="Title"
-            value={value}
-            placeholder="React.js course"
-            handleInputChange={onChange}
-            formErrorMessage={errors[name]?.message}
-          />
-        )}
-      />
+      <HStack alignItems="flex-start" spacing={10}>
+        <Controller
+          name="title"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <FormInput
+              isRequired
+              isInvalid={!!errors[name]?.message}
+              name={name}
+              type="text"
+              formLabelName="Title"
+              value={value}
+              placeholder="React.js course"
+              handleInputChange={onChange}
+              formErrorMessage={errors[name]?.message}
+            />
+          )}
+        />
+        <Controller
+          name="disabled"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <>
+              <FormLabel htmlFor="isChecked" m={0}>
+                Disabled
+              </FormLabel>
+              <Switch id="isChecked" name={name} isChecked={value} onChange={onChange} />
+            </>
+          )}
+        />
+      </HStack>
       <Controller
         name="subTitle"
         control={control}

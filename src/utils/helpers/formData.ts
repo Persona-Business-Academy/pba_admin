@@ -32,6 +32,7 @@ export const generateOfflineCourseDefaultValues = (
     ? offlineCourse.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item }))
     : [],
   forKids: offlineCourse?.forKids || forKids,
+  disabled: offlineCourse?.disabled || false,
 });
 
 export const generateOnlineCourseDefaultValues = (

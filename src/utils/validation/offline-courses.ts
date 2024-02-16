@@ -82,6 +82,9 @@ export class CreateOfflineCourseValidation {
 
   @IsBoolean()
   forKids: boolean;
+
+  @IsBoolean()
+  disabled: boolean;
 }
 
 export class EditOfflineCourseValidation {

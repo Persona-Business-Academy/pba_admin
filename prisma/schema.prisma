@@ -175,6 +175,7 @@ model OfflineCourse {
   whatYouWillLearn       String[]
   whatYouWillLearnPhoto  String     @default("")
   benefits               Json       @db.Json
+  disabled               Boolean    @default(false)
 
   applicants          Applicant[]
   comments            CourseComment[]
