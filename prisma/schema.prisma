@@ -8,254 +8,228 @@ datasource db {
 }
 
 model User {
-  id               Int     @id @default(autoincrement())
-  email            String  @unique
-  firstName        String? @db.VarChar(45)
-  lastName         String? @db.VarChar(45)
-  password         String  @db.VarChar(60)
-  isVerified       Boolean @default(false)
-  phone            String? @db.VarChar(60)
-  isPhoneVerified  Boolean @default(false)
-  address          String? @db.VarChar(60)
-  country          String? @db.VarChar(60)
-  state            String? @db.VarChar(60)
-  city             String? @db.VarChar(60)
-  confirmationCode Int?    @unique
-  avatar           String?
-
+  id                   Int             @id @default(autoincrement())
+  email                String          @unique
+  firstName            String?         @db.VarChar(45)
+  lastName             String?         @db.VarChar(45)
+  password             String          @db.VarChar(60)
+  isVerified           Boolean         @default(false)
+  phone                String?         @db.VarChar(60)
+  isPhoneVerified      Boolean         @default(false)
+  address              String?         @db.VarChar(60)
+  country              String?         @db.VarChar(60)
+  state                String?         @db.VarChar(60)
+  city                 String?         @db.VarChar(60)
+  confirmationCode     Int?            @unique
+  avatar               String?
+  createdAt            DateTime        @default(now()) @db.Timestamp(0)
+  updatedAt            DateTime        @updatedAt @db.Timestamp(0)
   onlineCourseComments CourseComment[]
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
 }
 
 model Admin {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  firstName String? @db.VarChar(45)
-  lastName  String? @db.VarChar(45)
-  password  String  @db.VarChar(60)
-
-  role     AdminRole
-  comments CourseComment[]
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  id        Int             @id @default(autoincrement())
+  email     String          @unique
+  firstName String?         @db.VarChar(45)
+  lastName  String?         @db.VarChar(45)
+  password  String          @db.VarChar(60)
+  role      AdminRole
+  createdAt DateTime        @default(now()) @db.Timestamp(0)
+  updatedAt DateTime        @updatedAt @db.Timestamp(0)
+  comments  CourseComment[]
 }
 
 model OnlineCourse {
-  id                     Int        @id @default(autoincrement())
-  title                  String     @unique @db.Text
-  subTitle               String     @db.Text
+  id                     Int                 @id @default(autoincrement())
+  title                  String              @unique
+  subTitle               String
   courseLevel            SkillLevel
   coverPhoto             String
-  mediaId                String     @unique
-  description            String     @db.Text
-  duration               Float      @default(0)
-  lessonsCount           Int        @default(0)
-  graduatedStudentsCount Int        @default(0)
-  enrolledStudentsCount  Int        @default(0)
+  mediaId                String              @unique
+  description            String
+  duration               Float               @default(0)
+  lessonsCount           Int                 @default(0)
+  graduatedStudentsCount Int                 @default(0)
+  enrolledStudentsCount  Int                 @default(0)
   instructorId           Int
   language               Language
-  rating                 Float      @default(0)
+  rating                 Float               @default(0)
   topic                  Topic
   whatYouWillLearn       String[]
-
-  instructor Instructor          @relation(fields: [instructorId], references: [id])
-  comments   CourseComment[]
-  days       OnlineCourseDay[]
-  levels     OnlineCourseLevel[]
-  videos     OnlineCourseVideo[]
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  createdAt              DateTime            @default(now()) @db.Timestamp(0)
+  updatedAt              DateTime            @updatedAt @db.Timestamp(0)
+  comments               CourseComment[]
+  instructor             Instructor          @relation(fields: [instructorId], references: [id])
+  days                   OnlineCourseDay[]
+  levels                 OnlineCourseLevel[]
+  videos                 OnlineCourseVideo[]
 }
 
 model OnlineCourseLevel {
-  id             Int    @id @default(autoincrement())
-  level          String @db.VarChar(45)
+  id             Int                 @id @default(autoincrement())
+  level          String              @db.VarChar(45)
   onlineCourseId Int
-
-  days         OnlineCourseDay[]
-  onlineCourse OnlineCourse        @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
-  videos       OnlineCourseVideo[]
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  createdAt      DateTime            @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime            @updatedAt @db.Timestamp(0)
+  days           OnlineCourseDay[]
+  onlineCourse   OnlineCourse        @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
+  videos         OnlineCourseVideo[]
 }
 
 model OnlineCourseDay {
-  id                  Int    @id @default(autoincrement())
-  label               String @db.VarChar(45)
+  id                  Int                 @id @default(autoincrement())
+  label               String              @db.VarChar(45)
   onlineCourseId      Int
   onlineCourseLevelId Int
-
-  onlineCourse      OnlineCourse        @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
-  onlineCourseLevel OnlineCourseLevel   @relation(fields: [onlineCourseLevelId], references: [id], onDelete: Cascade)
-  videos            OnlineCourseVideo[]
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  createdAt           DateTime            @default(now()) @db.Timestamp(0)
+  updatedAt           DateTime            @updatedAt @db.Timestamp(0)
+  onlineCourse        OnlineCourse        @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
+  onlineCourseLevel   OnlineCourseLevel   @relation(fields: [onlineCourseLevelId], references: [id], onDelete: Cascade)
+  videos              OnlineCourseVideo[]
 }
 
 model OnlineCourseVideo {
-  id                  Int    @id @default(autoincrement())
+  id                  Int               @id @default(autoincrement())
   key                 String
   name                String
   onlineCourseId      Int
   onlineCourseLevelId Int
   onlineCourseDayId   Int
-
-  onlineCourseDay   OnlineCourseDay   @relation(fields: [onlineCourseDayId], references: [id], onDelete: Cascade)
-  onlineCourse      OnlineCourse      @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
-  onlineCourseLevel OnlineCourseLevel @relation(fields: [onlineCourseLevelId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  createdAt           DateTime          @default(now()) @db.Timestamp(0)
+  updatedAt           DateTime          @updatedAt @db.Timestamp(0)
+  onlineCourseDay     OnlineCourseDay   @relation(fields: [onlineCourseDayId], references: [id], onDelete: Cascade)
+  onlineCourse        OnlineCourse      @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
+  onlineCourseLevel   OnlineCourseLevel @relation(fields: [onlineCourseLevelId], references: [id], onDelete: Cascade)
 }
 
 model CourseComment {
-  id              Int     @id @default(autoincrement())
-  headline        String  @db.Text
-  text            String  @db.Text
+  id              Int            @id @default(autoincrement())
+  headline        String
+  text            String
   userPicture     String?
   authorId        Int?
   authorAdminId   Int?
   onlineCourseId  Int?
   offlineCourseId Int?
-
-  authorAdmin   Admin?         @relation(fields: [authorAdminId], references: [id], onDelete: Cascade)
-  author        User?          @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  offlineCourse OfflineCourse? @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
-  onlineCourse  OnlineCourse?  @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  createdAt       DateTime       @default(now()) @db.Timestamp(0)
+  updatedAt       DateTime       @updatedAt @db.Timestamp(0)
+  authorAdmin     Admin?         @relation(fields: [authorAdminId], references: [id], onDelete: Cascade)
+  author          User?          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  offlineCourse   OfflineCourse? @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
+  onlineCourse    OnlineCourse?  @relation(fields: [onlineCourseId], references: [id], onDelete: Cascade)
 }
 
 model Instructor {
-  id                     Int    @id @default(autoincrement())
-  firstName              String @db.VarChar(45)
-  profession             String @db.VarChar(45)
-  lastName               String @db.VarChar(45)
-  graduatedStudentsCount Int    @default(0)
-  enrolledStudentsCount  Int    @default(0)
-  about                  String @db.Text
-  avatar                 String
-  mediaId                String @unique
-
+  id                       Int                        @id @default(autoincrement())
+  firstName                String                     @db.VarChar(45)
+  profession               String                     @db.VarChar(45)
+  lastName                 String                     @db.VarChar(45)
+  graduatedStudentsCount   Int                        @default(0)
+  enrolledStudentsCount    Int                        @default(0)
+  about                    String
+  avatar                   String
+  mediaId                  String                     @unique
+  createdAt                DateTime                   @default(now()) @db.Timestamp(0)
+  updatedAt                DateTime                   @updatedAt @db.Timestamp(0)
   offlineCourseInstructors OfflineCourseInstructors[]
   onlineCourses            OnlineCourse[]
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
 }
 
 model OfflineCourse {
-  id                     Int        @id @default(autoincrement())
-  title                  String     @unique @db.Text
-  subTitle               String     @db.Text
+  id                     Int                        @id @default(autoincrement())
+  title                  String                     @unique
+  subTitle               String
   topic                  Topic
   coverPhoto             String
-  pdf                    String     @default("")
-  graduationPhoto        String     @default("")
-  mediaId                String     @unique
-  rating                 Float      @default(0)
-  description            String     @db.Text
+  pdf                    String                     @default("")
+  graduationPhoto        String                     @default("")
+  mediaId                String                     @unique
+  rating                 Float                      @default(0)
+  description            String
   language               Language
   ageLimit               String
-  totalDuration          Float      @default(0)
+  totalDuration          Float                      @default(0)
   courseLevel            SkillLevel
-  forKids                Boolean    @default(false)
-  graduatedStudentsCount Int        @default(0)
-  enrolledStudentsCount  Int        @default(0)
-  lessonsCount           Int        @default(0)
+  forKids                Boolean                    @default(false)
+  graduatedStudentsCount Int                        @default(0)
+  enrolledStudentsCount  Int                        @default(0)
+  lessonsCount           Int                        @default(0)
   price                  Float
   currency               Currency
   whatYouWillLearn       String[]
-  whatYouWillLearnPhoto  String     @default("")
-  benefits               Json       @db.Json
-  disabled               Boolean    @default(false)
-
-  applicants          Applicant[]
-  comments            CourseComment[]
-  instructors         OfflineCourseInstructors[]
-  timeLine            OfflineCourseTimeline?
-  offlineCourseVideos OfflineCourseVideo[]
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  whatYouWillLearnPhoto  String                     @default("")
+  benefits               Json                       @db.Json
+  createdAt              DateTime                   @default(now()) @db.Timestamp(0)
+  updatedAt              DateTime                   @updatedAt @db.Timestamp(0)
+  disabled               Boolean                    @default(false)
+  applicants             Applicant[]
+  comments               CourseComment[]
+  instructors            OfflineCourseInstructors[]
+  timeLine               OfflineCourseTimeline?
+  offlineCourseVideos    OfflineCourseVideo[]
 }
 
 model OfflineCourseVideo {
-  id              Int    @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   key             String
   name            String
   offlineCourseId Int
-
-  offlineCourse OfflineCourse @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  createdAt       DateTime      @default(now()) @db.Timestamp(0)
+  updatedAt       DateTime      @updatedAt @db.Timestamp(0)
+  offlineCourse   OfflineCourse @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
 }
 
 model OfflineCourseInstructors {
-  id              Int @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   offlineCourseId Int
   instructorId    Int
-
-  instructor Instructor    @relation(fields: [instructorId], references: [id], onDelete: Cascade)
-  course     OfflineCourse @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
+  instructor      Instructor    @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  course          OfflineCourse @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
 
   @@unique([offlineCourseId, instructorId], name: "offlineCourseInstructorId")
 }
 
 model OfflineCourseTimeline {
-  id              Int        @id @default(autoincrement())
-  offlineCourseId Int        @unique
+  id              Int           @id @default(autoincrement())
+  offlineCourseId Int           @unique
   startDates      DateTime[]
-
-  offlineCourse OfflineCourse @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
+  offlineCourse   OfflineCourse @relation(fields: [offlineCourseId], references: [id], onDelete: Cascade)
 }
 
 model Applicant {
-  id                       Int           @id @default(autoincrement())
+  id                       Int            @id @default(autoincrement())
   name                     String?
   email                    String
   phoneNumber              String?
-  attachment               String?       @default("")
+  attachment               String?        @default("")
   company                  String?
-  message                  String?       @db.Text
-  motivationLetter         String?       @db.Text
-  hasAgreedToPrivacyPolicy Boolean       @default(true)
+  message                  String?
+  motivationLetter         String?
+  hasAgreedToPrivacyPolicy Boolean        @default(true)
   for                      ApplicantType
   offlineCourseId          Int?
   jobId                    Int?
   courseDesiredStartTime   String?
   courseDesiredEndTime     String?
-
-  job           Job?           @relation(fields: [jobId], references: [id])
-  offlineCourse OfflineCourse? @relation(fields: [offlineCourseId], references: [id])
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  createdAt                DateTime       @default(now()) @db.Timestamp(0)
+  updatedAt                DateTime       @updatedAt @db.Timestamp(0)
+  job                      Job?           @relation(fields: [jobId], references: [id])
+  offlineCourse            OfflineCourse? @relation(fields: [offlineCourseId], references: [id])
 }
 
 model Job {
-  id               Int     @id @default(autoincrement())
-  title            String  @db.Text
+  id               Int         @id @default(autoincrement())
+  title            String
   salary           String
   workingHours     String
   contractType     String
-  description      String  @db.Text
-  responsibilities String  @db.Text
-  requirements     String  @db.Text
-  disabled         Boolean @default(false)
-
-  applicants Applicant[]
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  description      String
+  responsibilities String
+  requirements     String
+  disabled         Boolean     @default(false)
+  createdAt        DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt        DateTime    @updatedAt @db.Timestamp(0)
+  applicants       Applicant[]
 }
 
 enum ApplicantType {
@@ -282,6 +256,7 @@ enum Topic {
   BUSINESS_LAW
   BUSINESS_ENGLISH
   MANAGEMENT
+  OTHER
 }
 
 enum SkillLevel {

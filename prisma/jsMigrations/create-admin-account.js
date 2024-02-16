@@ -4,13 +4,13 @@ const bcrypt = require("bcrypt");
 const { PrismaClient } = PClient;
 const prisma = new PrismaClient();
 const migration = async () => {
-  const hashedPassword = await bcrypt.hash("admin", 10);
+  const hashedPassword = await bcrypt.hash("1634516345Tt*", 10);
 
   await prisma.admin.create({
     data: {
       firstName: "Persona",
       lastName: "Bussiness",
-      email: "persona@mailinator.com",
+      email: "Ceo@pba.am",
       role: "SUPER_ADMIN",
       password: hashedPassword,
     },
@@ -26,5 +26,3 @@ migration().then(
     process.exit(2);
   },
 );
-
-

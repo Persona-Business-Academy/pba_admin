@@ -10,10 +10,10 @@ const SKILL_LEVELS: Array<{ name: SkillLevelType; value: SkillLevelType; order: 
 
 const TOPICS: Array<{ name: string; value: Topic }> = [
   { name: "Development", value: Topic.DEVELOPMENT },
-  { name: "Digital Marketing", value: Topic.DIGITAL_MARKETING },
+  { name: "Marketing", value: Topic.DIGITAL_MARKETING },
+  { name: "Management", value: Topic.MANAGEMENT },
   { name: "Design", value: Topic.DESIGN },
-  { name: "Business Law", value: Topic.BUSINESS_LAW },
-  { name: "Business English", value: Topic.BUSINESS_ENGLISH },
+  { name: "Other", value: Topic.OTHER },
 ];
 
 const LANGUAGES: Array<{ name: string; value: LanguageType }> = [
