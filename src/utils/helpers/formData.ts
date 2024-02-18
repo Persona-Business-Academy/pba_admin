@@ -13,53 +13,53 @@ export const generateOfflineCourseDefaultValues = (
   offlineCourse: OfflineCourse,
   forKids: boolean,
 ): CreateOfflineCourseValidation => ({
-  title: !!offlineCourse ? offlineCourse.title : "",
-  topic: !!offlineCourse ? offlineCourse.topic : Topic.DEVELOPMENT,
-  subTitle: !!offlineCourse ? offlineCourse.subTitle : "",
-  description: !!offlineCourse ? offlineCourse.description : "",
-  language: !!offlineCourse ? offlineCourse.language : "ARM",
-  ageLimit: !!offlineCourse ? offlineCourse.ageLimit : "",
-  totalDuration: !!offlineCourse ? offlineCourse.totalDuration : 0,
-  courseLevel: !!offlineCourse ? offlineCourse.courseLevel : "BEGINNER",
-  graduatedStudentsCount: !!offlineCourse ? offlineCourse.graduatedStudentsCount : 0,
-  enrolledStudentsCount: !!offlineCourse ? offlineCourse.enrolledStudentsCount : 0,
-  price: !!offlineCourse ? offlineCourse.price : 0,
-  currency: !!offlineCourse ? offlineCourse.currency : "AMD",
-  lessonsCount: !!offlineCourse ? offlineCourse.lessonsCount : 0,
-  coverPhoto: !!offlineCourse ? offlineCourse.coverPhoto : "",
-  mediaId: !!offlineCourse ? offlineCourse.mediaId : uuidv4(),
-  whatYouWillLearn: !!offlineCourse
-    ? offlineCourse.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item }))
-    : [],
+  title: offlineCourse?.title || "",
+  topic: offlineCourse?.topic || Topic.DEVELOPMENT,
+  subTitle: offlineCourse?.subTitle || "",
+  description: offlineCourse?.description || "",
+  language: offlineCourse?.language || "ARM",
+  ageLimit: offlineCourse?.ageLimit || "",
+  totalDuration: offlineCourse?.totalDuration || 0,
+  courseLevel: offlineCourse?.courseLevel || "BEGINNER",
+  graduatedStudentsCount: offlineCourse?.graduatedStudentsCount || 0,
+  enrolledStudentsCount: offlineCourse?.enrolledStudentsCount || 0,
+  price: offlineCourse?.price || 0,
+  currency: offlineCourse?.currency || "AMD",
+  lessonsCount: offlineCourse?.lessonsCount || 0,
+  coverPhoto: offlineCourse?.coverPhoto || "",
+  mediaId: offlineCourse?.mediaId || uuidv4(),
+  whatYouWillLearn:
+    offlineCourse?.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item })) || [],
   forKids: offlineCourse?.forKids || forKids,
-  disabled: offlineCourse?.disabled || false,
+  disabled: !!offlineCourse?.disabled,
 });
 
 export const generateOnlineCourseDefaultValues = (
   onlineCourse: OnlineCourse,
 ): CreateEditOnlineCourseValidation => ({
-  title: !!onlineCourse ? onlineCourse.title : "",
-  description: !!onlineCourse ? onlineCourse.description : "",
-  courseLevel: !!onlineCourse ? onlineCourse.courseLevel : "BEGINNER",
-  topic: !!onlineCourse ? onlineCourse.topic : Topic.DEVELOPMENT,
-  language: !!onlineCourse ? onlineCourse.language : "ARM",
-  instructorId: !!onlineCourse ? onlineCourse.instructorId : undefined!,
-  coverPhoto: !!onlineCourse ? onlineCourse.coverPhoto : "",
-  mediaId: !!onlineCourse ? onlineCourse.mediaId : uuidv4(),
-  whatYouWillLearn: !!onlineCourse
-    ? onlineCourse.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item }))
-    : [],
+  title: onlineCourse?.title || "",
+  description: onlineCourse?.description || "",
+  courseLevel: onlineCourse?.courseLevel || "BEGINNER",
+  topic: onlineCourse?.topic || Topic.DEVELOPMENT,
+  language: onlineCourse?.language || "ARM",
+  instructorId: onlineCourse?.instructorId || undefined!,
+  coverPhoto: onlineCourse?.coverPhoto || "",
+  mediaId: onlineCourse?.mediaId || uuidv4(),
+  whatYouWillLearn:
+    onlineCourse?.whatYouWillLearn.map(item => ({ id: uuidv4(), value: item })) || [],
 });
 
 export const generateInstructorDefaultValues = (
   instructor: InstructorType,
 ): CreateEditInstructorValidation => ({
-  firstName: !!instructor ? instructor.firstName : "",
-  lastName: !!instructor ? instructor.lastName : "",
-  about: !!instructor ? instructor.about : "",
-  avatar: !!instructor ? instructor.avatar : "",
-  profession: !!instructor ? instructor.profession : "",
-  mediaId: !!instructor ? instructor.mediaId : uuidv4(),
+  firstName: instructor?.firstName || "",
+  lastName: instructor?.lastName || "",
+  about: instructor?.about || "",
+  graduatedStudentsCount: instructor?.graduatedStudentsCount || 0,
+  enrolledStudentsCount: instructor?.enrolledStudentsCount || 0,
+  avatar: instructor?.avatar || "",
+  profession: instructor?.profession || "",
+  mediaId: instructor?.mediaId || uuidv4(),
 });
 
 export const generateJobDefaultValues = (job: JobModel): CreateEditJobValidation => ({
@@ -70,5 +70,5 @@ export const generateJobDefaultValues = (job: JobModel): CreateEditJobValidation
   contractType: job?.contractType || "",
   responsibilities: job?.responsibilities || "",
   requirements: job?.requirements || "",
-  disabled: job?.disabled || false,
+  disabled: !!job?.disabled,
 });

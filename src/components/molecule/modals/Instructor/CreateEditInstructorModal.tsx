@@ -203,6 +203,44 @@ const CreateEditInstructorModal: FC<Props> = ({ instructor, isOpen, onClose, onS
           />
         )}
       />
+      <HStack alignItems="flex-start">
+        <Controller
+          name="graduatedStudentsCount"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <FormInput
+              isRequired
+              isInvalid={!!errors[name]?.message}
+              name={name}
+              type="number"
+              formLabelName="Graduated Students Count"
+              value={value || ""}
+              placeholder="345"
+              handleInputChange={e => onChange(+e.target.value)}
+              formErrorMessage={errors[name]?.message}
+              inputProps={{ min: 0 }}
+            />
+          )}
+        />
+        <Controller
+          name="enrolledStudentsCount"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <FormInput
+              isRequired
+              isInvalid={!!errors[name]?.message}
+              name={name}
+              type="number"
+              formLabelName="Enrolled students count"
+              value={value || ""}
+              placeholder="345"
+              handleInputChange={e => onChange(+e.target.value)}
+              formErrorMessage={errors[name]?.message}
+              inputProps={{ min: 0 }}
+            />
+          )}
+        />
+      </HStack>
       <Controller
         name="about"
         control={control}

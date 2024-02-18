@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class CreateEditInstructorValidation {
   @IsString()
@@ -12,6 +12,14 @@ export class CreateEditInstructorValidation {
   @IsString()
   @IsNotEmpty({ message: "About is required" })
   about: string;
+
+  @IsNumber()
+  @IsNotEmpty({ message: "Graduated students count is required" })
+  graduatedStudentsCount: number;
+
+  @IsNumber()
+  @IsNotEmpty({ message: "Enrolled students count is required" })
+  enrolledStudentsCount: number;
 
   @IsString()
   @IsNotEmpty({ message: "Profession is required" })

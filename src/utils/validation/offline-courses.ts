@@ -55,7 +55,7 @@ export class CreateOfflineCourseValidation {
   graduatedStudentsCount: number;
 
   @IsNumber()
-  @IsNotEmpty({ message: "Graduated students count is required" })
+  @IsNotEmpty({ message: "Enrolled students count is required" })
   enrolledStudentsCount: number;
 
   @IsNumber()
