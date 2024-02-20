@@ -37,7 +37,7 @@ export class AwsService {
       Key: keys.existingKey,
     };
 
-    if (actionType === "delete") {
+    if (actionType === "delete" && !!keys.existingKey) {
       return this.awsS3.deleteObject(params);
     }
     if (actionType === "update" && !!keys.existingKey && keys.existingKey !== keys.key) {
