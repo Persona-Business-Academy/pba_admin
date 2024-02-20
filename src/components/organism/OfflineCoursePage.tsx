@@ -222,22 +222,27 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
                 }/${getValue()}/pdf`}>
                 Attach Pdf
               </MenuItem>
-              <MenuItem
-                color="green"
-                onClick={() => {
-                  setEditableOfflineCourse(row.original);
-                  graduationPhotoModal.onOpen();
-                }}>
-                Add graduation photo
-              </MenuItem>
-              <MenuItem
-                color="green"
-                onClick={() => {
-                  setEditableOfflineCourse(row.original);
-                  whatYouWillLearnPhotoModal.onOpen();
-                }}>
-                Add what you will learn photo
-              </MenuItem>
+              {!forKids && (
+                <>
+                  <MenuItem
+                    color="green"
+                    onClick={() => {
+                      setEditableOfflineCourse(row.original);
+                      graduationPhotoModal.onOpen();
+                    }}>
+                    Add graduation photo
+                  </MenuItem>
+                  <MenuItem
+                    color="green"
+                    onClick={() => {
+                      setEditableOfflineCourse(row.original);
+                      whatYouWillLearnPhotoModal.onOpen();
+                    }}>
+                    Add what you will learn photo
+                  </MenuItem>
+                </>
+              )}
+
               <MenuItem
                 color="red"
                 onClick={() => {
