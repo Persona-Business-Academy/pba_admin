@@ -91,6 +91,14 @@ const CreateEditOfflineCourseModal: FC<Props> = ({
         if (!validateAgeLimit(data.ageLimit)) {
           return setError("ageLimit", { message: "Invalid age limit" });
         }
+        const entryOrderNum = SKILL_LEVELS.find(el => el.value === data.entryLevel)?.order;
+        const levelOrderNum = SKILL_LEVELS.find(el => el.value === data.courseLevel)?.order;
+        if (!entryOrderNum || !levelOrderNum || levelOrderNum < entryOrderNum) {
+          setError("entryLevel", { message: "Invalid data" });
+          setError("courseLevel", { message: "Invalid data" });
+          return;
+        }
+
         let reqData = data;
         if (localImage?.file) {
           if (localImage.file.size > 3 * 1024 * 1024) {
@@ -301,6 +309,21 @@ const CreateEditOfflineCourseModal: FC<Props> = ({
               name={name}
               formLabelName="Language"
               options={LANGUAGES}
+              defaultValue={value}
+              isInvalid={!!errors[name]?.message}
+              onChange={onChange}
+            />
+          )}
+        />
+        <Controller
+          name="entryLevel"
+          control={control}
+          render={({ field: { onChange, value, name } }) => (
+            <CustomSelect
+              isRequired
+              name={name}
+              formLabelName="Entry level"
+              options={SKILL_LEVELS}
               defaultValue={value}
               isInvalid={!!errors[name]?.message}
               onChange={onChange}

@@ -20,6 +20,7 @@ export const generateOfflineCourseDefaultValues = (
   language: offlineCourse?.language || "ARM",
   ageLimit: offlineCourse?.ageLimit || "",
   totalDuration: offlineCourse?.totalDuration || 0,
+  entryLevel: offlineCourse?.entryLevel || "BEGINNER",
   courseLevel: offlineCourse?.courseLevel || "BEGINNER",
   graduatedStudentsCount: offlineCourse?.graduatedStudentsCount || 0,
   enrolledStudentsCount: offlineCourse?.enrolledStudentsCount || 0,

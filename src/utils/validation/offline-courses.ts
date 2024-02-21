@@ -47,6 +47,10 @@ export class CreateOfflineCourseValidation {
   totalDuration: number;
 
   @IsString()
+  @IsNotEmpty({ message: "Entry level is required" })
+  entryLevel: SkillLevelType;
+
+  @IsString()
   @IsNotEmpty({ message: "Level is required" })
   courseLevel: SkillLevelType;
 
