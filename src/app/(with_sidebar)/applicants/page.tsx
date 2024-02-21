@@ -17,6 +17,7 @@ import { ApplicantEnumType, ApplicantModel } from "@/utils/models/common";
 
 const title: Record<ApplicantEnumType, string> = {
   JOB_APPLICANT: "Job Applicants",
+  KIDS_COURSE_APPLICANT: "Kids course applicants",
   CONTACT_US_APPLICANT: "Contact us applicants",
   OFFLINE_COURSE_APPLICANT: "Offline course applicants",
   ARTICLE_APPLICANT: "Article applicants",
