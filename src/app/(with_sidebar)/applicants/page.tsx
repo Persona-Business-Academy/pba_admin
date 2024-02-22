@@ -35,9 +35,10 @@ export default function Applicants() {
   );
 
   const filterId = useMemo(() => {
-    const obj: Record<string, "jobId" | "offlineCourseId"> = {
+    const obj: Partial<Record<ApplicantEnumType, "jobId" | "offlineCourseId">> = {
       JOB_APPLICANT: "jobId",
       OFFLINE_COURSE_APPLICANT: "offlineCourseId",
+      KIDS_COURSE_APPLICANT: "offlineCourseId",
     };
     const id = searchParams?.get("filterId");
     const key = obj[searchParamFilter];

@@ -11,4 +11,4 @@ export const validateAgeLimit = (ageLimit: string) => {
 };
 
 export const generateOfflineCourseUrl = (id: number, title: string) =>
-  `${process.env.NEXT_PUBLIC_PBA_URL + OFFLINE_COURSES_ROUTE}/${title.replaceAll(" ", "-")}/${id}`;
+  `${process.env.NEXT_PUBLIC_PBA_URL + OFFLINE_COURSES_ROUTE}/${title.trim().replaceAll(" ", "-").replaceAll("/", "-")}/${id}`;

@@ -162,6 +162,7 @@ model OfflineCourse {
   createdAt              DateTime                   @default(now()) @db.Timestamp(0)
   updatedAt              DateTime                   @updatedAt @db.Timestamp(0)
   disabled               Boolean                    @default(false)
+  entryLevel             SkillLevel?
   applicants             Applicant[]
   comments               CourseComment[]
   instructors            OfflineCourseInstructors[]
@@ -237,6 +238,7 @@ enum ApplicantType {
   CONTACT_US_APPLICANT
   JOB_APPLICANT
   ARTICLE_APPLICANT
+  KIDS_COURSE_APPLICANT
 }
 
 enum AdminRole {
