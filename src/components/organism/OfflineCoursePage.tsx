@@ -139,7 +139,7 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
           <Button
             variant="link"
             as={Link}
-            href={`${APPLICANTS_ROUTE}?filter=${ApplicantEnum.OFFLINE_COURSE_APPLICANT}&filterId=${info.getValue()}`}>
+            href={`${APPLICANTS_ROUTE}?filter=${forKids ? ApplicantEnum.KIDS_COURSE_APPLICANT : ApplicantEnum.OFFLINE_COURSE_APPLICANT}&filterId=${info.getValue()}`}>
             {`Applicants >`}
           </Button>
         ),
@@ -242,7 +242,6 @@ const OfflineCoursePage: FC<Props> = ({ forKids }) => {
                   </MenuItem>
                 </>
               )}
-
               <MenuItem
                 color="red"
                 onClick={() => {
