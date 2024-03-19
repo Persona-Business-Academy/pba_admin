@@ -14,11 +14,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "d2cnsoh3yg3xet.cloudfront.net",
-      },
-      {
-        protocol: "https",
-        hostname: "d17g72h6u0q1gt.cloudfront.net",
+        hostname: "pba-users-bucket.s3.amazonaws.com",
       },
     ],
   },
